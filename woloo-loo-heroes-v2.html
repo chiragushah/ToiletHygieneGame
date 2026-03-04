@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loo Heroes — Woloo</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============================================
+   ROOT & RESET
+============================================ */
+:root {
+  --y1: #FFD000;   /* primary yellow */
+  --y2: #FFE55C;   /* light yellow */
+  --y3: #FFF5B0;   /* pale yellow fill */
+  --y4: #FFA500;   /* amber accent */
+  --y5: #FF8C00;   /* deep amber */
+  --w:  #FFFFFF;
+  --off: #FFFDF0;  /* off-white tint */
+  --ink: #1A1200;  /* near-black text */
+  --ink2: #5C4A00; /* muted text */
+  --ok: #22C55E;
+  --err: #EF4444;
+  --outline: 3px solid var(--y1);
+  --shadow: 0 4px 0 0 var(--y1);
+  --shadow-lg: 0 6px 0 0 var(--y1);
+  --shadow-hover: 0 2px 0 0 var(--y1);
+  --r: 16px;
+  --r-sm: 10px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--w);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23FFD000' stroke='%231A1200' stroke-width='2'/%3E%3C/svg%3E") 12 12, auto;
+}
+
+/* ============================================
+   PARTICLES
+============================================ */
+#particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.star-particle {
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--y1);
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  animation: starFloat linear infinite;
+  opacity: 0;
+}
+@keyframes starFloat {
+  0%   { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity:0; }
+  10%  { opacity: 0.6; }
+  90%  { opacity: 0.3; }
+  100% { transform: translateY(-10vh) rotate(720deg) scale(1.2); opacity:0; }
+}
+
+/* ============================================
+   LAYOUT
+============================================ */
+.screen {
+  display: none; flex-direction: column; align-items: center;
+  min-height: 100vh; padding: 0 16px 100px;
+  position: relative; z-index: 1;
+}
+.screen.active { display: flex; }
+.wrap { width: 100%; max-width: 680px; margin: 0 auto; }
+
+/* ============================================
+   TOP BAR
+============================================ */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  width: 100%; background: var(--w);
+  border-bottom: var(--outline);
+  padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 0;
+}
+.topbar-logo {
+  display: flex; align-items: center; gap: 8px;
+}
+.logo-mark {
+  width: 36px; height: 36px;
+  background: var(--y1);
+  border: 2px solid var(--ink);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+.logo-wordmark {
+  font-family: 'Baloo 2', cursive;
+  font-size: 20px; font-weight: 900;
+  color: var(--ink); line-height: 1;
+}
+.logo-tagline { font-size: 10px; color: var(--ink2); font-weight: 700; letter-spacing: 1px; }
+.topbar-hud { display: flex; gap: 8px; }
+.hud-chip {
+  display: flex; align-items: center; gap: 5px;
+  border: 2px solid var(--y1);
+  border-radius: 30px; padding: 4px 12px;
+  font-weight: 800; font-size: 13px; color: var(--ink);
+  background: var(--y3);
+  box-shadow: 2px 2px 0 var(--y1);
+}
+
+/* ============================================
+   HERO / TITLE
+============================================ */
+.hero-screen {
+  justify-content: center;
+  background: var(--w);
+}
+.hero-wrap {
+  width: 100%; max-width: 600px;
+  padding: 40px 20px 60px;
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center;
+}
+.hero-badge {
+  display: inline-block;
+  background: var(--y1);
+  border: 2px solid var(--ink);
+  border-radius: 30px;
+  padding: 5px 18px;
+  font-size: 11px; font-weight: 900; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  margin-bottom: 24px;
+  animation: badgePop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes badgePop { from { transform: scale(0) rotate(-10deg); } to { transform: scale(1) rotate(0deg); } }
+
+.hero-character {
+  position: relative;
+  width: 140px; height: 140px;
+  margin: 0 auto 24px;
+}
+.char-body {
+  width: 140px; height: 140px;
+  background: var(--y1);
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 70px;
+  box-shadow: 5px 5px 0 var(--ink);
+  animation: heroFloat 3s ease-in-out infinite;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.char-body:active { transform: scale(0.92); }
+@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.char-speech {
+  position: absolute;
+  top: -20px; right: -80px;
+  background: var(--w);
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-size: 12px; font-weight: 800; color: var(--ink);
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 var(--y1);
+  animation: speechBob 4s ease-in-out infinite;
+}
+.char-speech::before {
+  content: '';
+  position: absolute; bottom: 50%; left: -8px;
+  border: 6px solid transparent;
+  border-right-color: var(--ink);
+  transform: translateY(50%);
+}
+@keyframes speechBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+
+.hero-title {
+  font-family: 'Baloo 2', cursive;
+  font-size: clamp(48px,10vw,80px);
+  font-weight: 900;
+  color: var(--ink);
+  line-height: 0.9;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  text-shadow: 5px 5px 0 var(--y1);
+  margin-bottom: 6px;
+  animation: titleSlide 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
+}
+@keyframes titleSlide { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
+.hero-subtitle {
+  font-family: 'Baloo 2', cursive;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink2); margin-bottom: 28px;
+  animation: titleSlide 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.35s both;
+}
+
+.story-panel {
+  background: var(--off);
+  border: var(--outline);
+  border-radius: var(--r);
+  padding: 18px 22px;
+  text-align: left;
+  font-size: 14px; line-height: 1.7; color: var(--ink2);
+  margin-bottom: 28px;
+  box-shadow: var(--shadow-lg);
+  animation: titleSlide 0.7s ease 0.45s both;
+}
+.story-panel strong { color: var(--ink); }
+
+/* ============================================
+   BUTTONS
+============================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800; border: 2px solid var(--ink);
+  border-radius: var(--r); cursor: pointer;
+  transition: all 0.12s; text-decoration: none;
+  position: relative; top: 0;
+  user-select: none;
+}
+.btn:active { top: 4px; box-shadow: none !important; }
+.btn-xl { font-size: 22px; padding: 16px 44px; box-shadow: var(--shadow-lg); }
+.btn-lg { font-size: 18px; padding: 13px 32px; box-shadow: var(--shadow); }
+.btn-md { font-size: 15px; padding: 10px 22px; box-shadow: var(--shadow); }
+.btn-sm { font-size: 13px; padding: 7px 16px; box-shadow: 0 3px 0 0 var(--y1); }
+.btn-yellow { background: var(--y1); color: var(--ink); }
+.btn-yellow:hover { background: var(--y2); }
+.btn-white { background: var(--w); color: var(--ink); border-color: var(--y1); box-shadow: var(--shadow); }
+.btn-white:hover { background: var(--y3); }
+.btn-dark { background: var(--ink); color: var(--y1); }
+.btn-dark:hover { background: #2e2000; }
+.btn-green { background: var(--ok); color: white; border-color: #16a34a; box-shadow: 0 4px 0 0 #16a34a; }
+.btn-green:hover { background: #16a34a; }
+.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+
+/* ============================================
+   MAP
+============================================ */
+.map-header { text-align: center; padding: 24px 0 16px; }
+.map-title { font-family:'Baloo 2',cursive; font-size:32px; font-weight:900; color:var(--ink); }
+.map-sub { font-size:14px; color:var(--ink2); font-weight:600; margin-top:2px; }
+
+.city-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px; padding: 0 0 20px;
+}
+.region {
+  background: var(--w);
+  border: 2px solid var(--y1);
+  border-radius: var(--r);
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.region::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--y3);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.region:hover:not(.locked)::before { opacity: 1; }
+.region:hover:not(.locked) { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.region:active:not(.locked) { transform: translateY(2px); box-shadow: 0 2px 0 0 var(--y1); }
+.region.locked { border-color: #E5E7EB; box-shadow: 0 4px 0 0 #E5E7EB; cursor: not-allowed; opacity: 0.6; }
+.region.done { background: var(--y3); }
+.region.done::after {
+  content: '✓';
+  position: absolute; top: 6px; right: 10px;
+  color: var(--y5); font-weight: 900; font-size: 16px;
+}
+.region-icon { font-size: 36px; display:block; margin-bottom:8px; position:relative; z-index:1; }
+.region-name { font-family:'Baloo 2',cursive; font-weight:800; font-size:14px; color:var(--ink); position:relative;z-index:1; }
+.region-lvl { font-size:11px; color:var(--ink2); font-weight:700; margin-top:2px; position:relative;z-index:1; }
+
+/* ============================================
+   GAME CARD
+============================================ */
+.game-card {
+  background: var(--w);
+  border: var(--outline);
+  border-radius: 20px;
+  padding: 26px;
+  box-shadow: var(--shadow-lg);
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+.game-card::before {
+  content: '';
+  position: absolute; top:0; left:0; right:0; height:5px;
+  background: var(--y1);
+}
+.gc-title { font-family:'Baloo 2',cursive; font-size:24px; font-weight:900; color:var(--ink); margin-bottom:3px; }
+.gc-desc { font-size:13px; color:var(--ink2); font-weight:600; margin-bottom:16px; }
+
+/* ============================================
+   PROGRESS BAR
+============================================ */
+.pbar-wrap { background: var(--y3); border:2px solid var(--y1); border-radius:30px; height:14px; overflow:hidden; margin-bottom:6px; }
+.pbar-fill { height:100%; background:linear-gradient(90deg,var(--y1),var(--y4)); border-radius:30px; transition:width 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+.pbar-label { font-size:12px; color:var(--ink2); font-weight:700; text-align:right; margin-bottom:14px; }
+
+/* ============================================
+   QUIZ
+============================================ */
+.q-box {
+  background: var(--y3);
+  border: 2px solid var(--y1);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  font-size: 17px; font-weight: 800; color: var(--ink);
+  line-height: 1.5; margin-bottom: 16px;
+}
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opt {
+  background: var(--w);
+  border: 2px solid var(--y1);
+  border-radius: var(--r-sm);
+  padding: 13px 14px;
+  font-size: 14px; font-weight: 700; color: var(--ink);
+  cursor: pointer; text-align: left;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 3px 0 0 var(--y1);
+  transition: all 0.12s;
+  position: relative; top: 0;
+}
+.opt:hover { background: var(--y3); transform: translateY(-2px); box-shadow: 0 5px 0 0 var(--y1); }
+.opt:active { top: 3px; box-shadow: none; }
+.opt.c-right { background:#D1FAE5; border-color:#22C55E; box-shadow:0 3px 0 0 #16a34a; color:#14532D; pointer-events:none; }
+.opt.c-wrong { background:#FEE2E2; border-color:#EF4444; box-shadow:0 3px 0 0 #B91C1C; color:#7F1D1D; pointer-events:none; }
+.opt.c-disabled { pointer-events:none; opacity:0.6; }
+.opt-key {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: var(--y1); border: 2px solid var(--ink);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   FEEDBACK
+============================================ */
+.fb {
+  display: none; border-radius: var(--r-sm);
+  padding: 12px 16px; font-weight: 800; font-size: 14px;
+  margin-top: 12px; border: 2px solid;
+}
+.fb.show { display: block; }
+.fb.ok { background:#D1FAE5; border-color:var(--ok); color:#14532D; }
+.fb.bad { background:#FEE2E2; border-color:var(--err); color:#7F1D1D; }
+.fb.tip { background:var(--y3); border-color:var(--y1); color:var(--ink); }
+
+/* ============================================
+   SPOT THE LOO
+============================================ */
+.loo-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.loo-card {
+  border: 3px solid var(--y1);
+  border-radius: var(--r);
+  padding: 16px;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.15s;
+  position: relative;
+  overflow: hidden;
+  background: var(--w);
+}
+.loo-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
+.loo-card:active { transform:translateY(2px); }
+.loo-big { font-size:56px; display:block; margin-bottom:10px;
+  animation: iconWobble 2s ease-in-out infinite;
+}
+@keyframes iconWobble { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+.loo-name { font-family:'Baloo 2',cursive; font-weight:800; font-size:15px; margin-bottom:6px; }
+.loo-clue { font-size:11px; color:var(--ink2); text-align:left; }
+.loo-clue li { margin-bottom:3px; }
+.loo-card.flash-right {
+  border-color: var(--ok) !important;
+  background: #D1FAE5 !important;
+  animation: rightFlash 0.4s ease;
+}
+.loo-card.flash-wrong {
+  border-color: var(--err) !important;
+  background: #FEE2E2 !important;
+  animation: wrongShake 0.4s ease;
+}
+@keyframes rightFlash { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
+@keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+/* ============================================
+   DRAG & DROP SORT
+============================================ */
+.drag-pool {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  background: var(--off); border: 2px dashed var(--y1);
+  border-radius: var(--r); padding: 14px;
+  min-height: 60px; margin-bottom: 14px;
+}
+.drag-item {
+  background: var(--w);
+  border: 2px solid var(--y1);
+  border-radius: 30px;
+  padding: 7px 16px;
+  font-size: 13px; font-weight: 700;
+  cursor: grab; user-select: none;
+  box-shadow: 2px 2px 0 var(--y1);
+  transition: all 0.12s;
+  display: flex; align-items: center; gap: 5px;
+  touch-action: none;
+}
+.drag-item:hover { background:var(--y3); transform:scale(1.05); }
+.drag-item.is-dragging { opacity:0.4; cursor:grabbing; transform:scale(0.95); }
+.drag-item.placed { cursor:default; pointer-events:none; }
+.drag-item.placed:hover { transform:none; }
+
+.sort-bins { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.sort-bin {
+  border: 3px dashed;
+  border-radius: var(--r);
+  padding: 12px;
+  min-height: 90px;
+  transition: all 0.15s;
+}
+.sort-bin.hyg { border-color:var(--ok); background:#F0FDF4; }
+.sort-bin.uhyg { border-color:var(--err); background:#FEF2F2; }
+.sort-bin.drag-over { transform:scale(1.02); }
+.sort-bin.hyg.drag-over { background:#D1FAE5; }
+.sort-bin.uhyg.drag-over { background:#FEE2E2; }
+.bin-label { font-family:'Baloo 2',cursive; font-weight:800; font-size:14px; margin-bottom:8px; }
+.bin-label.hyg { color:#15803D; }
+.bin-label.uhyg { color:#B91C1C; }
+.bin-items { display:flex; flex-wrap:wrap; gap:6px; min-height:40px; }
+.bin-items .drag-item { font-size:12px; padding:5px 12px; }
+
+/* ============================================
+   REPORTING GAME — CLICK THE ISSUE
+============================================ */
+.scene-container {
+  position: relative;
+  background: var(--off);
+  border: var(--outline);
+  border-radius: var(--r);
+  padding: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+  overflow: hidden;
+}
+.scene-toilet { font-size: 80px; display:block; margin-bottom:8px;
+  filter: drop-shadow(3px 3px 0 var(--y1));
+}
+.scene-title { font-family:'Baloo 2',cursive; font-weight:800; font-size:16px; color:var(--ink); }
+.scene-sub { font-size:12px; color:var(--ink2); }
+
+.issue-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px; }
+.issue-chip {
+  background: var(--w);
+  border: 2px solid var(--y1);
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--y1);
+  transition: all 0.15s;
+  position: relative; top: 0;
+}
+.issue-chip:hover { background:var(--y3); top:-2px; box-shadow:4px 4px 0 var(--y1); }
+.issue-chip:active { top:2px; box-shadow:none; }
+.issue-chip.tapped-issue {
+  background: #D1FAE5; border-color:var(--ok);
+  box-shadow: 2px 2px 0 #16a34a; color:#14532D;
+  animation: chipFound 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  cursor:default;
+}
+.issue-chip.tapped-good {
+  background: #FEF3C7; border-color:var(--y4);
+  color:#92400E; cursor:default;
+  animation: wrongShake 0.3s ease;
+}
+@keyframes chipFound { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+
+/* ============================================
+   CHECKLIST
+============================================ */
+.checklist { list-style:none; }
+.cl-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; margin-bottom:8px;
+  background: var(--w);
+  border: 2px solid var(--y1);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-size: 14px; font-weight: 700; color: var(--ink);
+  box-shadow: 2px 3px 0 var(--y1);
+  transition: all 0.15s;
+  position: relative; top:0;
+}
+.cl-item:hover { background:var(--y3); top:-2px; box-shadow:2px 5px 0 var(--y1); }
+.cl-item:active { top:2px; box-shadow:none; }
+.cl-item.done {
+  background: var(--y3); border-color:var(--y4);
+  box-shadow: 2px 3px 0 var(--y4);
+  animation: checkDone 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes checkDone { 0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
+.cl-box {
+  width:26px; height:26px; border-radius:8px;
+  border:2px solid var(--y1); background:var(--w);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; flex-shrink:0;
+  transition: all 0.2s;
+}
+.cl-item.done .cl-box { background:var(--y1); border-color:var(--y4); }
+
+/* ============================================
+   PROFILE
+============================================ */
+.profile-hero {
+  text-align:center; padding:30px 20px 20px;
+}
+.p-avatar {
+  width:110px; height:110px;
+  background:var(--y1);
+  border:3px solid var(--ink);
+  border-radius:50%;
+  margin:0 auto 14px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:56px;
+  box-shadow: 5px 5px 0 var(--ink);
+}
+.p-name { font-family:'Baloo 2',cursive; font-size:26px; font-weight:900; color:var(--ink); }
+.p-rank { font-size:13px; font-weight:800; color:var(--ink2); letter-spacing:1px; text-transform:uppercase; margin-top:4px; }
+
+.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:20px 0; }
+.stat-box {
+  background:var(--w); border:2px solid var(--y1);
+  border-radius:var(--r); padding:14px 10px;
+  text-align:center; box-shadow:var(--shadow);
+}
+.stat-n { font-family:'Baloo 2',cursive; font-size:28px; font-weight:900; color:var(--ink); }
+.stat-l { font-size:11px; color:var(--ink2); font-weight:700; text-transform:uppercase; }
+
+.badges-wrap { margin-bottom:20px; }
+.sec-title { font-family:'Baloo 2',cursive; font-size:18px; font-weight:800; margin-bottom:12px; color:var(--ink); }
+.badge-row { display:flex; flex-wrap:wrap; gap:8px; }
+.badge-tag {
+  display:flex; align-items:center; gap:6px;
+  padding:7px 16px; border-radius:30px;
+  font-size:12px; font-weight:800; border:2px solid;
+}
+.badge-tag.earned { background:var(--y1); border-color:var(--ink); color:var(--ink); box-shadow:2px 2px 0 var(--ink); }
+.badge-tag.locked { background:var(--w); border-color:#E5E7EB; color:#9CA3AF; }
+
+/* ============================================
+   LEADERBOARD
+============================================ */
+.lb-list { padding: 8px 0; }
+.lb-row {
+  display:flex; align-items:center; gap:12px;
+  background:var(--w); border:2px solid var(--y1);
+  border-radius:var(--r-sm); padding:12px 16px;
+  margin-bottom:9px;
+  box-shadow:var(--shadow);
+  transition:all 0.12s;
+}
+.lb-row:hover { transform:translateX(4px); background:var(--y3); }
+.lb-row.r1 { background:var(--y1); border-color:var(--ink); box-shadow:var(--shadow-lg); }
+.lb-row.r2 { background:#F8FAFC; border-color:#94A3B8; box-shadow:0 4px 0 #94A3B8; }
+.lb-row.r3 { background:#FFF7ED; border-color:#F97316; box-shadow:0 4px 0 #F97316; }
+.lb-row.me { border-color:var(--y4); background:var(--y3); border-width:3px; }
+.lb-rank { font-family:'Baloo 2',cursive; font-size:22px; font-weight:900; width:34px; text-align:center; }
+.lb-av { font-size:28px; }
+.lb-info { flex:1; }
+.lb-name { font-weight:800; font-size:15px; }
+.lb-sch { font-size:11px; color:var(--ink2); }
+.lb-sc { font-family:'Baloo 2',cursive; font-size:18px; font-weight:900; }
+
+/* ============================================
+   BOTTOM NAV
+============================================ */
+.bottom-nav {
+  position:fixed; bottom:0; left:0; right:0; z-index:50;
+  background:var(--w); border-top:var(--outline);
+  display:flex; justify-content:space-around;
+  padding:8px 0 env(safe-area-inset-bottom,8px);
+}
+.nav-btn {
+  display:flex; flex-direction:column; align-items:center; gap:2px;
+  background:none; border:none; cursor:pointer;
+  font-size:10px; font-weight:800; color:var(--ink2);
+  padding:4px 20px; transition:all 0.15s;
+  font-family:'Nunito',sans-serif; text-transform:uppercase; letter-spacing:0.5px;
+}
+.nav-btn .ni { font-size:22px; transition:transform 0.15s; }
+.nav-btn:hover,.nav-btn.on { color:var(--y5); }
+.nav-btn.on .ni { transform:scale(1.25); }
+
+/* ============================================
+   REWARD OVERLAY
+============================================ */
+.overlay {
+  position:fixed; inset:0; z-index:100;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(6px);
+  display:none; align-items:center; justify-content:center;
+  padding:20px;
+}
+.overlay.open { display:flex; }
+.reward-box {
+  background:var(--w);
+  border:3px solid var(--ink);
+  border-radius:24px; padding:36px 32px;
+  text-align:center; max-width:400px; width:100%;
+  box-shadow:8px 8px 0 var(--y1);
+  animation:rewardPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes rewardPop { from{transform:scale(0.3)rotate(-15deg);opacity:0} to{transform:scale(1)rotate(0);opacity:1} }
+.rw-emoji { font-size:80px; display:block; margin-bottom:12px; }
+.rw-title { font-family:'Baloo 2',cursive; font-size:30px; font-weight:900; color:var(--ink); margin-bottom:8px; }
+.rw-badge {
+  display:inline-block;
+  background:var(--y1); border:2px solid var(--ink);
+  border-radius:30px; padding:8px 22px;
+  font-weight:900; font-size:15px; color:var(--ink);
+  box-shadow:3px 3px 0 var(--ink); margin-bottom:14px;
+}
+.rw-text { color:var(--ink2); font-size:14px; line-height:1.6; margin-bottom:20px; }
+
+/* ============================================
+   POINTS TOAST
+============================================ */
+.toast {
+  position:fixed; left:50%; top:80px;
+  transform:translateX(-50%) translateY(0);
+  background:var(--y1); border:2px solid var(--ink);
+  border-radius:30px; padding:10px 28px;
+  font-family:'Baloo 2',cursive; font-size:20px; font-weight:900;
+  color:var(--ink); box-shadow:4px 4px 0 var(--ink);
+  z-index:200; pointer-events:none;
+  animation:toastUp 1.6s cubic-bezier(0.25,1,0.5,1) forwards;
+  white-space:nowrap;
+}
+@keyframes toastUp {
+  0%{transform:translateX(-50%) translateY(0);opacity:1}
+  100%{transform:translateX(-50%) translateY(-80px);opacity:0}
+}
+
+/* ============================================
+   CONFETTI
+============================================ */
+.confetto {
+  position:fixed; z-index:300; pointer-events:none;
+  width:10px; height:10px;
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0%{transform:translateY(-20px) rotate(0) scale(1);opacity:1}
+  100%{transform:translateY(100vh) rotate(720deg) scale(0.3);opacity:0}
+}
+
+/* ============================================
+   RESPONSIVE
+============================================ */
+@media(max-width:520px) {
+  .city-grid { grid-template-columns:repeat(2,1fr); }
+  .opts { grid-template-columns:1fr; }
+  .loo-grid { grid-template-columns:1fr; }
+  .sort-bins { grid-template-columns:1fr; }
+  .stats-row { grid-template-columns:1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<!-- ==================== TITLE ==================== -->
+<div class="screen active hero-screen" id="s-title">
+  <div class="hero-wrap">
+    <div class="hero-badge">🌟 Woloo Presents</div>
+    <div class="hero-character">
+      <div class="char-body" onclick="charPoke(this)" title="Poke me!">🦸</div>
+      <div class="char-speech" id="charSpeech">Tap me!</div>
+    </div>
+    <h1 class="hero-title">Loo<br>Heroes!</h1>
+    <p class="hero-subtitle">Mission: Clean &amp; Safe! 🚿✨</p>
+    <div class="story-panel">
+      <strong>🌀 Crisis in Sanitia City!</strong> Filth Monsters are polluting washrooms everywhere.
+      Citizens are scared — children can't go out with confidence.<br><br>
+      <strong>Your Mission:</strong> Become a <strong>Certified Loo Hero</strong> — scout, report &amp; restore
+      hygiene across the city with the Woloo team!
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-yellow btn-xl" onclick="go('s-map')">🎮 Start Adventure!</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-white btn-md" onclick="go('s-profile')">👤 My Profile</button>
+      <button class="btn btn-white btn-md" onclick="go('s-lb')">🏆 Leaderboard</button>
+    </div>
+    <p style="margin-top:20px;font-size:12px;color:var(--ink2);font-weight:700;">Powered by <strong style="color:var(--y5)">woloo.in</strong></p>
+  </div>
+</div>
+
+<!-- ==================== MAP ==================== -->
+<div class="screen" id="s-map">
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-mark">🚿</div>
+      <div><div class="logo-wordmark">Woloo</div><div class="logo-tagline">Loo Heroes</div></div>
+    </div>
+    <div class="topbar-hud">
+      <div class="hud-chip">⭐ <span id="h-csp">0</span></div>
+      <div class="hud-chip">🏅 <span id="h-bdg">0</span></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="map-header">
+      <div class="map-title">🗺️ Sanitia City</div>
+      <div class="map-sub">Choose a neighbourhood — complete missions to unlock new zones!</div>
+    </div>
+    <div class="city-grid" id="cityGrid"></div>
+    <div class="btn-row"><button class="btn btn-white btn-md" onclick="go('s-title')">← Home</button></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-btn on" onclick="go('s-map')"><span class="ni">🗺️</span>Map</button>
+    <button class="nav-btn" onclick="go('s-profile')"><span class="ni">👤</span>Hero</button>
+    <button class="nav-btn" onclick="go('s-lb')"><span class="ni">🏆</span>Ranks</button>
+  </div>
+</div>
+
+<!-- ==================== LEVEL 1: QUIZ ==================== -->
+<div class="screen" id="s-l1">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">📚</div><div><div class="logo-wordmark">Schoolville</div><div class="logo-tagline">Level 1 · Quiz</div></div></div>
+    <div class="hud-chip">⭐ <span id="l1h">0</span></div>
+  </div>
+  <div class="wrap">
+    <div class="game-card" style="margin-top:16px;">
+      <div class="gc-title">🧠 Hygiene Basics Quiz</div>
+      <div class="gc-desc">Answer all 7 questions to earn your first badge!</div>
+      <div class="pbar-wrap"><div class="pbar-fill" id="q-pbar" style="width:0%"></div></div>
+      <div class="pbar-label" id="q-lbl">Question 1 of 7</div>
+      <div class="q-box" id="q-text">Loading…</div>
+      <div class="opts" id="q-opts"></div>
+      <div class="fb" id="q-fb"></div>
+      <div class="fb tip" id="q-tip" style="display:none;margin-top:10px;"></div>
+      <div class="btn-row" id="q-nxt" style="display:none;">
+        <button class="btn btn-yellow btn-md" onclick="nextQ()">Next →</button>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
+  </div>
+</div>
+
+<!-- ==================== LEVEL 2: SPOT THE LOO ==================== -->
+<div class="screen" id="s-l2">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">🔍</div><div><div class="logo-wordmark">Market Plaza</div><div class="logo-tagline">Level 2 · Spot It</div></div></div>
+    <div class="hud-chip">⭐ <span id="l2h">0</span></div>
+  </div>
+  <div class="wrap">
+    <div class="game-card" style="margin-top:16px;">
+      <div class="gc-title">🔍 Spot the Dirty Loo!</div>
+      <div class="gc-desc">Tap the <strong>UNHYGIENIC</strong> washroom each round. 5 rounds to win!</div>
+      <div class="pbar-wrap"><div class="pbar-fill" id="l2-pbar" style="width:0%"></div></div>
+      <div class="pbar-label" id="l2-lbl">Round 1 of 5</div>
+      <div class="loo-grid" id="loo-cards"></div>
+      <div class="fb" id="l2-fb"></div>
+    </div>
+    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
+  </div>
+</div>
+
+<!-- ==================== LEVEL 3: REPORT ==================== -->
+<div class="screen" id="s-l3">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">📢</div><div><div class="logo-wordmark">Metro Junction</div><div class="logo-tagline">Level 3 · Report</div></div></div>
+    <div class="hud-chip">⭐ <span id="l3h">0</span></div>
+  </div>
+  <div class="wrap">
+    <div class="game-card" style="margin-top:16px;">
+      <div class="gc-title">📢 Report a Toilet!</div>
+      <div class="gc-desc">Tap every problem you spot to file a complete Woloo report!</div>
+      <div class="scene-container">
+        <span class="scene-toilet">🚽</span>
+        <div class="scene-title">Metro Junction — Public Washroom</div>
+        <div class="scene-sub">⚠️ Multiple complaints received. Inspect carefully!</div>
+      </div>
+      <div class="issue-chips" id="issue-chips"></div>
+      <div class="pbar-wrap"><div class="pbar-fill" id="l3-pbar" style="width:0%"></div></div>
+      <p id="l3-cnt" style="font-size:13px;color:var(--ink2);font-weight:700;text-align:center;margin-bottom:10px;">Issues found: 0 / 6</p>
+      <div class="fb" id="l3-fb"></div>
+      <div class="btn-row" id="l3-sub" style="display:none;">
+        <button class="btn btn-yellow btn-md" onclick="submitReport()">📤 Submit Woloo Report!</button>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
+  </div>
+</div>
+
+<!-- ==================== LEVEL 4: SORT ==================== -->
+<div class="screen" id="s-l4">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">♻️</div><div><div class="logo-wordmark">Parkside</div><div class="logo-tagline">Level 4 · Sort</div></div></div>
+    <div class="hud-chip">⭐ <span id="l4h">0</span></div>
+  </div>
+  <div class="wrap">
+    <div class="game-card" style="margin-top:16px;">
+      <div class="gc-title">♻️ Hygiene Sort Challenge!</div>
+      <div class="gc-desc">Drag &amp; drop — or <strong>tap an item then tap a bin</strong> — to sort all 10 habits!</div>
+      <div class="drag-pool" id="drag-pool"></div>
+      <div class="sort-bins">
+        <div class="sort-bin hyg" id="bin-h">
+          <div class="bin-label hyg">✅ Hygienic</div>
+          <div class="bin-items" id="drop-h"></div>
+        </div>
+        <div class="sort-bin uhyg" id="bin-u">
+          <div class="bin-label uhyg">❌ Unhygienic</div>
+          <div class="bin-items" id="drop-u"></div>
+        </div>
+      </div>
+      <div class="fb" id="l4-fb" style="margin-top:12px;"></div>
+      <div class="btn-row" id="l4-check">
+        <button class="btn btn-yellow btn-md" onclick="checkSort()">✅ Check My Sort!</button>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
+  </div>
+</div>
+
+<!-- ==================== LEVEL 5: CHECKLIST ==================== -->
+<div class="screen" id="s-l5">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">🏆</div><div><div class="logo-wordmark">Bazaar Lane</div><div class="logo-tagline">Level 5 · Certify</div></div></div>
+    <div class="hud-chip">⭐ <span id="l5h">0</span></div>
+  </div>
+  <div class="wrap">
+    <div class="game-card" style="margin-top:16px;">
+      <div class="gc-title">📋 Hero Certification!</div>
+      <div class="gc-desc">Tick every inspection item to certify this washroom as Woloo-approved!</div>
+      <ul class="checklist" id="hero-cl"></ul>
+      <div class="pbar-wrap" style="margin-top:14px;"><div class="pbar-fill" id="cl-pbar" style="width:0%"></div></div>
+      <p id="cl-cnt" style="text-align:center;font-size:13px;color:var(--ink2);font-weight:700;margin-top:6px;">Checked: 0 / 10</p>
+      <div class="btn-row" id="cl-certify" style="display:none;">
+        <button class="btn btn-yellow btn-lg" onclick="certify()">🎓 Certify as Loo Hero!</button>
+      </div>
+    </div>
+    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
+  </div>
+</div>
+
+<!-- ==================== PROFILE ==================== -->
+<div class="screen" id="s-profile">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">👤</div><div><div class="logo-wordmark">My Profile</div><div class="logo-tagline">Loo Hero Stats</div></div></div>
+  </div>
+  <div class="wrap">
+    <div class="profile-hero">
+      <div class="p-avatar" id="p-av">🦸</div>
+      <div class="p-name" id="p-name">Sanitation Scout</div>
+      <div class="p-rank" id="p-rank">⭐ Rookie</div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-n" id="p-csp">0</div><div class="stat-l">Scout Points</div></div>
+      <div class="stat-box"><div class="stat-n" id="p-bc">0</div><div class="stat-l">Badges</div></div>
+      <div class="stat-box"><div class="stat-n" id="p-lc">0</div><div class="stat-l">Levels Done</div></div>
+    </div>
+    <div class="badges-wrap">
+      <div class="sec-title">🏅 Badge Collection</div>
+      <div class="badge-row" id="p-badges"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-yellow btn-md" onclick="go('s-map')">🗺️ Play</button>
+      <button class="btn btn-white btn-md" onclick="go('s-lb')">🏆 Ranks</button>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="go('s-map')"><span class="ni">🗺️</span>Map</button>
+    <button class="nav-btn on" onclick="go('s-profile')"><span class="ni">👤</span>Hero</button>
+    <button class="nav-btn" onclick="go('s-lb')"><span class="ni">🏆</span>Ranks</button>
+  </div>
+</div>
+
+<!-- ==================== LEADERBOARD ==================== -->
+<div class="screen" id="s-lb">
+  <div class="topbar">
+    <div class="topbar-logo"><div class="logo-mark">🏆</div><div><div class="logo-wordmark">Rankings</div><div class="logo-tagline">Sanitia City</div></div></div>
+  </div>
+  <div class="wrap">
+    <div class="map-header">
+      <div class="map-title">🏆 City Leaderboard</div>
+      <div class="map-sub">Top Loo Heroes this week!</div>
+    </div>
+    <div class="lb-list" id="lb-list"></div>
+    <div class="btn-row"><button class="btn btn-yellow btn-md" onclick="go('s-map')">🎮 Keep Playing!</button></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-btn" onclick="go('s-map')"><span class="ni">🗺️</span>Map</button>
+    <button class="nav-btn" onclick="go('s-profile')"><span class="ni">👤</span>Hero</button>
+    <button class="nav-btn on" onclick="go('s-lb')"><span class="ni">🏆</span>Ranks</button>
+  </div>
+</div>
+
+<!-- ==================== REWARD ==================== -->
+<div class="overlay" id="overlay">
+  <div class="reward-box">
+    <span class="rw-emoji" id="rw-em">🎉</span>
+    <div class="rw-title" id="rw-ttl">Level Complete!</div>
+    <div class="rw-badge" id="rw-bdg">🏅 Badge</div>
+    <div class="rw-text" id="rw-txt">Great work!</div>
+    <button class="btn btn-yellow btn-lg" id="rw-btn" onclick="closeReward()">Continue! 🚀</button>
+  </div>
+</div>
+
+<script>
+/* ============================================
+   STATE
+============================================ */
+const G = {
+  csp: 0,
+  level: 1,
+  done: new Set(),
+  badges: [],
+  selected: null   // for tap-to-sort
+};
+
+const ALL_BADGES = [
+  {id:'wb', name:'Washroom Watcher', icon:'👁️'},
+  {id:'cs', name:'Clean Sweep Medal', icon:'🧹'},
+  {id:'sr', name:'Sanitia Reporter', icon:'📢'},
+  {id:'tw', name:'Teamwork Ribbon', icon:'🤝'},
+  {id:'lh', name:'Loo Hero Cert.', icon:'🎓'}
+];
+
+const RANKS = [[0,'🌱 Rookie'],[50,'🔍 Scout'],[150,'🧹 Clean Scout'],[300,'📢 Reporter'],[500,'🤝 Champion'],[800,'🦸 Loo Hero']];
+
+/* ============================================
+   PARTICLES
+============================================ */
+(function spawnStars(){
+  const c = document.getElementById('particles');
+  for(let i=0;i<20;i++){
+    const s = document.createElement('div');
+    s.className = 'star-particle';
+    s.style.cssText=`left:${Math.random()*100}%;width:${6+Math.random()*14}px;height:${6+Math.random()*14}px;animation-duration:${10+Math.random()*15}s;animation-delay:${Math.random()*12}s;`;
+    c.appendChild(s);
+  }
+})();
+
+/* ============================================
+   CHAR POKE
+============================================ */
+const charLines = ['Flush after use! 🚽','Wash hands! 🧼','Report dirty loos! 📢','Stay hygienic! ✨','Woloo certified! ⭐','You\'re a hero! 🦸'];
+let charIdx = 0;
+function charPoke(el){
+  charIdx = (charIdx+1)%charLines.length;
+  document.getElementById('charSpeech').textContent = charLines[charIdx];
+  el.style.transform = 'scale(0.88)';
+  setTimeout(()=>el.style.transform='',200);
+  spawnPoints(el, '+5');
+  G.csp += 5; updateHUD();
+}
+
+/* ============================================
+   NAVIGATION
+============================================ */
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='s-map') buildMap();
+  if(id==='s-profile') buildProfile();
+  if(id==='s-lb') buildLB();
+}
+
+/* ============================================
+   HUD
+============================================ */
+function updateHUD(){
+  ['h-csp','l1h','l2h','l3h','l4h','l5h'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.textContent=G.csp;
+  });
+  const hb=document.getElementById('h-bdg'); if(hb) hb.textContent=G.badges.length;
+}
+
+/* ============================================
+   TOAST & CONFETTI
+============================================ */
+function toast(msg){
+  const t=document.createElement('div');
+  t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),1700);
+}
+function spawnPoints(ref,msg){
+  toast(msg+' ⭐');
+}
+function confetti(n=30){
+  const colors=['#FFD000','#FFE55C','#FFA500','#FF8C00','#FFFDE7','#FFF9C4'];
+  for(let i=0;i<n;i++){
+    const c=document.createElement('div');
+    c.className='confetto';
+    const size=6+Math.random()*14;
+    const shape=Math.random()>0.5?'50%':'4px';
+    c.style.cssText=`left:${10+Math.random()*80}%;top:0;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${shape};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;`;
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+/* ============================================
+   REWARD
+============================================ */
+let _rewardCb = null;
+function reward(em,ttl,bdg,txt,cb){
+  document.getElementById('rw-em').textContent=em;
+  document.getElementById('rw-ttl').textContent=ttl;
+  document.getElementById('rw-bdg').textContent=bdg;
+  document.getElementById('rw-txt').textContent=txt;
+  document.getElementById('overlay').classList.add('open');
+  _rewardCb=cb;
+  confetti(50);
+}
+function closeReward(){
+  document.getElementById('overlay').classList.remove('open');
+  if(_rewardCb) _rewardCb();
+}
+function addCSP(n){ G.csp+=n; updateHUD(); toast(`+${n} CSP`); }
+function finishLevel(lvl,bdg,pts,em,ttl,bdgTxt,txt){
+  G.done.add(lvl);
+  G.level=Math.max(G.level, G.done.size+1);
+  addCSP(pts);
+  if(bdg&&!G.badges.includes(bdg)) G.badges.push(bdg);
+  reward(em,ttl,bdgTxt,txt,()=>go('s-map'));
+}
+
+/* ============================================
+   MAP
+============================================ */
+const REGIONS=[
+  {id:'l1',name:'Schoolville',icon:'🏫',lbl:'Level 1 · Quiz',sc:'s-l1',min:1},
+  {id:'l2',name:'Market Plaza',icon:'🛒',lbl:'Level 2 · Spot It',sc:'s-l2',min:1},
+  {id:'l3',name:'Metro Junction',icon:'🚇',lbl:'Level 3 · Report',sc:'s-l3',min:2},
+  {id:'l4',name:'Parkside',icon:'🌳',lbl:'Level 4 · Sort',sc:'s-l4',min:3},
+  {id:'l5',name:'Bazaar Lane',icon:'🏪',lbl:'Level 5 · Certify',sc:'s-l5',min:4},
+  {id:'cx',name:'City Hall',icon:'🏛️',lbl:'🔒 Coming Soon',sc:null,min:99}
+];
+function buildMap(){
+  const g=document.getElementById('cityGrid'); g.innerHTML='';
+  updateHUD();
+  REGIONS.forEach((r,i)=>{
+    const locked=G.level<r.min;
+    const done=G.done.has(r.id);
+    const d=document.createElement('div');
+    d.className='region'+(locked?' locked':'')+(done?' done':'');
+    d.innerHTML=`<span class="region-icon">${r.icon}</span><div class="region-name">${r.name}</div><div class="region-lvl">${locked?'🔒 Locked':r.lbl}</div>`;
+    d.style.animationDelay=i*0.07+'s';
+    if(!locked&&r.sc) d.onclick=()=>launchLevel(r.sc,r.id);
+    g.appendChild(d);
+  });
+}
+function launchLevel(sc,id){
+  if(sc==='s-l1') initQuiz();
+  if(sc==='s-l2') initLoo();
+  if(sc==='s-l3') initReport();
+  if(sc==='s-l4') initSort();
+  if(sc==='s-l5') initCL();
+  go(sc);
+}
+
+/* ============================================
+   LEVEL 1 — QUIZ
+============================================ */
+const QS=[
+  {q:'Why must we wash hands after using a toilet?',opts:[{t:'🦠 Remove germs & prevent disease',c:true},{t:'🎨 Remove paint stains',c:false},{t:'💧 Cool our hands down',c:false},{t:'🌸 Make them smell nice',c:false}],tip:'Germs on unwashed hands spread to food, eyes & others — causing diarrhoea, typhoid & more!'},
+  {q:'How long should you scrub with soap?',opts:[{t:'⚡ 2 seconds',c:false},{t:'✅ 20 seconds',c:true},{t:'🕐 5 minutes',c:false},{t:'💦 Just rinse with water',c:false}],tip:'20 seconds = singing "Happy Birthday" twice. That kills most harmful germs!'},
+  {q:'What makes a public washroom SAFE to use?',opts:[{t:'💡 Only bright lights',c:false},{t:'✅ Clean, lit, working, soap & water',c:true},{t:'🎵 Good music',c:false},{t:'🖼️ Nice paintings',c:false}],tip:'Woloo certifies washrooms that are clean, functional, well-lit and hygiene-stocked!'},
+  {q:'What should you do if a washroom is dirty?',opts:[{t:'😤 Just ignore it',c:false},{t:'✅ Report it on the Woloo app!',c:true},{t:'🗑️ Add more garbage',c:false},{t:'🚶 Never use public loos again',c:false}],tip:'Every Woloo report makes Sanitia cleaner. Your report matters!'},
+  {q:'Which habit spreads germs in washrooms?',opts:[{t:'🧼 Washing hands',c:false},{t:'🚿 Flushing after use',c:false},{t:'✅ NOT flushing after use',c:true},{t:'🗑️ Using the bin',c:false}],tip:'Always flush! Unflushed waste releases bacteria that can make many people sick.'},
+  {q:'What does Woloo help people find?',opts:[{t:'🍕 Pizza restaurants',c:false},{t:'✅ Safe, certified public washrooms',c:true},{t:'🎮 Gaming cafes',c:false},{t:'🛍️ Shopping malls',c:false}],tip:'Woloo is a phygital platform helping everyone find safe, clean washrooms nearby!'},
+  {q:'Who benefits most from well-maintained washrooms?',opts:[{t:'🤔 Only adults',c:false},{t:'🤔 Only men',c:false},{t:'✅ Everyone — especially women & children',c:true},{t:'🤔 Only tourists',c:false}],tip:'Clean public washrooms protect dignity, health & safety — it\'s a basic human right!'}
+];
+let qIdx=0,qDone=false;
+function initQuiz(){ qIdx=0; qDone=false; renderQ(); }
+function renderQ(){
+  const d=QS[qIdx];
+  document.getElementById('q-text').textContent=d.q;
+  document.getElementById('q-lbl').textContent=`Question ${qIdx+1} of ${QS.length}`;
+  document.getElementById('q-pbar').style.width=`${(qIdx/QS.length)*100}%`;
+  const o=document.getElementById('q-opts'); o.innerHTML='';
+  const keys=['A','B','C','D'];
+  d.opts.forEach((opt,i)=>{
+    const b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML=`<span class="opt-key">${keys[i]}</span>${opt.t}`;
+    b.onclick=()=>{ if(!qDone) answerQ(b,opt.c,d); };
+    o.appendChild(b);
+  });
+  ['q-fb','q-tip'].forEach(id=>{ const el=document.getElementById(id); el.className=el.className.includes('tip')?'fb tip':'fb'; el.style.display='none'; });
+  document.getElementById('q-nxt').style.display='none';
+  document.getElementById('l1h').textContent=G.csp;
+  qDone=false;
+}
+function answerQ(btn,correct,d){
+  qDone=true;
+  document.querySelectorAll('#q-opts .opt').forEach((b,i)=>{
+    if(d.opts[i].c) b.classList.add('c-right');
+    else b.classList.add('c-disabled');
+    if(b===btn&&!correct) b.classList.remove('c-disabled'), b.classList.add('c-wrong');
+  });
+  const fb=document.getElementById('q-fb');
+  if(correct){
+    fb.className='fb ok show'; fb.textContent='🎉 Correct! You\'re a hygiene expert!';
+    addCSP(15);
+  } else {
+    fb.className='fb bad show'; fb.textContent='❌ Not quite — the correct answer is highlighted!';
+    addCSP(5);
+  }
+  const tip=document.getElementById('q-tip');
+  tip.style.display='flex'; tip.className='fb tip show';
+  tip.innerHTML='💡 '+d.tip;
+  document.getElementById('q-nxt').style.display='flex';
+  document.getElementById('l1h').textContent=G.csp;
+}
+function nextQ(){
+  qIdx++;
+  if(qIdx>=QS.length){
+    finishLevel('l1','wb',30,'🏅','Level 1 Complete!','🏅 Washroom Watcher Badge Earned!','You aced the Hygiene Basics Quiz! Sanitia is proud of you!');
+  } else renderQ();
+}
+
+/* ============================================
+   LEVEL 2 — SPOT THE LOO
+============================================ */
+const LOOS=[
+  {c:{e:'✨🚽',n:'Sparkling Clean',cl:['✅ Dry spotless floor','✅ Soap dispenser full','✅ Fresh air, no smell']},d:{e:'💢🚽',n:'Filth Monster Lair',cl:['❌ Wet slippery floor','❌ No soap available','❌ Terrible odour']}},
+  {c:{e:'🌸🚿',n:'Floral Fresh',cl:['✅ Working flush','✅ Clean mirror','✅ Lidded dustbin']},d:{e:'🕷️🚿',n:'Spider\'s Den',cl:['❌ Broken flush','❌ Cracked mirror','❌ Overflowing bin']}},
+  {c:{e:'💧🚰',n:'Crystal Clear',cl:['✅ Running taps','✅ Paper towels','✅ Well lit']},d:{e:'⚠️🚰',n:'Germ Central',cl:['❌ No water','❌ No paper/dryer','❌ Broken lights']}},
+  {c:{e:'🌿🚽',n:'Green & Fresh',cl:['✅ Regular cleaning','✅ Sanitiser','✅ Good ventilation']},d:{e:'🦠🚽',n:'Virus Vault',cl:['❌ Never cleaned','❌ No sanitiser','❌ Stuffy & smelly']}},
+  {c:{e:'⭐🏪',n:'Woloo Certified ⭐⭐⭐⭐⭐',cl:['✅ 5-star rated','✅ All amenities','✅ Safety assured']},d:{e:'💀🏚️',n:'Reported & Closed',cl:['❌ Multiple complaints','❌ Missing facilities','❌ Unsafe for women']}}
+];
+let looR=0;
+function initLoo(){ looR=0; renderLoo(); }
+function renderLoo(){
+  const r=LOOS[looR];
+  document.getElementById('l2-lbl').textContent=`Round ${looR+1} of ${LOOS.length}`;
+  document.getElementById('l2-pbar').style.width=`${(looR/LOOS.length)*100}%`;
+  document.getElementById('l2h').textContent=G.csp;
+  const wrap=document.getElementById('loo-cards'); wrap.innerHTML='';
+  const pair=Math.random()>0.5?[{...r.c,bad:false},{...r.d,bad:true}]:[{...r.d,bad:true},{...r.c,bad:false}];
+  pair.forEach(l=>{
+    const c=document.createElement('div');
+    c.className='loo-card';
+    c.innerHTML=`<span class="loo-big">${l.e}</span><div class="loo-name">${l.n}</div><ul class="loo-clue">${l.cl.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+    c.onclick=()=>pickLoo(c,l.bad);
+    wrap.appendChild(c);
+  });
+  document.getElementById('l2-fb').className='fb';
+}
+function pickLoo(card,bad){
+  document.querySelectorAll('.loo-card').forEach(c=>c.onclick=null);
+  const fb=document.getElementById('l2-fb');
+  if(bad){
+    card.classList.add('flash-right');
+    fb.className='fb ok show'; fb.textContent='🎉 Spot on! That\'s the unhygienic one!';
+    addCSP(20); document.getElementById('l2h').textContent=G.csp;
+    setTimeout(()=>{
+      looR++;
+      if(looR>=LOOS.length) finishLevel('l2','cs',50,'🧹','Level 2 Complete!','🧹 Clean Sweep Medal Earned!','You can now identify dirty washrooms like a true Loo Hero!');
+      else renderLoo();
+    },1400);
+  } else {
+    card.classList.add('flash-wrong');
+    fb.className='fb bad show'; fb.textContent='❌ Look again! Read the clues carefully…';
+    setTimeout(()=>{
+      card.classList.remove('flash-wrong');
+      document.querySelectorAll('.loo-card').forEach(c=>{ const isBad=c.querySelector('.loo-name').textContent.includes('Filth')||c.querySelector('.loo-name').textContent.includes('Spider')||c.querySelector('.loo-name').textContent.includes('Germ')||c.querySelector('.loo-name').textContent.includes('Virus')||c.querySelector('.loo-name').textContent.includes('Reported'); c.onclick=()=>pickLoo(c,isBad); });
+      fb.className='fb';
+    },1200);
+  }
+}
+
+/* ============================================
+   LEVEL 3 — REPORT
+============================================ */
+const ISSUES=[
+  {t:'💧 Leaking tap',real:true},{t:'🧼 No soap',real:true},{t:'🚽 Unflushed toilet',real:true},
+  {t:'💡 Broken light',real:true},{t:'🗑️ Overflowing bin',real:true},{t:'🕷️ Cobwebs on ceiling',real:true},
+  {t:'✅ Fresh air (window)',real:false},{t:'✅ Door latch works',real:false},{t:'✅ Clean floor tiles',real:false}
+];
+let reportCount=0, issuesTotal=0;
+function initReport(){
+  reportCount=0;
+  issuesTotal=ISSUES.filter(i=>i.real).length;
+  document.getElementById('l3-cnt').textContent=`Issues found: 0 / ${issuesTotal}`;
+  document.getElementById('l3-pbar').style.width='0%';
+  document.getElementById('l3-fb').className='fb';
+  document.getElementById('l3-sub').style.display='none';
+  document.getElementById('l3h').textContent=G.csp;
+  const pool=document.getElementById('issue-chips'); pool.innerHTML='';
+  [...ISSUES].sort(()=>Math.random()-0.5).forEach(item=>{
+    const c=document.createElement('div');
+    c.className='issue-chip'; c.textContent=item.t;
+    c.onclick=()=>tapIssue(c,item);
+    pool.appendChild(c);
+  });
+}
+function tapIssue(chip,item){
+  if(chip.classList.contains('tapped-issue')||chip.classList.contains('tapped-good')) return;
+  if(item.real){
+    chip.classList.add('tapped-issue');
+    reportCount++;
+    addCSP(10); document.getElementById('l3h').textContent=G.csp;
+    const pct=(reportCount/issuesTotal)*100;
+    document.getElementById('l3-pbar').style.width=pct+'%';
+    document.getElementById('l3-cnt').textContent=`Issues found: ${reportCount} / ${issuesTotal}`;
+    if(reportCount>=issuesTotal){
+      document.getElementById('l3-sub').style.display='flex';
+      const fb=document.getElementById('l3-fb');
+      fb.className='fb ok show'; fb.textContent='🎉 All issues found! Submit your report!';
+    }
+  } else {
+    chip.classList.add('tapped-good');
+    const fb=document.getElementById('l3-fb');
+    fb.className='fb tip show'; fb.textContent='⚠️ That\'s actually a good hygiene feature — not an issue!';
+    setTimeout(()=>fb.className='fb',2000);
+  }
+}
+function submitReport(){
+  finishLevel('l3','sr',60,'📢','Level 3 Complete!','📢 Sanitia Reporter Star Earned!','Your Woloo report has been submitted! Metro Junction will be cleaned!');
+}
+
+/* ============================================
+   LEVEL 4 — DRAG SORT
+============================================ */
+const SORT_ITEMS=[
+  {t:'🧼 Washing hands with soap',cat:'h'},{t:'🚽 Flushing after use',cat:'h'},
+  {t:'🗑️ Using the dustbin',cat:'h'},{t:'💧 Drinking clean water',cat:'h'},
+  {t:'🪥 Brushing teeth daily',cat:'h'},{t:'🚶 Littering on street',cat:'u'},
+  {t:'🤧 Sneezing without cover',cat:'u'},{t:'💩 Not flushing',cat:'u'},
+  {t:'🦠 Sharing unwashed cups',cat:'u'},{t:'🧃 Leaving food open',cat:'u'}
+];
+let sortMap={}, selItem=null;
+function initSort(){
+  sortMap={}; selItem=null; G.selected=null;
+  SORT_ITEMS.forEach(i=>sortMap[i.t]=null);
+  document.getElementById('drop-h').innerHTML='';
+  document.getElementById('drop-u').innerHTML='';
+  document.getElementById('l4-fb').className='fb';
+  document.getElementById('l4h').textContent=G.csp;
+  const pool=document.getElementById('drag-pool'); pool.innerHTML='';
+  [...SORT_ITEMS].sort(()=>Math.random()-0.5).forEach(item=>{
+    const el=makeDragItem(item,pool);
+    pool.appendChild(el);
+  });
+  // Bin drop targets
+  setupBin('bin-h','h'); setupBin('bin-u','u');
+}
+function makeDragItem(item, pool){
+  const el=document.createElement('div');
+  el.className='drag-item';
+  el.textContent=item.t;
+  el.dataset.key=item.t;
+  el.dataset.cat=item.cat;
+  // Tap to select then tap bin
+  el.onclick=()=>selectForTap(el,item);
+  // Drag
+  el.draggable=true;
+  el.addEventListener('dragstart',e=>{
+    e.dataTransfer.setData('text',item.t);
+    setTimeout(()=>el.classList.add('is-dragging'),0);
+  });
+  el.addEventListener('dragend',()=>el.classList.remove('is-dragging'));
+  return el;
+}
+function selectForTap(el,item){
+  if(el.classList.contains('placed')) return;
+  // deselect prev
+  document.querySelectorAll('.drag-item.selected-tap').forEach(e=>e.style.outline='');
+  el.style.outline='3px solid var(--y4)';
+  G.selected={el,item};
+}
+function setupBin(binId, cat){
+  const bin=document.getElementById(binId);
+  bin.ondragover=e=>{ e.preventDefault(); bin.classList.add('drag-over'); };
+  bin.ondragleave=()=>bin.classList.remove('drag-over');
+  bin.ondrop=e=>{
+    e.preventDefault(); bin.classList.remove('drag-over');
+    const key=e.dataTransfer.getData('text');
+    placeToBin(key,cat);
+  };
+  bin.onclick=()=>{
+    if(G.selected){
+      placeToBin(G.selected.item.t, cat);
+      G.selected=null;
+    }
+  };
+}
+function placeToBin(key,cat){
+  if(sortMap[key]!==null) return;
+  sortMap[key]=cat;
+  const src=document.getElementById('drag-pool');
+  const el=[...src.querySelectorAll('.drag-item')].find(e=>e.dataset.key===key);
+  if(el){ el.style.outline=''; el.remove(); }
+  const mini=document.createElement('div');
+  mini.className='drag-item placed';
+  mini.textContent=key;
+  document.getElementById('drop-'+cat).appendChild(mini);
+}
+function checkSort(){
+  const placed=Object.values(sortMap).filter(v=>v!==null).length;
+  if(placed<SORT_ITEMS.length){
+    const fb=document.getElementById('l4-fb');
+    fb.className='fb bad show';
+    fb.textContent=`Sort all ${SORT_ITEMS.length} items first! (${placed}/${SORT_ITEMS.length} done)`;
+    return;
+  }
+  let correct=0;
+  SORT_ITEMS.forEach(i=>{ if(sortMap[i.t]===i.cat) correct++; });
+  if(correct>=8){
+    addCSP(40+(correct-8)*15);
+    document.getElementById('l4h').textContent=G.csp;
+    finishLevel('l4','tw',80,'🤝','Level 4 Complete!','🤝 Teamwork Ribbon Earned!',`${correct}/10 correct! You're a hygiene champion!`);
+  } else {
+    const fb=document.getElementById('l4-fb');
+    fb.className='fb bad show';
+    fb.textContent=`${correct}/10 correct. Need 8+ to pass. Try again!`;
+    addCSP(10); setTimeout(initSort,2000);
+  }
+}
+
+/* ============================================
+   LEVEL 5 — CHECKLIST
+============================================ */
+const CL_ITEMS=[
+  '🧼 Check soap dispenser — full & working',
+  '💧 Verify taps & water supply',
+  '🚽 Confirm flush is working',
+  '💡 All lights on — no dark corners',
+  '🗑️ Empty bin & replace lid',
+  '🪤 Floor — dry, clean, no slip hazard',
+  '🔒 Door lock & latch for privacy',
+  '🌬️ Good ventilation — no foul odour',
+  '📋 Update cleaning log with date & time',
+  '⭐ Submit Woloo Certification Report'
+];
+let clState=[];
+function initCL(){
+  clState=new Array(CL_ITEMS.length).fill(false);
+  renderCL();
+  document.getElementById('cl-certify').style.display='none';
+  document.getElementById('l5h').textContent=G.csp;
+}
+function renderCL(){
+  const ul=document.getElementById('hero-cl'); ul.innerHTML='';
+  CL_ITEMS.forEach((txt,i)=>{
+    const li=document.createElement('li');
+    li.className='cl-item'+(clState[i]?' done':'');
+    li.innerHTML=`<div class="cl-box">${clState[i]?'✓':''}</div>${txt}`;
+    li.onclick=()=>tickCL(i);
+    ul.appendChild(li);
+  });
+  const done=clState.filter(Boolean).length;
+  document.getElementById('cl-pbar').style.width=`${(done/CL_ITEMS.length)*100}%`;
+  document.getElementById('cl-cnt').textContent=`Checked: ${done} / ${CL_ITEMS.length}`;
+  if(done===CL_ITEMS.length) document.getElementById('cl-certify').style.display='flex';
+}
+function tickCL(i){
+  if(clState[i]) return;
+  clState[i]=true;
+  addCSP(8); document.getElementById('l5h').textContent=G.csp;
+  renderCL();
+}
+function certify(){
+  finishLevel('l5','lh',100,'🎓','🦸 LOO HERO CERTIFIED!','🎓 Loo Hero Certificate Earned!','You\'ve completed all missions! You are now an official Woloo Loo Hero!');
+}
+
+/* ============================================
+   PROFILE
+============================================ */
+const HN=['Sanitation Rookie','Washroom Watcher','Clean Scout','Sanitia Reporter','Community Champion','Certified Loo Hero'];
+function buildProfile(){
+  const avs=['🦸','🦸‍♀️','🧑‍🔬','👩‍⚕️','🦸‍♂️'];
+  document.getElementById('p-av').textContent=avs[G.done.size%avs.length];
+  document.getElementById('p-name').textContent=HN[Math.min(G.badges.length,HN.length-1)];
+  let rank=RANKS[0][1];
+  for(const [p,r] of RANKS){ if(G.csp>=p) rank=r; }
+  document.getElementById('p-rank').textContent=rank;
+  document.getElementById('p-csp').textContent=G.csp;
+  document.getElementById('p-bc').textContent=G.badges.length;
+  document.getElementById('p-lc').textContent=G.done.size;
+  const bg=document.getElementById('p-badges'); bg.innerHTML='';
+  ALL_BADGES.forEach(b=>{
+    const el=document.createElement('div');
+    el.className='badge-tag '+(G.badges.includes(b.id)?'earned':'locked');
+    el.textContent=b.icon+' '+b.name;
+    bg.appendChild(el);
+  });
+}
+
+/* ============================================
+   LEADERBOARD
+============================================ */
+const LB_DATA=[
+  {name:'Priya Sharma',school:'Delhi Public School',av:'👧',score:920},
+  {name:'Arjun Mehta',school:'St. Xavier\'s Mumbai',av:'👦',score:845},
+  {name:'Sneha Pillai',school:'KV Pune',av:'👩',score:810},
+  {name:'Rohan Gupta',school:'DPS Noida',av:'🧑',score:760},
+  {name:'Kavya Nair',school:'Amrita Vidyalayam',av:'👧',score:720}
+];
+function buildLB(){
+  const me={name:'You 🌟',school:'Your School',av:'🦸',score:G.csp,me:true};
+  const combined=[...LB_DATA,me].sort((a,b)=>b.score-a.score);
+  const list=document.getElementById('lb-list'); list.innerHTML='';
+  const medals=['🥇','🥈','🥉'];
+  combined.slice(0,8).forEach((p,i)=>{
+    const row=document.createElement('div');
+    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
+    row.className='lb-row '+rc+(p.me?' me':'');
+    row.innerHTML=`<div class="lb-rank">${i<3?medals[i]:'#'+(i+1)}</div><div class="lb-av">${p.av}</div><div class="lb-info"><div class="lb-name">${p.name}</div><div class="lb-sch">${p.school}</div></div><div class="lb-sc">${p.score}</div>`;
+    list.appendChild(row);
+  });
+}
+
+/* ============================================
+   INIT
+============================================ */
+buildMap();
+updateHUD();
+</script>
+</body>
+</html>
