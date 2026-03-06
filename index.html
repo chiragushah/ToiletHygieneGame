@@ -2,1439 +2,1449 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Loo Heroes — Woloo</title>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
 <style>
-/* ============================================
-   ROOT & RESET
-============================================ */
-:root {
-  --y1: #FFD000;   /* primary yellow */
-  --y2: #FFE55C;   /* light yellow */
-  --y3: #FFF5B0;   /* pale yellow fill */
-  --y4: #FFA500;   /* amber accent */
-  --y5: #FF8C00;   /* deep amber */
-  --w:  #FFFFFF;
-  --off: #FFFDF0;  /* off-white tint */
-  --ink: #1A1200;  /* near-black text */
-  --ink2: #5C4A00; /* muted text */
-  --ok: #22C55E;
-  --err: #EF4444;
-  --outline: 3px solid var(--y1);
-  --shadow: 0 4px 0 0 var(--y1);
-  --shadow-lg: 0 6px 0 0 var(--y1);
-  --shadow-hover: 0 2px 0 0 var(--y1);
-  --r: 16px;
-  --r-sm: 10px;
+:root{
+  --gold:#F5C400;--gold-l:#FFE168;--gold-d:#C99B00;
+  --gold-pale:#FFFBEA;--gold-tint:#FFF5C0;
+  --ink:#111008;--ink-2:#4A3F00;--ink-3:#9A8C50;
+  --surface:#FFFFFF;--surface-2:#FAFAF7;
+  --border:rgba(245,196,0,0.35);--border-strong:#F5C400;
+  --success:#16A34A;--success-bg:#F0FDF4;
+  --error:#DC2626;--error-bg:#FEF2F2;
+  --warn-bg:#FFFBEA;
+  --radius:18px;--radius-sm:10px;
+  --shadow-card:0 2px 24px rgba(0,0,0,0.07);
+  --shadow-gold:0 4px 20px rgba(245,196,0,0.35);
+  --tr:all 0.22s cubic-bezier(0.4,0,0.2,1);
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Nunito', sans-serif;
-  background: var(--w);
-  color: var(--ink);
-  min-height: 100vh;
-  overflow-x: hidden;
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%23FFD000' stroke='%231A1200' stroke-width='2'/%3E%3C/svg%3E") 12 12, auto;
-}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--surface);color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(245,196,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(245,196,0,0.04) 1px,transparent 1px);background-size:40px 40px;}
 
-/* ============================================
-   PARTICLES
-============================================ */
-#particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
-.star-particle {
-  position: absolute;
-  width: 8px; height: 8px;
-  background: var(--y1);
-  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  animation: starFloat linear infinite;
-  opacity: 0;
-}
-@keyframes starFloat {
-  0%   { transform: translateY(110vh) rotate(0deg) scale(0.5); opacity:0; }
-  10%  { opacity: 0.6; }
-  90%  { opacity: 0.3; }
-  100% { transform: translateY(-10vh) rotate(720deg) scale(1.2); opacity:0; }
-}
+/* SCREENS */
+.screen{display:none;flex-direction:column;align-items:center;min-height:100vh;position:relative;z-index:1;padding-bottom:80px;}
+.screen.active{display:flex;}
 
-/* ============================================
-   LAYOUT
-============================================ */
-.screen {
-  display: none; flex-direction: column; align-items: center;
-  min-height: 100vh; padding: 0 16px 100px;
-  position: relative; z-index: 1;
-}
-.screen.active { display: flex; }
-.wrap { width: 100%; max-width: 680px; margin: 0 auto; }
+/* TOPBAR */
+.topbar{width:100%;max-width:740px;display:flex;align-items:center;justify-content:space-between;padding:12px 20px;position:sticky;top:0;z-index:80;background:rgba(255,255,255,0.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+.tb-logo{display:flex;align-items:center;gap:10px;}
+.tb-icon{width:36px;height:36px;background:var(--gold);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(245,196,0,0.4);}
+.tb-text{font-family:'Syne',sans-serif;font-size:17px;font-weight:900;color:var(--ink);line-height:1;}
+.tb-sub{font-size:10px;font-weight:600;color:var(--ink-3);letter-spacing:.5px;text-transform:uppercase;}
+.tb-chips{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.chip{display:flex;align-items:center;gap:4px;padding:4px 11px;border-radius:30px;font-size:12px;font-weight:700;border:1.5px solid var(--border-strong);background:var(--gold-pale);color:var(--ink-2);transition:var(--tr);}
+.chip.pulse{animation:chipPulse 0.5s ease;}
+@keyframes chipPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 
-/* ============================================
-   TOP BAR
-============================================ */
-.topbar {
-  position: sticky; top: 0; z-index: 50;
-  width: 100%; background: var(--w);
-  border-bottom: var(--outline);
-  padding: 10px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 0;
-}
-.topbar-logo {
-  display: flex; align-items: center; gap: 8px;
-}
-.logo-mark {
-  width: 36px; height: 36px;
-  background: var(--y1);
-  border: 2px solid var(--ink);
-  border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
-  box-shadow: 2px 2px 0 var(--ink);
-}
-.logo-wordmark {
-  font-family: 'Baloo 2', cursive;
-  font-size: 20px; font-weight: 900;
-  color: var(--ink); line-height: 1;
-}
-.logo-tagline { font-size: 10px; color: var(--ink2); font-weight: 700; letter-spacing: 1px; }
-.topbar-hud { display: flex; gap: 8px; }
-.hud-chip {
-  display: flex; align-items: center; gap: 5px;
-  border: 2px solid var(--y1);
-  border-radius: 30px; padding: 4px 12px;
-  font-weight: 800; font-size: 13px; color: var(--ink);
-  background: var(--y3);
-  box-shadow: 2px 2px 0 var(--y1);
-}
+/* WRAP */
+.wrap{width:100%;max-width:720px;padding:0 14px;margin:0 auto;}
 
-/* ============================================
-   HERO / TITLE
-============================================ */
-.hero-screen {
-  justify-content: center;
-  background: var(--w);
-}
-.hero-wrap {
-  width: 100%; max-width: 600px;
-  padding: 40px 20px 60px;
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center;
-}
-.hero-badge {
-  display: inline-block;
-  background: var(--y1);
-  border: 2px solid var(--ink);
-  border-radius: 30px;
-  padding: 5px 18px;
-  font-size: 11px; font-weight: 900; letter-spacing: 2px;
-  text-transform: uppercase; color: var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
-  margin-bottom: 24px;
-  animation: badgePop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
-}
-@keyframes badgePop { from { transform: scale(0) rotate(-10deg); } to { transform: scale(1) rotate(0deg); } }
+/* TITLE */
+#s-title{justify-content:flex-start;align-items:center;}
+.splash{width:100%;max-width:600px;padding:40px 20px 60px;display:flex;flex-direction:column;align-items:center;text-align:center;}
+.splash-label{display:inline-flex;align-items:center;gap:6px;background:var(--gold);border-radius:30px;padding:5px 16px 5px 10px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);margin-bottom:28px;animation:fadeUp 0.5s ease both;}
+.splash-dot{width:8px;height:8px;background:var(--ink);border-radius:50%;}
+.hero-visual{position:relative;width:180px;height:180px;margin:0 auto 30px;}
+.hero-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--gold);animation:ringPulse 3s ease-in-out infinite;}
+.hero-ring:nth-child(2){border-color:rgba(245,196,0,0.3);animation-delay:.5s;transform:scale(1.15);}
+.hero-ring:nth-child(3){border-color:rgba(245,196,0,0.12);animation-delay:1s;transform:scale(1.3);}
+@keyframes ringPulse{0%,100%{opacity:1}50%{opacity:0.4;transform:scale(1.06)}}
+.hero-face{position:absolute;inset:12px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:66px;box-shadow:0 8px 32px rgba(245,196,0,0.4),inset 0 -4px 0 rgba(0,0,0,0.08);cursor:pointer;transition:transform .15s;animation:heroFloat 4s ease-in-out infinite;user-select:none;}
+.hero-face:active{transform:scale(0.88)!important;}
+@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero-badge-float{position:absolute;top:-10px;right:-16px;background:var(--surface);border:2px solid var(--gold);border-radius:12px;padding:5px 11px;font-size:12px;font-weight:700;box-shadow:var(--shadow-gold);animation:badgeFloat 4s ease-in-out infinite;white-space:nowrap;pointer-events:none;}
+@keyframes badgeFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-6px) rotate(3deg)}}
+.splash-title{font-family:'Syne',sans-serif;font-size:clamp(50px,10vw,82px);font-weight:900;color:var(--ink);line-height:.9;letter-spacing:-3px;margin-bottom:8px;animation:fadeUp .6s .15s ease both;}
+.splash-title span{color:var(--gold-d);display:block;}
+.splash-sub{font-size:15px;font-weight:600;color:var(--ink-3);margin-bottom:24px;animation:fadeUp .6s .2s ease both;max-width:400px;line-height:1.65;}
+.story-card{background:var(--gold-pale);border:1.5px solid var(--border-strong);border-radius:var(--radius);padding:18px 22px;text-align:left;font-size:14px;line-height:1.75;color:var(--ink-2);margin-bottom:28px;animation:fadeUp .6s .25s ease both;max-width:480px;width:100%;}
+.story-card strong{color:var(--ink);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-.hero-character {
-  position: relative;
-  width: 140px; height: 140px;
-  margin: 0 auto 24px;
-}
-.char-body {
-  width: 140px; height: 140px;
-  background: var(--y1);
-  border: 3px solid var(--ink);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 70px;
-  box-shadow: 5px 5px 0 var(--ink);
-  animation: heroFloat 3s ease-in-out infinite;
-  cursor: pointer;
-  transition: transform 0.1s;
-}
-.char-body:active { transform: scale(0.92); }
-@keyframes heroFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-.char-speech {
-  position: absolute;
-  top: -20px; right: -80px;
-  background: var(--w);
-  border: 2px solid var(--ink);
-  border-radius: 12px;
-  padding: 6px 12px;
-  font-size: 12px; font-weight: 800; color: var(--ink);
-  white-space: nowrap;
-  box-shadow: 2px 2px 0 var(--y1);
-  animation: speechBob 4s ease-in-out infinite;
-}
-.char-speech::before {
-  content: '';
-  position: absolute; bottom: 50%; left: -8px;
-  border: 6px solid transparent;
-  border-right-color: var(--ink);
-  transform: translateY(50%);
-}
-@keyframes speechBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-5px)} }
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;border:none;border-radius:var(--radius);cursor:pointer;transition:var(--tr);text-decoration:none;position:relative;overflow:hidden;letter-spacing:-.1px;}
+.btn:active{transform:scale(0.96)!important;}
+.btn-xl{font-size:17px;padding:17px 44px;box-shadow:0 4px 20px rgba(0,0,0,0.08);}
+.btn-lg{font-size:15px;padding:13px 30px;}
+.btn-md{font-size:14px;padding:10px 22px;}
+.btn-sm{font-size:13px;padding:8px 16px;}
+.btn-gold{background:var(--gold);color:var(--ink);box-shadow:var(--shadow-gold);}
+.btn-gold:hover{background:var(--gold-l);transform:translateY(-1px);}
+.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border-strong);}
+.btn-outline:hover{background:var(--gold-pale);}
+.btn-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px;}
 
-.hero-title {
-  font-family: 'Baloo 2', cursive;
-  font-size: clamp(48px,10vw,80px);
-  font-weight: 900;
-  color: var(--ink);
-  line-height: 0.9;
-  text-transform: uppercase;
-  letter-spacing: -2px;
-  text-shadow: 5px 5px 0 var(--y1);
-  margin-bottom: 6px;
-  animation: titleSlide 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.2s both;
-}
-@keyframes titleSlide { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
-.hero-subtitle {
-  font-family: 'Baloo 2', cursive;
-  font-size: 20px; font-weight: 700;
-  color: var(--ink2); margin-bottom: 28px;
-  animation: titleSlide 0.7s cubic-bezier(0.34,1.56,0.64,1) 0.35s both;
-}
+/* WORLD MAP */
+.map-wrap{width:100%;max-width:740px;padding:0 14px 20px;}
+.world-section{margin-bottom:28px;}
+.world-title{display:flex;align-items:center;gap:10px;margin:20px 0 12px;}
+.world-label{font-family:'Syne',sans-serif;font-size:16px;font-weight:900;color:var(--ink);}
+.world-count{font-size:11px;font-weight:700;color:var(--ink-3);background:var(--gold-tint);border:1px solid var(--border-strong);padding:2px 10px;border-radius:20px;}
+.world-divider{flex:1;height:1px;background:var(--border);}
+.zones-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.region{background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;cursor:pointer;transition:var(--tr);position:relative;overflow:hidden;}
+.region-shine{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(245,196,0,0.12),transparent);transform:skewX(-20deg);transition:left .6s ease;}
+.region:hover .region-shine{left:150%;}
+.region:hover:not(.locked){border-color:var(--gold);transform:translateY(-3px);box-shadow:0 6px 20px rgba(245,196,0,0.2);}
+.region:active:not(.locked){transform:translateY(0)!important;}
+.region.locked{opacity:0.42;cursor:not-allowed;}
+.region.done{background:var(--gold-pale);border-color:var(--gold);}
+.region-tick{position:absolute;top:7px;right:8px;background:var(--success);color:#fff;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;}
+.region-icon{font-size:30px;display:block;margin-bottom:7px;transition:transform .3s;}
+.region:hover:not(.locked) .region-icon{transform:scale(1.18);}
+.region-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--ink);margin-bottom:2px;line-height:1.2;}
+.region-sub{font-size:10px;color:var(--ink-3);font-weight:600;}
+.region-xp{display:inline-block;margin-top:5px;background:var(--gold);border-radius:20px;padding:1px 8px;font-size:9px;font-weight:800;color:var(--ink);}
 
-.story-panel {
-  background: var(--off);
-  border: var(--outline);
-  border-radius: var(--r);
-  padding: 18px 22px;
-  text-align: left;
-  font-size: 14px; line-height: 1.7; color: var(--ink2);
-  margin-bottom: 28px;
-  box-shadow: var(--shadow-lg);
-  animation: titleSlide 0.7s ease 0.45s both;
-}
-.story-panel strong { color: var(--ink); }
+/* GAME SHELL */
+.game-shell{width:100%;max-width:700px;padding:14px 14px;}
+.level-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:24px;box-shadow:var(--shadow-card);position:relative;overflow:hidden;margin-bottom:12px;}
+.level-card-accent{position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-l));}
+.lc-label{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);border:1px solid var(--border-strong);border-radius:30px;padding:3px 12px;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--gold-d);margin-bottom:8px;}
+.lc-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:900;color:var(--ink);margin-bottom:4px;}
+.lc-desc{font-size:13px;color:var(--ink-3);font-weight:500;line-height:1.5;margin-bottom:16px;}
 
-/* ============================================
-   BUTTONS
-============================================ */
-.btn {
-  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  font-family: 'Baloo 2', cursive;
-  font-weight: 800; border: 2px solid var(--ink);
-  border-radius: var(--r); cursor: pointer;
-  transition: all 0.12s; text-decoration: none;
-  position: relative; top: 0;
-  user-select: none;
-}
-.btn:active { top: 4px; box-shadow: none !important; }
-.btn-xl { font-size: 22px; padding: 16px 44px; box-shadow: var(--shadow-lg); }
-.btn-lg { font-size: 18px; padding: 13px 32px; box-shadow: var(--shadow); }
-.btn-md { font-size: 15px; padding: 10px 22px; box-shadow: var(--shadow); }
-.btn-sm { font-size: 13px; padding: 7px 16px; box-shadow: 0 3px 0 0 var(--y1); }
-.btn-yellow { background: var(--y1); color: var(--ink); }
-.btn-yellow:hover { background: var(--y2); }
-.btn-white { background: var(--w); color: var(--ink); border-color: var(--y1); box-shadow: var(--shadow); }
-.btn-white:hover { background: var(--y3); }
-.btn-dark { background: var(--ink); color: var(--y1); }
-.btn-dark:hover { background: #2e2000; }
-.btn-green { background: var(--ok); color: white; border-color: #16a34a; box-shadow: 0 4px 0 0 #16a34a; }
-.btn-green:hover { background: #16a34a; }
-.btn-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+/* PROGRESS */
+.prog-wrap{margin-bottom:16px;}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.prog-label{font-size:12px;font-weight:700;color:var(--ink-3);}
+.prog-frac{font-size:12px;font-weight:800;color:var(--ink-2);}
+.prog-bar{height:7px;background:#F3EFD5;border-radius:30px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-d),var(--gold),var(--gold-l));border-radius:30px;transition:width .5s cubic-bezier(0.34,1.56,0.64,1);}
 
-/* ============================================
-   MAP
-============================================ */
-.map-header { text-align: center; padding: 24px 0 16px; }
-.map-title { font-family:'Baloo 2',cursive; font-size:32px; font-weight:900; color:var(--ink); }
-.map-sub { font-size:14px; color:var(--ink2); font-weight:600; margin-top:2px; }
+/* STREAK */
+.streak-bar{display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:14px;flex-wrap:wrap;}
+.streak-dot{width:9px;height:9px;border-radius:50%;background:#E8E3CC;transition:var(--tr);}
+.streak-dot.lit{background:var(--gold);box-shadow:0 0 5px var(--gold);}
+.streak-dot.correct{background:var(--success);}
+.streak-dot.wrong{background:var(--error);}
 
-.city-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px; padding: 0 0 20px;
-}
-.region {
-  background: var(--w);
-  border: 2px solid var(--y1);
-  border-radius: var(--r);
-  padding: 18px 12px;
-  text-align: center;
-  cursor: pointer;
-  box-shadow: var(--shadow);
-  transition: all 0.15s;
-  position: relative;
-  overflow: hidden;
-}
-.region::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: var(--y3);
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-.region:hover:not(.locked)::before { opacity: 1; }
-.region:hover:not(.locked) { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-.region:active:not(.locked) { transform: translateY(2px); box-shadow: 0 2px 0 0 var(--y1); }
-.region.locked { border-color: #E5E7EB; box-shadow: 0 4px 0 0 #E5E7EB; cursor: not-allowed; opacity: 0.6; }
-.region.done { background: var(--y3); }
-.region.done::after {
-  content: '✓';
-  position: absolute; top: 6px; right: 10px;
-  color: var(--y5); font-weight: 900; font-size: 16px;
-}
-.region-icon { font-size: 36px; display:block; margin-bottom:8px; position:relative; z-index:1; }
-.region-name { font-family:'Baloo 2',cursive; font-weight:800; font-size:14px; color:var(--ink); position:relative;z-index:1; }
-.region-lvl { font-size:11px; color:var(--ink2); font-weight:700; margin-top:2px; position:relative;z-index:1; }
+/* QUIZ */
+.q-pill{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.q-num{width:30px;height:30px;flex-shrink:0;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:900;}
+.q-category{font-size:11px;font-weight:700;color:var(--ink-3);letter-spacing:.3px;text-transform:uppercase;}
+.q-text{background:var(--gold-pale);border:1.5px solid var(--border);border-radius:13px;padding:16px 18px;font-size:16px;font-weight:700;color:var(--ink);line-height:1.55;margin-bottom:14px;}
+.opts{display:flex;flex-direction:column;gap:9px;}
+.opt{background:var(--surface);border:1.5px solid #E8E3CC;border-radius:11px;padding:13px 15px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:11px;text-align:left;width:100%;}
+.opt:hover:not([disabled]){border-color:var(--gold);background:var(--gold-pale);transform:translateX(3px);}
+.opt-key{width:28px;height:28px;flex-shrink:0;border-radius:7px;background:#F5F0DC;border:1.5px solid #E0D9B0;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;transition:var(--tr);}
+.opt:hover:not([disabled]) .opt-key{background:var(--gold);border-color:var(--gold-d);}
+.opt.correct{background:var(--success-bg);border-color:var(--success);color:#14532D;}
+.opt.correct .opt-key{background:var(--success);border-color:#15803D;color:#fff;}
+.opt.wrong{background:var(--error-bg);border-color:var(--error);color:#7F1D1D;animation:shake .35s ease;}
+.opt.wrong .opt-key{background:var(--error);border-color:#B91C1C;color:#fff;}
+.opt.dimmed{opacity:0.38;pointer-events:none;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 
-/* ============================================
-   GAME CARD
-============================================ */
-.game-card {
-  background: var(--w);
-  border: var(--outline);
-  border-radius: 20px;
-  padding: 26px;
-  box-shadow: var(--shadow-lg);
-  margin: 16px 0;
-  position: relative;
-  overflow: hidden;
-}
-.game-card::before {
-  content: '';
-  position: absolute; top:0; left:0; right:0; height:5px;
-  background: var(--y1);
-}
-.gc-title { font-family:'Baloo 2',cursive; font-size:24px; font-weight:900; color:var(--ink); margin-bottom:3px; }
-.gc-desc { font-size:13px; color:var(--ink2); font-weight:600; margin-bottom:16px; }
+/* FEEDBACK */
+.feedback{display:none;border-radius:11px;padding:12px 15px;margin-top:12px;font-size:13px;font-weight:600;line-height:1.5;border:1.5px solid;}
+.feedback.show{display:flex;align-items:flex-start;gap:9px;}
+.feedback.ok{background:var(--success-bg);border-color:var(--success);color:#14532D;}
+.feedback.bad{background:var(--error-bg);border-color:var(--error);color:#7F1D1D;}
+.feedback.info{background:var(--warn-bg);border-color:var(--border-strong);color:var(--ink-2);}
+.fb-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
 
-/* ============================================
-   PROGRESS BAR
-============================================ */
-.pbar-wrap { background: var(--y3); border:2px solid var(--y1); border-radius:30px; height:14px; overflow:hidden; margin-bottom:6px; }
-.pbar-fill { height:100%; background:linear-gradient(90deg,var(--y1),var(--y4)); border-radius:30px; transition:width 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-.pbar-label { font-size:12px; color:var(--ink2); font-weight:700; text-align:right; margin-bottom:14px; }
+/* TRUE/FALSE */
+.tf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.tf-btn{background:var(--surface);border:1.5px solid #E8E3CC;border-radius:14px;padding:20px 14px;font-family:'Syne',sans-serif;font-size:17px;font-weight:900;cursor:pointer;transition:var(--tr);display:flex;flex-direction:column;align-items:center;gap:7px;}
+.tf-btn:hover{border-color:var(--gold);background:var(--gold-pale);transform:translateY(-2px);}
+.tf-icon{font-size:30px;}
+.tf-btn.correct{background:var(--success-bg);border-color:var(--success);color:#14532D;}
+.tf-btn.wrong{background:var(--error-bg);border-color:var(--error);color:#7F1D1D;animation:shake .35s ease;}
+.tf-btn.dimmed{opacity:0.32;pointer-events:none;}
 
-/* ============================================
-   QUIZ
-============================================ */
-.q-box {
-  background: var(--y3);
-  border: 2px solid var(--y1);
-  border-radius: var(--r);
-  padding: 18px 20px;
-  font-size: 17px; font-weight: 800; color: var(--ink);
-  line-height: 1.5; margin-bottom: 16px;
-}
-.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.opt {
-  background: var(--w);
-  border: 2px solid var(--y1);
-  border-radius: var(--r-sm);
-  padding: 13px 14px;
-  font-size: 14px; font-weight: 700; color: var(--ink);
-  cursor: pointer; text-align: left;
-  display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 3px 0 0 var(--y1);
-  transition: all 0.12s;
-  position: relative; top: 0;
-}
-.opt:hover { background: var(--y3); transform: translateY(-2px); box-shadow: 0 5px 0 0 var(--y1); }
-.opt:active { top: 3px; box-shadow: none; }
-.opt.c-right { background:#D1FAE5; border-color:#22C55E; box-shadow:0 3px 0 0 #16a34a; color:#14532D; pointer-events:none; }
-.opt.c-wrong { background:#FEE2E2; border-color:#EF4444; box-shadow:0 3px 0 0 #B91C1C; color:#7F1D1D; pointer-events:none; }
-.opt.c-disabled { pointer-events:none; opacity:0.6; }
-.opt-key {
-  width: 28px; height: 28px; border-radius: 8px;
-  background: var(--y1); border: 2px solid var(--ink);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 13px;
-  flex-shrink: 0;
-}
+/* SPOT THE LOO */
+.loo-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.loo-card{background:var(--surface);border:1.5px solid var(--border);border-radius:15px;padding:18px 13px;cursor:pointer;transition:var(--tr);text-align:center;position:relative;overflow:hidden;}
+.loo-card:hover{border-color:var(--gold);transform:translateY(-4px);box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+.loo-icon{font-size:48px;display:block;margin-bottom:10px;animation:looWobble 3s ease-in-out infinite;}
+@keyframes looWobble{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+.loo-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:7px;color:var(--ink);}
+.loo-clues{list-style:none;text-align:left;}
+.loo-clues li{font-size:11px;color:var(--ink-3);font-weight:500;padding:1px 0;display:flex;gap:4px;}
+.loo-card.hit{border-color:var(--success);background:var(--success-bg);animation:hitPop .4s ease;}
+.loo-card.miss{border-color:var(--error);background:var(--error-bg);animation:shake .35s ease;}
+@keyframes hitPop{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
-/* ============================================
-   FEEDBACK
-============================================ */
-.fb {
-  display: none; border-radius: var(--r-sm);
-  padding: 12px 16px; font-weight: 800; font-size: 14px;
-  margin-top: 12px; border: 2px solid;
-}
-.fb.show { display: block; }
-.fb.ok { background:#D1FAE5; border-color:var(--ok); color:#14532D; }
-.fb.bad { background:#FEE2E2; border-color:var(--err); color:#7F1D1D; }
-.fb.tip { background:var(--y3); border-color:var(--y1); color:var(--ink); }
+/* REPORT */
+.report-scene{background:var(--gold-pale);border:1.5px solid var(--border-strong);border-radius:15px;padding:20px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
+.scene-emoji{font-size:64px;display:block;margin-bottom:8px;filter:drop-shadow(0 4px 10px rgba(0,0,0,0.12));}
+.scene-name{font-family:'Syne',sans-serif;font-size:16px;font-weight:900;color:var(--ink);margin-bottom:3px;}
+.scene-cap{font-size:12px;color:var(--ink-3);font-weight:500;}
+.issue-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px;}
+.issue-chip{background:var(--surface);border:1.5px solid #E8E3CC;border-radius:30px;padding:7px 15px;font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr);display:flex;align-items:center;gap:5px;}
+.issue-chip:hover{border-color:var(--gold);background:var(--gold-pale);}
+.issue-chip.found{background:var(--success-bg);border-color:var(--success);color:#14532D;font-weight:700;animation:chipPop .35s cubic-bezier(0.34,1.56,0.64,1);pointer-events:none;}
+.issue-chip.not-issue{background:#FEF9E8;border-color:var(--gold-d);color:var(--ink-2);pointer-events:none;animation:shake .3s ease;}
+@keyframes chipPop{0%{transform:scale(1)}50%{transform:scale(1.15)}100%{transform:scale(1)}}
 
-/* ============================================
-   SPOT THE LOO
-============================================ */
-.loo-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
-.loo-card {
-  border: 3px solid var(--y1);
-  border-radius: var(--r);
-  padding: 16px;
-  cursor: pointer;
-  text-align: center;
-  box-shadow: var(--shadow);
-  transition: all 0.15s;
-  position: relative;
-  overflow: hidden;
-  background: var(--w);
-}
-.loo-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); }
-.loo-card:active { transform:translateY(2px); }
-.loo-big { font-size:56px; display:block; margin-bottom:10px;
-  animation: iconWobble 2s ease-in-out infinite;
-}
-@keyframes iconWobble { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
-.loo-name { font-family:'Baloo 2',cursive; font-weight:800; font-size:15px; margin-bottom:6px; }
-.loo-clue { font-size:11px; color:var(--ink2); text-align:left; }
-.loo-clue li { margin-bottom:3px; }
-.loo-card.flash-right {
-  border-color: var(--ok) !important;
-  background: #D1FAE5 !important;
-  animation: rightFlash 0.4s ease;
-}
-.loo-card.flash-wrong {
-  border-color: var(--err) !important;
-  background: #FEE2E2 !important;
-  animation: wrongShake 0.4s ease;
-}
-@keyframes rightFlash { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1)} }
-@keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+/* SORT */
+.sort-hint{background:var(--gold-tint);border:1px solid var(--border);border-radius:9px;padding:9px 13px;font-size:12px;font-weight:600;color:var(--ink-2);margin-bottom:12px;display:flex;align-items:center;gap:7px;}
+.item-pool{display:flex;flex-wrap:wrap;gap:7px;background:var(--surface-2);border:1.5px dashed var(--border-strong);border-radius:13px;padding:13px;min-height:52px;margin-bottom:13px;}
+.sort-item{background:var(--surface);border:1.5px solid #E0D9B0;border-radius:30px;padding:7px 14px;font-size:12px;font-weight:600;color:var(--ink);cursor:pointer;transition:var(--tr);user-select:none;}
+.sort-item:hover{border-color:var(--gold);background:var(--gold-pale);transform:translateY(-2px);}
+.sort-item.sel{border-color:var(--gold-d);background:var(--gold);box-shadow:0 0 0 3px rgba(245,196,0,0.3);}
+.sort-item.placed{opacity:0.45;pointer-events:none;}
+.bins{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.bin{border:2px dashed;border-radius:13px;padding:12px;min-height:72px;transition:var(--tr);}
+.bin.h-bin{border-color:var(--success);background:var(--success-bg);}
+.bin.u-bin{border-color:var(--error);background:var(--error-bg);}
+.bin.drop-active{transform:scale(1.03);}
+.bin-label{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;margin-bottom:7px;}
+.bin-label.h{color:var(--success);}
+.bin-label.u{color:var(--error);}
+.bin-items{display:flex;flex-wrap:wrap;gap:5px;}
+.bin-items .sort-item{font-size:11px;padding:4px 10px;pointer-events:none;}
 
-/* ============================================
-   DRAG & DROP SORT
-============================================ */
-.drag-pool {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  background: var(--off); border: 2px dashed var(--y1);
-  border-radius: var(--r); padding: 14px;
-  min-height: 60px; margin-bottom: 14px;
-}
-.drag-item {
-  background: var(--w);
-  border: 2px solid var(--y1);
-  border-radius: 30px;
-  padding: 7px 16px;
-  font-size: 13px; font-weight: 700;
-  cursor: grab; user-select: none;
-  box-shadow: 2px 2px 0 var(--y1);
-  transition: all 0.12s;
-  display: flex; align-items: center; gap: 5px;
-  touch-action: none;
-}
-.drag-item:hover { background:var(--y3); transform:scale(1.05); }
-.drag-item.is-dragging { opacity:0.4; cursor:grabbing; transform:scale(0.95); }
-.drag-item.placed { cursor:default; pointer-events:none; }
-.drag-item.placed:hover { transform:none; }
+/* MATCHING */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.match-col-title{font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--ink-3);margin-bottom:7px;text-align:center;}
+.match-col{display:flex;flex-direction:column;gap:7px;}
+.match-item{background:var(--surface);border:1.5px solid #E8E3CC;border-radius:9px;padding:10px 13px;font-size:12px;font-weight:600;cursor:pointer;transition:var(--tr);text-align:center;line-height:1.4;}
+.match-item:hover{border-color:var(--gold);background:var(--gold-pale);}
+.match-item.sel-left{border-color:var(--gold-d);background:var(--gold);font-weight:700;}
+.match-item.matched{background:var(--success-bg);border-color:var(--success);color:#14532D;pointer-events:none;}
+.match-item.wrong-flash{border-color:var(--error);background:var(--error-bg);animation:shake .3s ease;}
 
-.sort-bins { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-.sort-bin {
-  border: 3px dashed;
-  border-radius: var(--r);
-  padding: 12px;
-  min-height: 90px;
-  transition: all 0.15s;
-}
-.sort-bin.hyg { border-color:var(--ok); background:#F0FDF4; }
-.sort-bin.uhyg { border-color:var(--err); background:#FEF2F2; }
-.sort-bin.drag-over { transform:scale(1.02); }
-.sort-bin.hyg.drag-over { background:#D1FAE5; }
-.sort-bin.uhyg.drag-over { background:#FEE2E2; }
-.bin-label { font-family:'Baloo 2',cursive; font-weight:800; font-size:14px; margin-bottom:8px; }
-.bin-label.hyg { color:#15803D; }
-.bin-label.uhyg { color:#B91C1C; }
-.bin-items { display:flex; flex-wrap:wrap; gap:6px; min-height:40px; }
-.bin-items .drag-item { font-size:12px; padding:5px 12px; }
+/* CHECKLIST */
+.cl-list{display:flex;flex-direction:column;gap:7px;}
+.cl-item{display:flex;align-items:center;gap:12px;background:var(--surface);border:1.5px solid #E8E3CC;border-radius:11px;padding:13px 15px;cursor:pointer;font-size:13px;font-weight:600;color:var(--ink);transition:var(--tr);}
+.cl-item:hover:not(.done){border-color:var(--gold);background:var(--gold-pale);}
+.cl-item.done{background:var(--gold-tint);border-color:var(--gold);animation:clDone .3s ease;}
+@keyframes clDone{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+.cl-check{width:24px;height:24px;flex-shrink:0;border-radius:7px;border:2px solid #D4C87A;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:12px;transition:var(--tr);}
+.cl-item.done .cl-check{background:var(--gold);border-color:var(--gold-d);}
 
-/* ============================================
-   REPORTING GAME — CLICK THE ISSUE
-============================================ */
-.scene-container {
-  position: relative;
-  background: var(--off);
-  border: var(--outline);
-  border-radius: var(--r);
-  padding: 20px;
-  margin-bottom: 16px;
-  text-align: center;
-  overflow: hidden;
-}
-.scene-toilet { font-size: 80px; display:block; margin-bottom:8px;
-  filter: drop-shadow(3px 3px 0 var(--y1));
-}
-.scene-title { font-family:'Baloo 2',cursive; font-weight:800; font-size:16px; color:var(--ink); }
-.scene-sub { font-size:12px; color:var(--ink2); }
+/* SCENARIO CARD (for zone-specific story) */
+.scenario-banner{background:linear-gradient(135deg,var(--gold-pale),#FFF9D0);border:1.5px solid var(--border-strong);border-radius:15px;padding:16px 18px;margin-bottom:16px;display:flex;align-items:flex-start;gap:14px;}
+.scenario-icon{font-size:40px;flex-shrink:0;}
+.scenario-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:900;color:var(--ink);margin-bottom:3px;}
+.scenario-body{font-size:12px;color:var(--ink-2);line-height:1.6;}
 
-.issue-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:14px; }
-.issue-chip {
-  background: var(--w);
-  border: 2px solid var(--y1);
-  border-radius: 30px;
-  padding: 8px 18px;
-  font-size: 13px; font-weight: 700;
-  cursor: pointer;
-  box-shadow: 2px 2px 0 var(--y1);
-  transition: all 0.15s;
-  position: relative; top: 0;
-}
-.issue-chip:hover { background:var(--y3); top:-2px; box-shadow:4px 4px 0 var(--y1); }
-.issue-chip:active { top:2px; box-shadow:none; }
-.issue-chip.tapped-issue {
-  background: #D1FAE5; border-color:var(--ok);
-  box-shadow: 2px 2px 0 #16a34a; color:#14532D;
-  animation: chipFound 0.35s cubic-bezier(0.34,1.56,0.64,1);
-  cursor:default;
-}
-.issue-chip.tapped-good {
-  background: #FEF3C7; border-color:var(--y4);
-  color:#92400E; cursor:default;
-  animation: wrongShake 0.3s ease;
-}
-@keyframes chipFound { 0%{transform:scale(1)} 50%{transform:scale(1.2)} 100%{transform:scale(1)} }
+/* PROFILE */
+.profile-cover{width:100%;background:linear-gradient(135deg,var(--gold-pale) 0%,#FFF9D0 100%);border-bottom:1.5px solid var(--border);padding:28px 20px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;}
+.p-avatar{width:88px;height:88px;background:var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:44px;margin-bottom:12px;box-shadow:0 4px 20px rgba(245,196,0,0.4),0 0 0 4px var(--surface);}
+.p-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:900;color:var(--ink);margin-bottom:2px;}
+.p-rank{font-size:12px;font-weight:700;color:var(--ink-3);}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;padding:14px;}
+.stat-card{background:var(--surface);border:1.5px solid var(--border);border-radius:13px;padding:14px 8px;text-align:center;box-shadow:var(--shadow-card);}
+.stat-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:900;color:var(--ink);}
+.stat-name{font-size:10px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:.3px;}
+.badges-section{padding:0 14px 14px;}
+.sec-head{font-family:'Syne',sans-serif;font-size:16px;font-weight:900;color:var(--ink);margin-bottom:10px;}
+.badge-grid{display:flex;flex-wrap:wrap;gap:7px;}
+.badge-pill{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:30px;font-size:12px;font-weight:700;border:1.5px solid;}
+.badge-pill.earned{background:var(--gold);border-color:var(--gold-d);color:var(--ink);}
+.badge-pill.locked{background:var(--surface);border-color:#E0D9B0;color:#B0A060;}
 
-/* ============================================
-   CHECKLIST
-============================================ */
-.checklist { list-style:none; }
-.cl-item {
-  display: flex; align-items: center; gap: 12px;
-  padding: 12px 14px; margin-bottom:8px;
-  background: var(--w);
-  border: 2px solid var(--y1);
-  border-radius: var(--r-sm);
-  cursor: pointer;
-  font-size: 14px; font-weight: 700; color: var(--ink);
-  box-shadow: 2px 3px 0 var(--y1);
-  transition: all 0.15s;
-  position: relative; top:0;
-}
-.cl-item:hover { background:var(--y3); top:-2px; box-shadow:2px 5px 0 var(--y1); }
-.cl-item:active { top:2px; box-shadow:none; }
-.cl-item.done {
-  background: var(--y3); border-color:var(--y4);
-  box-shadow: 2px 3px 0 var(--y4);
-  animation: checkDone 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes checkDone { 0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)} }
-.cl-box {
-  width:26px; height:26px; border-radius:8px;
-  border:2px solid var(--y1); background:var(--w);
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; flex-shrink:0;
-  transition: all 0.2s;
-}
-.cl-item.done .cl-box { background:var(--y1); border-color:var(--y4); }
+/* LEADERBOARD */
+.lb-list{padding:0 14px;}
+.lb-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1.5px solid var(--border);border-radius:13px;padding:12px 15px;margin-bottom:7px;box-shadow:var(--shadow-card);transition:var(--tr);}
+.lb-row:hover{border-color:var(--gold);transform:translateX(3px);}
+.lb-row.g1{background:var(--gold);border-color:var(--gold-d);box-shadow:var(--shadow-gold);}
+.lb-row.g2{background:#F8F8F0;border-color:#B0A8A0;}
+.lb-row.g3{background:#FFF5EB;border-color:#F09050;}
+.lb-row.me{border-color:var(--gold-d);border-width:2px;background:var(--gold-pale);}
+.lb-rank{font-family:'Syne',sans-serif;font-size:18px;font-weight:900;width:30px;text-align:center;}
+.lb-av{font-size:24px;}
+.lb-info{flex:1;}
+.lb-name{font-weight:700;font-size:13px;color:var(--ink);}
+.lb-sch{font-size:10px;color:var(--ink-3);}
+.lb-pts{font-family:'Syne',sans-serif;font-size:16px;font-weight:900;color:var(--ink-2);}
 
-/* ============================================
-   PROFILE
-============================================ */
-.profile-hero {
-  text-align:center; padding:30px 20px 20px;
-}
-.p-avatar {
-  width:110px; height:110px;
-  background:var(--y1);
-  border:3px solid var(--ink);
-  border-radius:50%;
-  margin:0 auto 14px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:56px;
-  box-shadow: 5px 5px 0 var(--ink);
-}
-.p-name { font-family:'Baloo 2',cursive; font-size:26px; font-weight:900; color:var(--ink); }
-.p-rank { font-size:13px; font-weight:800; color:var(--ink2); letter-spacing:1px; text-transform:uppercase; margin-top:4px; }
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:80;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:7px 0 max(7px,env(safe-area-inset-bottom));}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;font-size:10px;font-weight:700;color:var(--ink-3);padding:3px 16px;transition:var(--tr);font-family:'Plus Jakarta Sans',sans-serif;text-transform:uppercase;letter-spacing:.5px;}
+.nav-icon{font-size:19px;display:block;transition:transform .2s;}
+.nav-btn.on{color:var(--gold-d);}
+.nav-btn.on .nav-icon{transform:scale(1.22);}
 
-.stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:20px 0; }
-.stat-box {
-  background:var(--w); border:2px solid var(--y1);
-  border-radius:var(--r); padding:14px 10px;
-  text-align:center; box-shadow:var(--shadow);
-}
-.stat-n { font-family:'Baloo 2',cursive; font-size:28px; font-weight:900; color:var(--ink); }
-.stat-l { font-size:11px; color:var(--ink2); font-weight:700; text-transform:uppercase; }
+/* REWARD */
+.overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.overlay.open{display:flex;}
+.reward-box{background:var(--surface);border:2px solid var(--border-strong);border-radius:24px;padding:36px 28px;text-align:center;max-width:360px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,0.2);animation:rewardIn .5s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes rewardIn{from{transform:scale(0.6) rotate(-5deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+.rw-emoji{font-size:66px;display:block;margin-bottom:14px;animation:heroFloat 2s infinite;}
+.rw-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:900;color:var(--ink);margin-bottom:8px;}
+.rw-badge{display:inline-block;background:var(--gold);border-radius:30px;padding:7px 20px;font-weight:800;font-size:13px;color:var(--ink);margin-bottom:12px;box-shadow:0 3px 12px rgba(245,196,0,0.4);}
+.xp-gained{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--gold-pale);border:1.5px solid var(--border-strong);border-radius:11px;padding:11px;margin-bottom:18px;}
+.xp-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:900;color:var(--gold-d);}
+.xp-lbl{font-size:12px;font-weight:700;color:var(--ink-2);}
+.rw-text{font-size:13px;color:var(--ink-3);line-height:1.6;margin-bottom:20px;}
 
-.badges-wrap { margin-bottom:20px; }
-.sec-title { font-family:'Baloo 2',cursive; font-size:18px; font-weight:800; margin-bottom:12px; color:var(--ink); }
-.badge-row { display:flex; flex-wrap:wrap; gap:8px; }
-.badge-tag {
-  display:flex; align-items:center; gap:6px;
-  padding:7px 16px; border-radius:30px;
-  font-size:12px; font-weight:800; border:2px solid;
-}
-.badge-tag.earned { background:var(--y1); border-color:var(--ink); color:var(--ink); box-shadow:2px 2px 0 var(--ink); }
-.badge-tag.locked { background:var(--w); border-color:#E5E7EB; color:#9CA3AF; }
+/* TOAST */
+.toast{position:fixed;left:50%;top:68px;transform:translateX(-50%);background:var(--ink);color:var(--gold);border-radius:30px;padding:8px 20px;font-size:13px;font-weight:700;z-index:300;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.2);animation:toastAnim 1.8s ease forwards;}
+@keyframes toastAnim{0%{opacity:0;transform:translateX(-50%) translateY(8px);}15%{opacity:1;transform:translateX(-50%) translateY(0);}75%{opacity:1;}100%{opacity:0;transform:translateX(-50%) translateY(-16px);}}
 
-/* ============================================
-   LEADERBOARD
-============================================ */
-.lb-list { padding: 8px 0; }
-.lb-row {
-  display:flex; align-items:center; gap:12px;
-  background:var(--w); border:2px solid var(--y1);
-  border-radius:var(--r-sm); padding:12px 16px;
-  margin-bottom:9px;
-  box-shadow:var(--shadow);
-  transition:all 0.12s;
-}
-.lb-row:hover { transform:translateX(4px); background:var(--y3); }
-.lb-row.r1 { background:var(--y1); border-color:var(--ink); box-shadow:var(--shadow-lg); }
-.lb-row.r2 { background:#F8FAFC; border-color:#94A3B8; box-shadow:0 4px 0 #94A3B8; }
-.lb-row.r3 { background:#FFF7ED; border-color:#F97316; box-shadow:0 4px 0 #F97316; }
-.lb-row.me { border-color:var(--y4); background:var(--y3); border-width:3px; }
-.lb-rank { font-family:'Baloo 2',cursive; font-size:22px; font-weight:900; width:34px; text-align:center; }
-.lb-av { font-size:28px; }
-.lb-info { flex:1; }
-.lb-name { font-weight:800; font-size:15px; }
-.lb-sch { font-size:11px; color:var(--ink2); }
-.lb-sc { font-family:'Baloo 2',cursive; font-size:18px; font-weight:900; }
+/* CONFETTI */
+.confetto{position:fixed;z-index:400;pointer-events:none;animation:confFall linear forwards;}
+@keyframes confFall{0%{transform:translateY(-10px) rotate(0) scale(1);opacity:1;}100%{transform:translateY(105vh) rotate(720deg) scale(0.4);opacity:0;}}
 
-/* ============================================
-   BOTTOM NAV
-============================================ */
-.bottom-nav {
-  position:fixed; bottom:0; left:0; right:0; z-index:50;
-  background:var(--w); border-top:var(--outline);
-  display:flex; justify-content:space-around;
-  padding:8px 0 env(safe-area-inset-bottom,8px);
+/* RESPONSIVE */
+@media(max-width:560px){
+  .zones-grid{grid-template-columns:repeat(3,1fr);}
+  .loo-pair{grid-template-columns:1fr;}
+  .bins{grid-template-columns:1fr;}
+  .tf-grid{grid-template-columns:1fr 1fr;}
+  .match-grid{grid-template-columns:1fr 1fr;}
 }
-.nav-btn {
-  display:flex; flex-direction:column; align-items:center; gap:2px;
-  background:none; border:none; cursor:pointer;
-  font-size:10px; font-weight:800; color:var(--ink2);
-  padding:4px 20px; transition:all 0.15s;
-  font-family:'Nunito',sans-serif; text-transform:uppercase; letter-spacing:0.5px;
-}
-.nav-btn .ni { font-size:22px; transition:transform 0.15s; }
-.nav-btn:hover,.nav-btn.on { color:var(--y5); }
-.nav-btn.on .ni { transform:scale(1.25); }
-
-/* ============================================
-   REWARD OVERLAY
-============================================ */
-.overlay {
-  position:fixed; inset:0; z-index:100;
-  background:rgba(0,0,0,0.4);
-  backdrop-filter:blur(6px);
-  display:none; align-items:center; justify-content:center;
-  padding:20px;
-}
-.overlay.open { display:flex; }
-.reward-box {
-  background:var(--w);
-  border:3px solid var(--ink);
-  border-radius:24px; padding:36px 32px;
-  text-align:center; max-width:400px; width:100%;
-  box-shadow:8px 8px 0 var(--y1);
-  animation:rewardPop 0.5s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes rewardPop { from{transform:scale(0.3)rotate(-15deg);opacity:0} to{transform:scale(1)rotate(0);opacity:1} }
-.rw-emoji { font-size:80px; display:block; margin-bottom:12px; }
-.rw-title { font-family:'Baloo 2',cursive; font-size:30px; font-weight:900; color:var(--ink); margin-bottom:8px; }
-.rw-badge {
-  display:inline-block;
-  background:var(--y1); border:2px solid var(--ink);
-  border-radius:30px; padding:8px 22px;
-  font-weight:900; font-size:15px; color:var(--ink);
-  box-shadow:3px 3px 0 var(--ink); margin-bottom:14px;
-}
-.rw-text { color:var(--ink2); font-size:14px; line-height:1.6; margin-bottom:20px; }
-
-/* ============================================
-   POINTS TOAST
-============================================ */
-.toast {
-  position:fixed; left:50%; top:80px;
-  transform:translateX(-50%) translateY(0);
-  background:var(--y1); border:2px solid var(--ink);
-  border-radius:30px; padding:10px 28px;
-  font-family:'Baloo 2',cursive; font-size:20px; font-weight:900;
-  color:var(--ink); box-shadow:4px 4px 0 var(--ink);
-  z-index:200; pointer-events:none;
-  animation:toastUp 1.6s cubic-bezier(0.25,1,0.5,1) forwards;
-  white-space:nowrap;
-}
-@keyframes toastUp {
-  0%{transform:translateX(-50%) translateY(0);opacity:1}
-  100%{transform:translateX(-50%) translateY(-80px);opacity:0}
-}
-
-/* ============================================
-   CONFETTI
-============================================ */
-.confetto {
-  position:fixed; z-index:300; pointer-events:none;
-  width:10px; height:10px;
-  animation:confettiFall linear forwards;
-}
-@keyframes confettiFall {
-  0%{transform:translateY(-20px) rotate(0) scale(1);opacity:1}
-  100%{transform:translateY(100vh) rotate(720deg) scale(0.3);opacity:0}
-}
-
-/* ============================================
-   RESPONSIVE
-============================================ */
-@media(max-width:520px) {
-  .city-grid { grid-template-columns:repeat(2,1fr); }
-  .opts { grid-template-columns:1fr; }
-  .loo-grid { grid-template-columns:1fr; }
-  .sort-bins { grid-template-columns:1fr; }
-  .stats-row { grid-template-columns:1fr 1fr; }
+@media(max-width:400px){
+  .zones-grid{grid-template-columns:repeat(2,1fr);}
 }
 </style>
 </head>
 <body>
 
-<div id="particles"></div>
-
-<!-- ==================== TITLE ==================== -->
-<div class="screen active hero-screen" id="s-title">
-  <div class="hero-wrap">
-    <div class="hero-badge">🌟 Woloo Presents</div>
-    <div class="hero-character">
-      <div class="char-body" onclick="charPoke(this)" title="Poke me!">🦸</div>
-      <div class="char-speech" id="charSpeech">Tap me!</div>
+<!-- ═══════ TITLE ═══════ -->
+<div class="screen active" id="s-title">
+  <div class="splash">
+    <div class="splash-label"><div class="splash-dot"></div>Woloo Presents</div>
+    <div class="hero-visual">
+      <div class="hero-ring"></div><div class="hero-ring"></div><div class="hero-ring"></div>
+      <div class="hero-face" id="heroFace" onclick="pokeFace(this)">🦸</div>
+      <div class="hero-badge-float" id="floatBadge">Tap me! 👋</div>
     </div>
-    <h1 class="hero-title">Loo<br>Heroes!</h1>
-    <p class="hero-subtitle">Mission: Clean &amp; Safe! 🚿✨</p>
-    <div class="story-panel">
-      <strong>🌀 Crisis in Sanitia City!</strong> Filth Monsters are polluting washrooms everywhere.
-      Citizens are scared — children can't go out with confidence.<br><br>
-      <strong>Your Mission:</strong> Become a <strong>Certified Loo Hero</strong> — scout, report &amp; restore
-      hygiene across the city with the Woloo team!
+    <h1 class="splash-title">LOO<span>HEROES</span></h1>
+    <p class="splash-sub">Explore 25 zones across Sanitia City — malls, cinemas, airports, hospitals and more. Become a Certified Hygiene Champion!</p>
+    <div class="story-card">
+      <strong>🚨 City-wide Crisis!</strong> Filth Monsters have invaded washrooms across every corner of Sanitia City — from school corridors to airport terminals, cinema lobbies to hospital wards.<br><br>
+      <strong>Your mission:</strong> Play through 25 real-world zones, each with unique hygiene challenges. Earn XP, collect badges, and become a Woloo Loo Hero!
     </div>
+    <div class="btn-row" style="margin-bottom:10px;"><button class="btn btn-gold btn-xl" onclick="go('s-map')">🎮 Begin Mission</button></div>
     <div class="btn-row">
-      <button class="btn btn-yellow btn-xl" onclick="go('s-map')">🎮 Start Adventure!</button>
+      <button class="btn btn-outline btn-md" onclick="go('s-profile')">👤 My Hero</button>
+      <button class="btn btn-outline btn-md" onclick="go('s-lb')">🏆 Rankings</button>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-white btn-md" onclick="go('s-profile')">👤 My Profile</button>
-      <button class="btn btn-white btn-md" onclick="go('s-lb')">🏆 Leaderboard</button>
-    </div>
-    <p style="margin-top:20px;font-size:12px;color:var(--ink2);font-weight:700;">Powered by <strong style="color:var(--y5)">woloo.in</strong></p>
+    <p style="margin-top:22px;font-size:11px;color:var(--ink-3);font-weight:600;">Powered by <strong style="color:var(--gold-d)">woloo.in</strong> · World of Loo</p>
   </div>
 </div>
 
-<!-- ==================== MAP ==================== -->
+<!-- ═══════ MAP ═══════ -->
 <div class="screen" id="s-map">
   <div class="topbar">
-    <div class="topbar-logo">
-      <div class="logo-mark">🚿</div>
-      <div><div class="logo-wordmark">Woloo</div><div class="logo-tagline">Loo Heroes</div></div>
-    </div>
-    <div class="topbar-hud">
-      <div class="hud-chip">⭐ <span id="h-csp">0</span></div>
-      <div class="hud-chip">🏅 <span id="h-bdg">0</span></div>
+    <div class="tb-logo"><div class="tb-icon">🚿</div><div><div class="tb-text">Woloo</div><div class="tb-sub">Loo Heroes</div></div></div>
+    <div class="tb-chips">
+      <div class="chip" id="m-xp">⭐ 0 XP</div>
+      <div class="chip" id="m-bdg">🏅 0</div>
+      <div class="chip" id="m-zones">🗺 0/25</div>
     </div>
   </div>
-  <div class="wrap">
-    <div class="map-header">
-      <div class="map-title">🗺️ Sanitia City</div>
-      <div class="map-sub">Choose a neighbourhood — complete missions to unlock new zones!</div>
-    </div>
-    <div class="city-grid" id="cityGrid"></div>
-    <div class="btn-row"><button class="btn btn-white btn-md" onclick="go('s-title')">← Home</button></div>
-  </div>
+  <div class="map-wrap" id="mapWrap"></div>
+  <div class="btn-row" style="padding:0 14px 10px;"><button class="btn btn-outline btn-sm" onclick="go('s-title')">← Home</button></div>
   <div class="bottom-nav">
-    <button class="nav-btn on" onclick="go('s-map')"><span class="ni">🗺️</span>Map</button>
-    <button class="nav-btn" onclick="go('s-profile')"><span class="ni">👤</span>Hero</button>
-    <button class="nav-btn" onclick="go('s-lb')"><span class="ni">🏆</span>Ranks</button>
+    <button class="nav-btn on" onclick="go('s-map')"><span class="nav-icon">🗺</span>Map</button>
+    <button class="nav-btn" onclick="go('s-profile')"><span class="nav-icon">👤</span>Hero</button>
+    <button class="nav-btn" onclick="go('s-lb')"><span class="nav-icon">🏆</span>Ranks</button>
   </div>
 </div>
 
-<!-- ==================== LEVEL 1: QUIZ ==================== -->
-<div class="screen" id="s-l1">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">📚</div><div><div class="logo-wordmark">Schoolville</div><div class="logo-tagline">Level 1 · Quiz</div></div></div>
-    <div class="hud-chip">⭐ <span id="l1h">0</span></div>
+<!-- ═══════ GAME SCREEN (single reusable screen for all zones) ═══════ -->
+<div class="screen" id="s-game">
+  <div class="topbar" id="game-topbar">
+    <div class="tb-logo"><div class="tb-icon" id="game-icon">🎮</div><div><div class="tb-text" id="game-zone-name">Zone</div><div class="tb-sub" id="game-zone-sub">Level</div></div></div>
+    <div class="chip" id="game-xp">⭐ 0</div>
   </div>
-  <div class="wrap">
-    <div class="game-card" style="margin-top:16px;">
-      <div class="gc-title">🧠 Hygiene Basics Quiz</div>
-      <div class="gc-desc">Answer all 7 questions to earn your first badge!</div>
-      <div class="pbar-wrap"><div class="pbar-fill" id="q-pbar" style="width:0%"></div></div>
-      <div class="pbar-label" id="q-lbl">Question 1 of 7</div>
-      <div class="q-box" id="q-text">Loading…</div>
-      <div class="opts" id="q-opts"></div>
-      <div class="fb" id="q-fb"></div>
-      <div class="fb tip" id="q-tip" style="display:none;margin-top:10px;"></div>
-      <div class="btn-row" id="q-nxt" style="display:none;">
-        <button class="btn btn-yellow btn-md" onclick="nextQ()">Next →</button>
-      </div>
-    </div>
-    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
+  <div class="game-shell" id="game-shell">
+    <!-- Injected by JS -->
   </div>
+  <div class="btn-row"><button class="btn btn-outline btn-sm" onclick="go('s-map')">← Map</button></div>
 </div>
 
-<!-- ==================== LEVEL 2: SPOT THE LOO ==================== -->
-<div class="screen" id="s-l2">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">🔍</div><div><div class="logo-wordmark">Market Plaza</div><div class="logo-tagline">Level 2 · Spot It</div></div></div>
-    <div class="hud-chip">⭐ <span id="l2h">0</span></div>
-  </div>
-  <div class="wrap">
-    <div class="game-card" style="margin-top:16px;">
-      <div class="gc-title">🔍 Spot the Dirty Loo!</div>
-      <div class="gc-desc">Tap the <strong>UNHYGIENIC</strong> washroom each round. 5 rounds to win!</div>
-      <div class="pbar-wrap"><div class="pbar-fill" id="l2-pbar" style="width:0%"></div></div>
-      <div class="pbar-label" id="l2-lbl">Round 1 of 5</div>
-      <div class="loo-grid" id="loo-cards"></div>
-      <div class="fb" id="l2-fb"></div>
-    </div>
-    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
-  </div>
-</div>
-
-<!-- ==================== LEVEL 3: REPORT ==================== -->
-<div class="screen" id="s-l3">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">📢</div><div><div class="logo-wordmark">Metro Junction</div><div class="logo-tagline">Level 3 · Report</div></div></div>
-    <div class="hud-chip">⭐ <span id="l3h">0</span></div>
-  </div>
-  <div class="wrap">
-    <div class="game-card" style="margin-top:16px;">
-      <div class="gc-title">📢 Report a Toilet!</div>
-      <div class="gc-desc">Tap every problem you spot to file a complete Woloo report!</div>
-      <div class="scene-container">
-        <span class="scene-toilet">🚽</span>
-        <div class="scene-title">Metro Junction — Public Washroom</div>
-        <div class="scene-sub">⚠️ Multiple complaints received. Inspect carefully!</div>
-      </div>
-      <div class="issue-chips" id="issue-chips"></div>
-      <div class="pbar-wrap"><div class="pbar-fill" id="l3-pbar" style="width:0%"></div></div>
-      <p id="l3-cnt" style="font-size:13px;color:var(--ink2);font-weight:700;text-align:center;margin-bottom:10px;">Issues found: 0 / 6</p>
-      <div class="fb" id="l3-fb"></div>
-      <div class="btn-row" id="l3-sub" style="display:none;">
-        <button class="btn btn-yellow btn-md" onclick="submitReport()">📤 Submit Woloo Report!</button>
-      </div>
-    </div>
-    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
-  </div>
-</div>
-
-<!-- ==================== LEVEL 4: SORT ==================== -->
-<div class="screen" id="s-l4">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">♻️</div><div><div class="logo-wordmark">Parkside</div><div class="logo-tagline">Level 4 · Sort</div></div></div>
-    <div class="hud-chip">⭐ <span id="l4h">0</span></div>
-  </div>
-  <div class="wrap">
-    <div class="game-card" style="margin-top:16px;">
-      <div class="gc-title">♻️ Hygiene Sort Challenge!</div>
-      <div class="gc-desc">Drag &amp; drop — or <strong>tap an item then tap a bin</strong> — to sort all 10 habits!</div>
-      <div class="drag-pool" id="drag-pool"></div>
-      <div class="sort-bins">
-        <div class="sort-bin hyg" id="bin-h">
-          <div class="bin-label hyg">✅ Hygienic</div>
-          <div class="bin-items" id="drop-h"></div>
-        </div>
-        <div class="sort-bin uhyg" id="bin-u">
-          <div class="bin-label uhyg">❌ Unhygienic</div>
-          <div class="bin-items" id="drop-u"></div>
-        </div>
-      </div>
-      <div class="fb" id="l4-fb" style="margin-top:12px;"></div>
-      <div class="btn-row" id="l4-check">
-        <button class="btn btn-yellow btn-md" onclick="checkSort()">✅ Check My Sort!</button>
-      </div>
-    </div>
-    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
-  </div>
-</div>
-
-<!-- ==================== LEVEL 5: CHECKLIST ==================== -->
-<div class="screen" id="s-l5">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">🏆</div><div><div class="logo-wordmark">Bazaar Lane</div><div class="logo-tagline">Level 5 · Certify</div></div></div>
-    <div class="hud-chip">⭐ <span id="l5h">0</span></div>
-  </div>
-  <div class="wrap">
-    <div class="game-card" style="margin-top:16px;">
-      <div class="gc-title">📋 Hero Certification!</div>
-      <div class="gc-desc">Tick every inspection item to certify this washroom as Woloo-approved!</div>
-      <ul class="checklist" id="hero-cl"></ul>
-      <div class="pbar-wrap" style="margin-top:14px;"><div class="pbar-fill" id="cl-pbar" style="width:0%"></div></div>
-      <p id="cl-cnt" style="text-align:center;font-size:13px;color:var(--ink2);font-weight:700;margin-top:6px;">Checked: 0 / 10</p>
-      <div class="btn-row" id="cl-certify" style="display:none;">
-        <button class="btn btn-yellow btn-lg" onclick="certify()">🎓 Certify as Loo Hero!</button>
-      </div>
-    </div>
-    <div class="btn-row"><button class="btn btn-white btn-sm" onclick="go('s-map')">← Map</button></div>
-  </div>
-</div>
-
-<!-- ==================== PROFILE ==================== -->
+<!-- ═══════ PROFILE ═══════ -->
 <div class="screen" id="s-profile">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">👤</div><div><div class="logo-wordmark">My Profile</div><div class="logo-tagline">Loo Hero Stats</div></div></div>
-  </div>
-  <div class="wrap">
-    <div class="profile-hero">
+  <div class="topbar"><div class="tb-logo"><div class="tb-icon">👤</div><div><div class="tb-text">My Profile</div><div class="tb-sub">Loo Hero Stats</div></div></div></div>
+  <div style="width:100%;max-width:700px;">
+    <div class="profile-cover">
       <div class="p-avatar" id="p-av">🦸</div>
-      <div class="p-name" id="p-name">Sanitation Scout</div>
-      <div class="p-rank" id="p-rank">⭐ Rookie</div>
+      <div class="p-name" id="p-name">Hygiene Scout</div>
+      <div class="p-rank" id="p-rank">🌱 Sanitation Rookie</div>
     </div>
-    <div class="stats-row">
-      <div class="stat-box"><div class="stat-n" id="p-csp">0</div><div class="stat-l">Scout Points</div></div>
-      <div class="stat-box"><div class="stat-n" id="p-bc">0</div><div class="stat-l">Badges</div></div>
-      <div class="stat-box"><div class="stat-n" id="p-lc">0</div><div class="stat-l">Levels Done</div></div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num" id="p-xp">0</div><div class="stat-name">XP Points</div></div>
+      <div class="stat-card"><div class="stat-num" id="p-bc">0</div><div class="stat-name">Badges</div></div>
+      <div class="stat-card"><div class="stat-num" id="p-zc">0</div><div class="stat-name">Zones Done</div></div>
     </div>
-    <div class="badges-wrap">
-      <div class="sec-title">🏅 Badge Collection</div>
-      <div class="badge-row" id="p-badges"></div>
+    <div class="badges-section">
+      <div class="sec-head">🏅 Badge Collection</div>
+      <div class="badge-grid" id="p-badges"></div>
     </div>
-    <div class="btn-row">
-      <button class="btn btn-yellow btn-md" onclick="go('s-map')">🗺️ Play</button>
-      <button class="btn btn-white btn-md" onclick="go('s-lb')">🏆 Ranks</button>
+    <div class="btn-row" style="padding:0 14px 20px;">
+      <button class="btn btn-gold btn-lg" onclick="go('s-map')">🗺 Play Game</button>
+      <button class="btn btn-outline btn-md" onclick="go('s-lb')">🏆 Leaderboard</button>
     </div>
   </div>
   <div class="bottom-nav">
-    <button class="nav-btn" onclick="go('s-map')"><span class="ni">🗺️</span>Map</button>
-    <button class="nav-btn on" onclick="go('s-profile')"><span class="ni">👤</span>Hero</button>
-    <button class="nav-btn" onclick="go('s-lb')"><span class="ni">🏆</span>Ranks</button>
+    <button class="nav-btn" onclick="go('s-map')"><span class="nav-icon">🗺</span>Map</button>
+    <button class="nav-btn on" onclick="go('s-profile')"><span class="nav-icon">👤</span>Hero</button>
+    <button class="nav-btn" onclick="go('s-lb')"><span class="nav-icon">🏆</span>Ranks</button>
   </div>
 </div>
 
-<!-- ==================== LEADERBOARD ==================== -->
+<!-- ═══════ LEADERBOARD ═══════ -->
 <div class="screen" id="s-lb">
-  <div class="topbar">
-    <div class="topbar-logo"><div class="logo-mark">🏆</div><div><div class="logo-wordmark">Rankings</div><div class="logo-tagline">Sanitia City</div></div></div>
-  </div>
-  <div class="wrap">
-    <div class="map-header">
-      <div class="map-title">🏆 City Leaderboard</div>
-      <div class="map-sub">Top Loo Heroes this week!</div>
+  <div class="topbar"><div class="tb-logo"><div class="tb-icon">🏆</div><div><div class="tb-text">Rankings</div><div class="tb-sub">Sanitia City</div></div></div></div>
+  <div style="width:100%;max-width:700px;">
+    <div style="text-align:center;padding:22px 14px 12px;">
+      <div style="font-family:Syne,sans-serif;font-size:26px;font-weight:900;">🏆 City Leaderboard</div>
+      <div style="font-size:13px;color:var(--ink-3);margin-top:3px;">Top Loo Heroes this week</div>
     </div>
     <div class="lb-list" id="lb-list"></div>
-    <div class="btn-row"><button class="btn btn-yellow btn-md" onclick="go('s-map')">🎮 Keep Playing!</button></div>
+    <div class="btn-row" style="padding:0 14px 20px;"><button class="btn btn-gold btn-lg" onclick="go('s-map')">🎮 Keep Playing</button></div>
   </div>
   <div class="bottom-nav">
-    <button class="nav-btn" onclick="go('s-map')"><span class="ni">🗺️</span>Map</button>
-    <button class="nav-btn" onclick="go('s-profile')"><span class="ni">👤</span>Hero</button>
-    <button class="nav-btn on" onclick="go('s-lb')"><span class="ni">🏆</span>Ranks</button>
+    <button class="nav-btn" onclick="go('s-map')"><span class="nav-icon">🗺</span>Map</button>
+    <button class="nav-btn" onclick="go('s-profile')"><span class="nav-icon">👤</span>Hero</button>
+    <button class="nav-btn on" onclick="go('s-lb')"><span class="nav-icon">🏆</span>Ranks</button>
   </div>
 </div>
 
-<!-- ==================== REWARD ==================== -->
+<!-- ═══════ REWARD ═══════ -->
 <div class="overlay" id="overlay">
   <div class="reward-box">
     <span class="rw-emoji" id="rw-em">🎉</span>
-    <div class="rw-title" id="rw-ttl">Level Complete!</div>
-    <div class="rw-badge" id="rw-bdg">🏅 Badge</div>
-    <div class="rw-text" id="rw-txt">Great work!</div>
-    <button class="btn btn-yellow btn-lg" id="rw-btn" onclick="closeReward()">Continue! 🚀</button>
+    <div class="rw-title" id="rw-ttl">Zone Complete!</div>
+    <div class="rw-badge" id="rw-bdg">🏅 Badge Earned</div>
+    <div class="xp-gained"><div class="xp-num" id="rw-xp">+0</div><div class="xp-lbl">XP Points Earned</div></div>
+    <div class="rw-text" id="rw-txt">Great job!</div>
+    <button class="btn btn-gold btn-lg" onclick="closeReward()">Continue! 🚀</button>
   </div>
 </div>
 
 <script>
-/* ============================================
+/* ══════════════════════════════════
    STATE
-============================================ */
-const G = {
-  csp: 0,
-  level: 1,
-  done: new Set(),
-  badges: [],
-  selected: null   // for tap-to-sort
-};
+══════════════════════════════════ */
+const G={xp:0,done:new Set(),badges:[],currentZone:null};
 
-const ALL_BADGES = [
-  {id:'wb', name:'Washroom Watcher', icon:'👁️'},
-  {id:'cs', name:'Clean Sweep Medal', icon:'🧹'},
-  {id:'sr', name:'Sanitia Reporter', icon:'📢'},
-  {id:'tw', name:'Teamwork Ribbon', icon:'🤝'},
-  {id:'lh', name:'Loo Hero Cert.', icon:'🎓'}
+const ALL_BADGES=[
+  {id:'school',icon:'📚',name:'Scholar'},
+  {id:'market',icon:'🛒',name:'Market Scout'},
+  {id:'metro',icon:'🚇',name:'Transit Pro'},
+  {id:'park',icon:'🌳',name:'Park Ranger'},
+  {id:'bazaar',icon:'🏪',name:'Bazaar Expert'},
+  {id:'mall',icon:'🛍️',name:'Mall Inspector'},
+  {id:'cinema',icon:'🎬',name:'Cinema Guard'},
+  {id:'airport',icon:'✈️',name:'Airport Ace'},
+  {id:'hospital',icon:'🏥',name:'Health Hero'},
+  {id:'hotel',icon:'🏨',name:'Hotel Star'},
+  {id:'restaurant',icon:'🍽️',name:'Food Safety Pro'},
+  {id:'stadium',icon:'🏟️',name:'Stadium Scout'},
+  {id:'beach',icon:'🏖️',name:'Beach Warden'},
+  {id:'train',icon:'🚂',name:'Rail Ranger'},
+  {id:'temple',icon:'🛕',name:'Sacred Space Keeper'},
+  {id:'office',icon:'🏢',name:'Office Pro'},
+  {id:'park2',icon:'🎡',name:'Fun Park Hero'},
+  {id:'petrol',icon:'⛽',name:'Highway Scout'},
+  {id:'library',icon:'📖',name:'Quiet Guardian'},
+  {id:'gym',icon:'🏋️',name:'Fitness Hygienist'},
+  {id:'bus',icon:'🚌',name:'Bus Station Boss'},
+  {id:'zoo',icon:'🦁',name:'Zoo Ranger'},
+  {id:'college',icon:'🎓',name:'Campus Champion'},
+  {id:'govt',icon:'🏛️',name:'Civic Duty Star'},
+  {id:'hero',icon:'🦸',name:'Certified Loo Hero'}
 ];
 
-const RANKS = [[0,'🌱 Rookie'],[50,'🔍 Scout'],[150,'🧹 Clean Scout'],[300,'📢 Reporter'],[500,'🤝 Champion'],[800,'🦸 Loo Hero']];
+const RANKS=[[0,'🌱 Rookie'],[100,'🔍 Scout'],[300,'🧹 Sanitation Pro'],[600,'📢 Community Voice'],[1000,'🤝 City Champion'],[1800,'🦸 Certified Loo Hero'],[2800,'🌟 Woloo Legend']];
 
-/* ============================================
-   PARTICLES
-============================================ */
-(function spawnStars(){
-  const c = document.getElementById('particles');
-  for(let i=0;i<20;i++){
-    const s = document.createElement('div');
-    s.className = 'star-particle';
-    s.style.cssText=`left:${Math.random()*100}%;width:${6+Math.random()*14}px;height:${6+Math.random()*14}px;animation-duration:${10+Math.random()*15}s;animation-delay:${Math.random()*12}s;`;
-    c.appendChild(s);
+/* ══════════════════════════════════
+   ZONES DEFINITION (25 zones)
+══════════════════════════════════ */
+const WORLDS=[
+  {
+    name:'🏙️ City Centre',
+    zones:[
+      {id:'school',name:'Schoolville',icon:'🏫',sub:'Quiz Battle',type:'quiz',xp:100,badge:'school',min:0},
+      {id:'market',name:'Market Plaza',icon:'🛒',sub:'True/False',type:'tf',xp:90,badge:'market',min:0},
+      {id:'metro',name:'Metro Station',icon:'🚇',sub:'Spot the Loo',type:'spot',xp:110,badge:'metro',min:1},
+      {id:'park',name:'City Park',icon:'🌳',sub:'Report & Sort',type:'report',xp:130,badge:'park',min:2},
+      {id:'bazaar',name:'Bazaar Lane',icon:'🏪',sub:'Match & Certify',type:'match',xp:150,badge:'bazaar',min:3}
+    ]
+  },
+  {
+    name:'🛍️ Retail & Entertainment',
+    zones:[
+      {id:'mall',name:'Grand Mall',icon:'🏬',sub:'Quiz Battle',type:'quiz',xp:120,badge:'mall',min:4},
+      {id:'cinema',name:'City Cinema',icon:'🎬',sub:'True/False',type:'tf',xp:110,badge:'cinema',min:5},
+      {id:'restaurant',name:'Food Court',icon:'🍽️',sub:'Spot the Loo',type:'spot',xp:130,badge:'restaurant',min:6},
+      {id:'stadium',name:'Sports Stadium',icon:'🏟️',sub:'Report & Sort',type:'report',xp:140,badge:'stadium',min:7},
+      {id:'park2',name:'Fun Park',icon:'🎡',sub:'Match & Certify',type:'match',xp:160,badge:'park2',min:8}
+    ]
+  },
+  {
+    name:'🏥 Health & Wellbeing',
+    zones:[
+      {id:'hospital',name:'City Hospital',icon:'🏥',sub:'Quiz Battle',type:'quiz',xp:140,badge:'hospital',min:9},
+      {id:'gym',name:'Fitness Centre',icon:'🏋️',sub:'True/False',type:'tf',xp:120,badge:'gym',min:10},
+      {id:'zoo',name:'City Zoo',icon:'🦁',sub:'Spot the Loo',type:'spot',xp:130,badge:'zoo',min:11},
+      {id:'beach',name:'Beach Promenade',icon:'🏖️',sub:'Report & Sort',type:'report',xp:150,badge:'beach',min:12},
+      {id:'temple',name:'Temple Complex',icon:'🛕',sub:'Match & Certify',type:'match',xp:160,badge:'temple',min:13}
+    ]
+  },
+  {
+    name:'✈️ Transit & Travel',
+    zones:[
+      {id:'airport',name:'Int. Airport',icon:'✈️',sub:'Quiz Battle',type:'quiz',xp:160,badge:'airport',min:14},
+      {id:'train',name:'Railway Station',icon:'🚂',sub:'True/False',type:'tf',xp:140,badge:'train',min:15},
+      {id:'bus',name:'Bus Terminal',icon:'🚌',sub:'Spot the Loo',type:'spot',xp:150,badge:'bus',min:16},
+      {id:'hotel',name:'5-Star Hotel',icon:'🏨',sub:'Report & Sort',type:'report',xp:170,badge:'hotel',min:17},
+      {id:'petrol',name:'Highway Stop',icon:'⛽',sub:'Match & Certify',type:'match',xp:160,badge:'petrol',min:18}
+    ]
+  },
+  {
+    name:'🎓 Education & Government',
+    zones:[
+      {id:'college',name:'University',icon:'🎓',sub:'Quiz Battle',type:'quiz',xp:180,badge:'college',min:19},
+      {id:'library',name:'Public Library',icon:'📖',sub:'True/False',type:'tf',xp:160,badge:'library',min:20},
+      {id:'office',name:'Office Tower',icon:'🏢',sub:'Spot the Loo',type:'spot',xp:170,badge:'office',min:21},
+      {id:'govt',name:'Govt. Complex',icon:'🏛️',sub:'Report & Sort',type:'report',xp:190,badge:'govt',min:22},
+      {id:'hero',name:'Hero HQ',icon:'🦸',sub:'Final Certification',type:'match',xp:250,badge:'hero',min:23}
+    ]
   }
-})();
+];
 
-/* ============================================
-   CHAR POKE
-============================================ */
-const charLines = ['Flush after use! 🚽','Wash hands! 🧼','Report dirty loos! 📢','Stay hygienic! ✨','Woloo certified! ⭐','You\'re a hero! 🦸'];
-let charIdx = 0;
-function charPoke(el){
-  charIdx = (charIdx+1)%charLines.length;
-  document.getElementById('charSpeech').textContent = charLines[charIdx];
-  el.style.transform = 'scale(0.88)';
-  setTimeout(()=>el.style.transform='',200);
-  spawnPoints(el, '+5');
-  G.csp += 5; updateHUD();
-}
+/* ══════════════════════════════════
+   QUESTION BANKS — Per zone/type
+══════════════════════════════════ */
 
-/* ============================================
-   NAVIGATION
-============================================ */
+// QUIZ questions bank — 60 questions across all quiz zones
+const QUIZ_BANK={
+  school:[
+    {cat:'Basic Hygiene',q:'How long must you wash hands with soap to kill most germs?',opts:['5 seconds','10 seconds','20 seconds','2 minutes'],ans:2,tip:'20 seconds — the WHO recommended duration — removes most pathogens from hand surfaces.'},
+    {cat:'Public Washrooms',q:'What makes a washroom Woloo-certified as safe?',opts:['Nice decor','Clean, soap, working flush & lighting','Expensive fittings','Only the location'],ans:1,tip:'Woloo certifies on cleanliness, hygiene supplies, functionality, lighting and safety standards.'},
+    {cat:'Germ Science',q:'Which habit MOST effectively prevents germ spread?',opts:['Using perfume','Wearing gloves','Regular handwashing with soap','Staying indoors'],ans:2,tip:'Handwashing with soap physically disrupts and removes pathogens — the single most effective public health measure.'},
+    {cat:'Reporting',q:'What is the best action when you find a dirty public washroom?',opts:['Ignore it','Report on Woloo app','Tell friends only','Use it anyway'],ans:1,tip:'Woloo reporting alerts facility managers and triggers inspections — every report makes a difference.'},
+    {cat:'Sanitation',q:'Which disease spreads through poor sanitation and contaminated water?',opts:['Diabetes','Asthma','Cholera','Arthritis'],ans:2,tip:'Cholera is caused by Vibrio cholerae bacteria — improved sanitation is the primary prevention method.'},
+    {cat:'Rights & Dignity',q:'Why are clean washrooms especially vital for girls and women?',opts:['They are not more important','Safety, menstrual hygiene & dignity','Women prefer outdoors','Academic performance only'],ans:1,tip:'Lack of safe washrooms causes girls to miss school during menstruation and face serious safety risks.'}
+  ],
+  mall:[
+    {cat:'Mall Hygiene',q:'Which area in a shopping mall requires the most frequent cleaning?',opts:['Store windows','Food court washrooms','Parking ramps','Display counters'],ans:1,tip:'Food court washrooms have the highest footfall and food contamination risk — they need hourly cleaning.'},
+    {cat:'Shopping Safety',q:'What should you do before eating food purchased at a mall food court?',opts:['Find a seat quickly','Wash hands thoroughly','Check the price','Take a photo'],ans:1,tip:'Mall food courts are high-traffic areas — hands pick up germs from escalator rails, lifts and surfaces.'},
+    {cat:'Mall Standards',q:'What is a key sign that a mall washroom is properly maintained?',opts:['Fancy tiles','A visible cleaning log with recent timestamps','Expensive soap dispensers','Air freshener smell'],ans:1,tip:'A cleaning log with recent timestamps proves active maintenance — it is a key Woloo certification criterion.'},
+    {cat:'Crowd Hygiene',q:'Why do malls need more washrooms per square metre than offices?',opts:['Larger building size','Higher footfall from diverse visitors including families','Better budgets','Legal requirements only'],ans:1,tip:'Mall visitors include children, elderly and those with special needs — higher density requires more facilities per area.'},
+    {cat:'Facility Management',q:'What does a "hygiene rating" sticker on a mall washroom door indicate?',opts:['The washroom is new','A certified third party has inspected and rated it','The rent is higher','It has fancy fittings'],ans:1,tip:'Third-party hygiene ratings — like Woloo stars — give visitors confidence based on verified inspections.'},
+    {cat:'Child Safety',q:'What special feature should every family washroom in a mall have?',opts:['Expensive mirrors','Child-height fixtures, changing table & baby care corner','Music system','Larger tiles'],ans:1,tip:'Family washrooms must accommodate children\'s height, nappy changing and safe baby care — essential for inclusive design.'}
+  ],
+  cinema:[
+    {cat:'Cinema Hygiene',q:'When is it most critical to wash hands in a cinema?',opts:['Before buying popcorn','After using the washroom and before eating snacks','During the interval only','Only if you feel sick'],ans:1,tip:'Cinema snacks are eaten by hand — washing after the washroom and before snacks prevents ingesting pathogens.'},
+    {cat:'Crowd Scenarios',q:'Cinema washrooms are busiest during interval. What should management do?',opts:['Close some cubicles','Increase cleaning staff during intervals','Reduce lighting','Lock the last cubicle'],ans:1,tip:'Peak-time staffing is a professional hygiene management standard — intervals require doubled cleaning frequency.'},
+    {cat:'Air Quality',q:'What causes bad odour in cinema washrooms despite regular cleaning?',opts:['Old movies playing nearby','Poor ventilation and blocked drains','Low-quality tiles','Too many people watching'],ans:1,tip:'Poor ventilation traps humid air and odour-causing compounds — mechanical ventilation is mandatory in enclosed spaces.'},
+    {cat:'Surface Hygiene',q:'Which surface in a cinema washroom carries the most germs?',opts:['Ceiling tiles','Door handles and flush buttons','Floor near corners','Mirror frame'],ans:1,tip:'High-touch surfaces like handles and flush buttons accumulate the most microbial load — they need frequent disinfection.'},
+    {cat:'Public Etiquette',q:'What should you do if there is no hand dryer or paper in a cinema washroom?',opts:['Wipe hands on clothing','Report it on Woloo and notify staff','Leave without drying','Use your seat fabric'],ans:1,tip:'Wet hands spread more germs than dry ones — reporting missing supplies prompts immediate restocking.'},
+    {cat:'Special Needs',q:'What is the purpose of a dedicated accessible washroom in cinemas?',opts:['For VIP customers only','For wheelchair users, elderly and people with disabilities','Reserved for staff','For children only'],ans:1,tip:'Accessible washrooms are a legal and ethical requirement — they enable dignity and independence for all visitors.'}
+  ],
+  airport:[
+    {cat:'Airport Hygiene',q:'How often should high-traffic airport washrooms ideally be cleaned?',opts:['Once daily','Every 30 minutes during peak hours','Once weekly','Only when complaints arise'],ans:1,tip:'International airports typically mandate 30-minute cleaning cycles — some achieve 15-minute cycles at top terminals.'},
+    {cat:'International Standards',q:'Which global standard rates airport washroom quality worldwide?',opts:['FIFA Hygiene Code','Skytrax World Airport Awards (washroom category)','UN Water Treaty','ISO Food Code'],ans:1,tip:'Skytrax rates airports on washroom cleanliness — Singapore Changi consistently wins for its immaculate washroom standards.'},
+    {cat:'Travel Health',q:'Why is handwashing especially critical after clearing immigration at airports?',opts:['Passport gets dirty','You touched many surfaces shared by international travellers','Custom rules require it','Your luggage has germs'],ans:1,tip:'Immigration touchpoints are shared by travellers from dozens of countries — pathogen transfer risk is at its highest.'},
+    {cat:'Touchless Tech',q:'What is the benefit of touchless taps and soap dispensers in airport washrooms?',opts:['They look modern','They eliminate cross-contamination from hand contact with fixtures','They save water always','They are cheaper to install'],ans:1,tip:'Touchless fixtures prevent surface-to-hand pathogen transfer — a critical upgrade for high-footfall facilities.'},
+    {cat:'Safety & Security',q:'Why must airport washrooms have clear sightlines and no blind spots?',opts:['For better lighting','To enable security monitoring and prevent unsafe activities','To reduce cleaning time','For easier maintenance'],ans:1,tip:'Safety design prevents misuse and enables emergency response — CPTED (Crime Prevention Through Environmental Design) principles apply.'},
+    {cat:'Special Facilities',q:'What is the purpose of a "prayer room" and "ablution area" at airports?',opts:['Religious tourism revenue','To provide ritual washing facilities for Muslim travellers and other faiths','For staff breaks only','As backup washrooms'],ans:1,tip:'Ablution areas enable the ritual pre-prayer washing required in Islam — inclusive airport design serves all faiths and cultures.'}
+  ],
+  hospital:[
+    {cat:'Clinical Hygiene',q:'How many times more frequently should hospital washrooms be cleaned vs malls?',opts:['Same frequency','3 to 5 times more frequently','Twice as often','Only once more'],ans:1,tip:'Hospital washrooms carry antibiotic-resistant bacteria risk — clinical environments require intensive cleaning every 1-2 hours.'},
+    {cat:'Infection Control',q:'What type of soap is mandatory in hospital washrooms?',opts:['Any scented soap','Antimicrobial or clinical-grade soap','Luxury foam soap','Budget bar soap'],ans:1,tip:'Antimicrobial soap kills bacteria and reduces HCAI (Healthcare-Associated Infections) — a patient safety critical requirement.'},
+    {cat:'Patient Care',q:'Why do hospital washrooms have emergency pull cords or call buttons?',opts:['For aesthetic design','To alert staff if a patient falls or requires immediate assistance','To control lighting','For maintenance requests'],ans:1,tip:'Falls in washrooms are a leading cause of patient injury — emergency call systems enable immediate life-saving response.'},
+    {cat:'Waste Management',q:'What colour bin is used for clinical/medical waste in hospital washrooms?',opts:['Green bin','Yellow bin with biohazard symbol','Blue bin','Black bin'],ans:1,tip:'Yellow biohazard bins segregate clinical waste requiring specialist disposal — colour coding is mandated under biomedical waste rules.'},
+    {cat:'Staff Compliance',q:'What is the medical term for the 5-moment handwashing protocol used by hospital staff?',opts:['WHO Five Moments for Hand Hygiene','Medical Hygiene Rule','Nurse Standard Protocol','Clinical Wash Cycle'],ans:1,tip:'WHO Five Moments defines WHEN to wash hands around patient care — before contact, before procedures, after body fluid exposure, after contact, after environment contact.'},
+    {cat:'Public Access',q:'Should hospital visitor washrooms be separate from patient ward washrooms?',opts:['No, shared is fine','Yes — to prevent cross-infection between visitors and vulnerable patients','Only for VIP wards','Only in private hospitals'],ans:1,tip:'Separate visitor and patient washrooms is a critical infection-control measure — visitor areas carry community pathogen exposure.'}
+  ],
+  hotel:[
+    {cat:'Hospitality Standards',q:'What is the international symbol of a hotel washroom meeting top hygiene standards?',opts:['Gold taps','Five-star rating from accredited bodies like Woloo','Marble floors','Branded toiletries'],ans:1,tip:'Independent hygiene ratings from platforms like Woloo provide verified evidence of cleanliness beyond visual decor.'},
+    {cat:'Guest Experience',q:'What should a hotel do if a guest reports an unclean washroom?',opts:['Apologise and do nothing','Immediately send housekeeping, document the complaint and follow up','Charge a cleaning fee','Offer a discount on next visit only'],ans:1,tip:'Immediate action, documentation and follow-up is the gold standard for hotel hygiene complaint management.'},
+    {cat:'Housekeeping',q:'How often should a hotel room washroom be cleaned during a multi-night stay?',opts:['Only at checkout','Daily, with a full deep clean mid-stay','Weekly','Only when requested'],ans:1,tip:'Daily cleaning maintains hygiene standards — mid-stay deep cleans remove biofilm buildup in drains and showers.'},
+    {cat:'Water Safety',q:'What risk does a hotel shower pose if it has not been used for several weeks?',opts:['Low water pressure','Legionella bacteria growth in stagnant warm water','Limescale buildup only','Drain blockage'],ans:1,tip:'Legionella pneumophila thrives in stagnant warm water — hotels must run taps weekly and shock-treat with hot water.'},
+    {cat:'Eco Standards',q:'Why do many hotels ask guests to reuse towels?',opts:['To reduce laundry costs for profit','To reduce water and energy consumption — an environmental hygiene practice','Because towels are expensive','For faster room turnaround'],ans:1,tip:'Each towel wash uses approximately 65 litres of water — towel reuse programmes meaningfully reduce hotel environmental impact.'},
+    {cat:'Accessibility',q:'What is the minimum requirement for an accessible hotel washroom?',opts:['Large mirror','Turn radius of at least 150cm, grab rails and roll-in shower','Luxury bath','Double sink'],ans:1,tip:'ADA and Indian accessibility standards mandate specific turning space, grab bars, sink height and shower design for wheelchair users.'}
+  ],
+  restaurant:[
+    {cat:'Food Safety',q:'What is the MOST important hygiene practice before handling food in a restaurant kitchen?',opts:['Wearing a uniform','Washing hands for 20 seconds with antimicrobial soap','Putting hair up','Wearing gloves only'],ans:1,tip:'Hand hygiene is the single most critical food safety control — gloves without handwashing can transfer contamination.'},
+    {cat:'Cross Contamination',q:'What colour chopping board should be used for raw meat in a restaurant?',opts:['Green','Red','Blue','Yellow'],ans:1,tip:'Colour-coded chopping boards prevent cross-contamination — Red = raw meat, Green = vegetables, Blue = fish, Yellow = cooked meat.'},
+    {cat:'Customer Safety',q:'Why should restaurant washrooms be inspected before the lunch service rush?',opts:['To check decor','To ensure soap, paper and cleanliness are in place before high footfall','For fire safety only','To count cubicles'],ans:1,tip:'Pre-service inspections catch supply shortfalls and maintenance issues before guests experience them — a professional standard.'},
+    {cat:'Pest Control',q:'What should you immediately do if you see a cockroach in a restaurant washroom?',opts:['Ignore it','Report to staff and note it on Woloo — it indicates a serious hygiene failure','Take a photo for fun','Wait to see if there are more'],ans:1,tip:'Cockroaches carry Salmonella, E. coli and other pathogens — a sighting indicates infestation and requires immediate pest control.'},
+    {cat:'Grading',q:'What does an A-grade hygiene certificate on a restaurant door mean?',opts:['The food is expensive','The establishment passed government hygiene inspections with a top score','They have celebrity chefs','They opened recently'],ans:1,tip:'Hygiene grades are awarded by food safety authorities after inspections — A-grade indicates excellent compliance with food safety laws.'},
+    {cat:'WASH Standards',q:'Which international framework covers safe water, sanitation and hygiene in food service?',opts:['FIFA WASH Protocol','FSSAI and WHO WASH Standards','ISO Food Grading','UN Trade Code'],ans:1,tip:'WASH (Water, Sanitation and Hygiene) standards set by WHO and enforced by FSSAI govern food establishment hygiene in India.'}
+  ],
+  stadium:[
+    {cat:'Events Hygiene',q:'What is the biggest washroom challenge at a sports stadium during a match?',opts:['Noise levels','Managing high simultaneous demand — especially at half-time','Stadium size','Parking issues'],ans:1,tip:'Stadium washrooms face extreme demand spikes at half-time — professional venues pre-position additional mobile units and increase cleaning staff.'},
+    {cat:'Crowd Management',q:'What ratio of washrooms to spectators is considered adequate at large events?',opts:['1 toilet per 500 people','1 toilet per 100 people (women) and 1 per 150 (men)','1 per 1000 people','Any ratio is acceptable'],ans:1,tip:'IS standards and event regulations specify toilet-to-spectator ratios — women require more facilities due to biological differences.'},
+    {cat:'Portable Facilities',q:'What is the minimum cleaning frequency for portable toilets at outdoor events?',opts:['Once at the end','Every 2 hours during active events','Once a day','Only when full'],ans:1,tip:'Portable toilets at active events require 2-hourly cleaning and restocking — more frequently in hot weather to control odour.'},
+    {cat:'Water Access',q:'Why is handwashing provision more important than hand sanitiser alone at food events?',opts:['Water tastes better','Handwashing with soap removes grease, food debris and pathogens — sanitiser cannot clean heavily soiled hands','Sanitiser is expensive','Water is free'],ans:1,tip:'Sanitiser is effective on clean hands — but food residue, oils and heavy contamination require soap and water for removal.'},
+    {cat:'Disability Access',q:'Large sports venues must provide accessible washrooms at which locations?',opts:['Only at main entrance','Near every seating section, particularly designated accessible seating areas','In VIP areas only','One central location'],ans:1,tip:'Accessible washrooms must be distributed near accessible seating — not just centrally — to eliminate unreasonable travel distances.'},
+    {cat:'Event Certification',q:'Which Indian body certifies hygiene standards for large public events?',opts:['BCCI only','FSSAI in coordination with local municipal corporations','FIFA','Private event companies'],ans:1,tip:'FSSAI (Food Safety and Standards Authority of India) and municipal health departments jointly oversee hygiene at large public events.'}
+  ],
+  college:[
+    {cat:'Campus Hygiene',q:'University washrooms see peak demand at which times?',opts:['Only at lunch','Between lectures — every 50-60 minutes','Only mornings','On exam days'],ans:1,tip:'Class changeover creates simultaneous demand spikes — campus facilities managers schedule cleaning in 50-minute cycles.'},
+    {cat:'Student Welfare',q:'Why is menstrual hygiene management (MHM) a key concern in college washrooms?',opts:['It is not a concern','Students may lack facilities to manage periods safely, affecting attendance and dignity','College campuses are large','Students are adults'],ans:1,tip:'MHM facilities — disposal units, dispensers, private cubicles — directly affect female student attendance and academic participation.'},
+    {cat:'Sustainability',q:'What sustainable practice is increasingly adopted in campus washrooms?',opts:['Using expensive fittings','Water-saving taps, recycled paper and compostable waste bags','Reducing cubicle numbers','Air freshener diffusers'],ans:1,tip:'Sustainable WASH practices reduce campus water consumption by up to 40% — a key metric in green campus certifications.'},
+    {cat:'Awareness',q:'What is the most effective way to improve student hygiene behaviour in campus washrooms?',opts:['Fines and penalties','Educational posters, hygiene ambassador programmes and peer education','Security cameras only','Locking washrooms'],ans:1,tip:'Positive behaviour change through peer education and visual prompts consistently outperforms punitive approaches in institutional settings.'},
+    {cat:'Woloo Platform',q:'How can a university use Woloo to maintain campus washroom standards?',opts:['They cannot use Woloo','List campus washrooms for student reviews and monitor ratings to trigger maintenance','Only for public washrooms','By advertising on the app'],ans:1,tip:'Woloo enables universities to list and monitor campus washrooms — student reviews create real-time accountability for facility managers.'},
+    {cat:'Mental Health',q:'Why is a clean, safe, private washroom important for student mental health?',opts:['It is not related','It provides a private, dignified space — lack of clean facilities increases anxiety and affects wellbeing','Students should not care','Only for medical students'],ans:1,tip:'Research links poor washroom conditions with stress, reduced confidence and lower academic engagement — especially among female students.'}
+  ],
+  govt:[
+    {cat:'Public Service',q:'Government office washrooms serve which of the following groups daily?',opts:['Only government staff','Government staff, citizens visiting for services, contractors and visitors','Only senior officers','Only those with appointments'],ans:1,tip:'Government offices are public service hubs — washrooms must serve diverse visitors including elderly, disabled and those with children.'},
+    {cat:'RTI & Accountability',q:'Can citizens use the Right to Information Act to find out cleaning records of govt. washrooms?',opts:['No, it is confidential','Yes — public records on maintenance and hygiene audits are RTI-applicable','Only for courts','Only in Delhi'],ans:1,tip:'Hygiene records of government facilities are public documents — RTI applications can compel disclosure of cleaning schedules and audit results.'},
+    {cat:'Standards',q:'Which Indian government standard governs washroom facilities in public buildings?',opts:['IS 1234','NBC (National Building Code) Part 9 — Plumbing & Sanitation','PWD General Order','IPC Code only'],ans:1,tip:'The National Building Code Part 9 specifies toilet ratios, fixture standards and accessibility requirements for all public buildings in India.'},
+    {cat:'Civic Rights',q:'What should a citizen do if a government office washroom is consistently unhygienic?',opts:['Accept it','File a grievance on the Swachh Bharat Mission portal or via Woloo report','Only complain verbally','Contact the media immediately'],ans:1,tip:'The Swachh Bharat Mission Grievance Portal and Woloo reporting both trigger official accountability — citizen voices drive real change.'},
+    {cat:'Inclusivity',q:'Under which Indian law are accessible washrooms mandatory in all government buildings?',opts:['Swachh Bharat Act','Rights of Persons with Disabilities Act 2016','RTI Act','Municipal Building Act'],ans:1,tip:'The RPWD Act 2016 mandates accessibility in all public and government buildings — non-compliance is legally actionable.'},
+    {cat:'Role Model',q:'Why should government offices set the highest washroom hygiene standards?',opts:['They have larger budgets','As public service institutions, they set norms and expectations for civic hygiene culture across society','Only for public image','Because they are inspected'],ans:1,tip:'Government institutions influence civic culture — when public buildings model excellent hygiene, they shift community expectations upward.'}
+  ]
+};
+
+// TRUE/FALSE BANK — per zone
+const TF_BANK={
+  market:[
+    {s:'Washing hands with water only is almost as effective as using soap.',ans:false,exp:'False — soap breaks down the cell walls of bacteria and strips viruses of their coating. Water alone removes only loose debris.'},
+    {s:'A washroom that smells like air freshener is always hygienic and safe.',ans:false,exp:'False — air fresheners mask odours without removing germs. A clean washroom has no bad odour at source.'},
+    {s:'Girls miss school more in countries without safe school washroom facilities.',ans:true,exp:'True — UNESCO data confirms girls miss up to 4 days monthly due to lack of safe private facilities for menstrual hygiene.'},
+    {s:'Proper sanitation reduces child diarrhoea deaths by up to 65 percent.',ans:true,exp:'True — WHO confirms that clean water and sanitation together prevent the majority of diarrhoea-related child deaths globally.'},
+    {s:'Community reporting apps like Woloo can improve public washroom standards.',ans:true,exp:'True — crowd-sourced reports create accountability, generate data and trigger inspections and maintenance upgrades.'},
+    {s:'A toilet that looks clean always has no dangerous bacteria on its surfaces.',ans:false,exp:'False — E.coli and many pathogens are invisible. Surfaces must be disinfected, not just wiped or decorated.'}
+  ],
+  cinema:[
+    {s:'Cinema washrooms only need cleaning once per day.',ans:false,exp:'False — high-footfall venues require interval cleaning and continuous monitoring, especially during back-to-back screenings.'},
+    {s:'Popcorn can carry pathogens if handled after using the washroom without washing hands.',ans:true,exp:'True — unwashed hands transfer gut pathogens directly to food that is then eaten — a common route for gastroenteritis.'},
+    {s:'Touchless flush systems reduce germ transfer at cinema washrooms.',ans:true,exp:'True — touchless fixtures eliminate the high-risk hand contact with contaminated flush buttons and taps.'},
+    {s:'It is safe to share drinks at the cinema without hygiene concerns.',ans:false,exp:'False — sharing drinks transfers saliva containing bacteria and viruses — including cold, flu and mononucleosis pathogens.'},
+    {s:'A dark or flickering light in a cinema washroom is a Woloo reportable issue.',ans:true,exp:'True — inadequate lighting is a safety and hygiene concern — it hides contamination and makes the space unsafe, especially for women.'},
+    {s:'Washroom odour in cinemas is only caused by external factors outside management control.',ans:false,exp:'False — odour is primarily caused by poor ventilation design, infrequent cleaning and blocked drains — all are manageable.'}
+  ],
+  gym:[
+    {s:'Gyms are low-risk environments for skin infections because people shower regularly.',ans:false,exp:'False — shared gym surfaces are high-risk for MRSA, ringworm and athlete\'s foot — sweat creates ideal bacterial growth conditions.'},
+    {s:'Gym washroom floors should have anti-slip surfaces and be disinfected after each class.',ans:true,exp:'True — wet floors cause falls and harbour fungal infections — anti-slip coatings and post-class disinfection are best practice.'},
+    {s:'It is safe to walk barefoot in a gym changing room.',ans:false,exp:'False — fungi causing tinea pedis (athlete\'s foot) survive on wet surfaces — flip flops should always be worn.'},
+    {s:'Gym members have a responsibility to wipe equipment after use to protect others.',ans:true,exp:'True — shared equipment transfers sweat-borne bacteria and viruses — wiping is a basic gym etiquette and hygiene requirement.'},
+    {s:'Gym showers need to be cleaned less frequently than cinema washrooms.',ans:false,exp:'False — gym showers face unique risks from sweat, body oils and fungal spores — they require more frequent, specialist cleaning.'},
+    {s:'Hand sanitiser at a gym entrance is an effective alternative to handwashing for clean hands.',ans:false,exp:'False — gym hands are often heavily soiled with sweat and oils — these require soap and water to clean effectively before sanitiser.'}
+  ],
+  train:[
+    {s:'Train washrooms in India are covered under Swachh Rail Mission standards.',ans:true,exp:'True — Indian Railways\' Swachh Rail Mission sets cleaning frequency, inspection and rating standards for all train washrooms.'},
+    {s:'Bio-toilets on Indian trains dispose of waste directly onto the track.',ans:false,exp:'False — bio-toilets use bacterial decomposition to treat waste in a holding tank — zero discharge onto tracks is the goal.'},
+    {s:'Passengers should avoid touching train washroom surfaces with bare hands.',ans:true,exp:'True — train washrooms are high-turnover shared spaces — use paper or elbow to operate fixtures where possible.'},
+    {s:'Train washrooms need cleaning only at the end of each journey.',ans:false,exp:'False — long-distance trains require cleaning at each major station halt — high usage demands multiple cleaning cycles per journey.'},
+    {s:'The Woloo app covers washroom ratings at Indian railway stations.',ans:true,exp:'True — Woloo maps public washrooms across all location types including railway stations — enabling citizen review and accountability.'},
+    {s:'A locked or out-of-order washroom on a train is not a reportable issue.',ans:false,exp:'False — out-of-order facilities on transport are reportable to railway authorities and via Woloo — availability is a passenger right.'}
+  ],
+  library:[
+    {s:'Library washrooms have lower hygiene needs than restaurant washrooms.',ans:false,exp:'False — all public washrooms have equal hygiene obligations regardless of the establishment type — no visitor deserves lesser standards.'},
+    {s:'Libraries should provide free sanitary products in washrooms as part of inclusive hygiene access.',ans:true,exp:'True — many progressive libraries globally provide free period products — this supports equity and enables full participation.'},
+    {s:'Reading materials and devices brought into washrooms cannot spread germs.',ans:false,exp:'False — phones and books taken into washrooms carry faecal bacteria on surfaces — a documented vector for germ transmission.'},
+    {s:'Library washrooms are used by some of the most vulnerable members of the public.',ans:true,exp:'True — libraries serve elderly, homeless, low-income and unhoused individuals — washrooms must be accessible, safe and non-judgmental.'},
+    {s:'Hand sanitiser stations near library book returns can help reduce pathogen transfer via books.',ans:true,exp:'True — books are touched by many people — sanitiser near returns reduces pathogen load passed via shared materials.'},
+    {s:'Temperature and humidity in library washrooms do not affect hygiene outcomes.',ans:false,exp:'False — warm, humid conditions accelerate bacterial and mould growth — ventilation and temperature control are hygiene-critical in washrooms.'}
+  ],
+  beach:[
+    {s:'Beach washrooms do not need soap because sea water kills germs.',ans:false,exp:'False — sea water does not substitute for soap — saltwater may contain bacteria and the mechanical action of handwashing is essential.'},
+    {s:'Mobile toilet units at beaches must meet the same standards as permanent washrooms.',ans:true,exp:'True — temporary facilities at public events and beaches must meet the same hygiene, safety and accessibility standards under law.'},
+    {s:'Sunscreen and sand make handwashing unnecessary at the beach.',ans:false,exp:'False — sunscreen and sand residue coat hands and harbour bacteria — soap and water are essential, especially before eating beach food.'},
+    {s:'Beach washrooms need more frequent drain cleaning than indoor washrooms.',ans:true,exp:'True — sand, sunscreen, salt and organic matter block beach drains faster — more frequent clearing prevents odour and overflow.'},
+    {s:'Children\'s beach areas require child-height washroom facilities.',ans:true,exp:'True — child-height fixtures, shallow sinks and step stools are inclusive design requirements for family beach facilities.'},
+    {s:'Leaving wet clothes near beach washrooms poses no hygiene risk.',ans:false,exp:'False — wet fabric is an ideal breeding ground for bacteria and mould — it also creates slip hazards and contributes to odour.'}
+  ],
+  bus:[
+    {s:'Bus terminal washrooms are the most neglected public washrooms in Indian cities.',ans:true,exp:'True — surveys consistently show bus terminal washrooms receive the lowest hygiene ratings — often due to insufficient maintenance budgets.'},
+    {s:'Bus terminals must provide separate washrooms for men, women and transgender persons.',ans:true,exp:'True — NALSA guidelines and several state policies mandate gender-inclusive washroom provision at public transport hubs.'},
+    {s:'Passengers waiting at bus terminals have no right to demand clean washroom facilities.',ans:false,exp:'False — access to clean sanitation is a fundamental right — citizens can demand standards from operators via grievance systems and Woloo.'},
+    {s:'A pay-per-use model for clean bus terminal washrooms is globally accepted practice.',ans:true,exp:'True — managed pay-per-use washrooms fund professional cleaning staff and maintenance — many cities use this successfully.'},
+    {s:'Bus terminal washrooms serving interstate travellers require the same standards as airports.',ans:true,exp:'True — interstate bus terminals serve diverse populations on long journeys — hygiene needs are comparable to airport terminals.'},
+    {s:'Woloo can help bus operators identify their worst-performing washroom locations.',ans:true,exp:'True — Woloo data analytics reveals patterns in low-rated locations, helping operators prioritise investment and corrective action.'}
+  ],
+  petrol:[
+    {s:'Petrol station washrooms on highways are optional facilities, not a legal requirement.',ans:false,exp:'False — NHAI and state highway rules require certified rest stops with washroom facilities at defined intervals for highway travellers.'},
+    {s:'Highway washrooms are used by a more uniform group of travellers than city washrooms.',ans:false,exp:'False — highway washrooms serve truck drivers, families, tourists, bus passengers and motorcyclists — highly diverse user groups.'},
+    {s:'A clean highway petrol station washroom can be a deciding factor in brand loyalty for drivers.',ans:true,exp:'True — surveys show washroom quality significantly influences petrol station choice — it is a key differentiator for highway operators.'},
+    {s:'Water supply at highway washrooms can be sourced from any available source without testing.',ans:false,exp:'False — water quality for public washroom facilities must meet BIS drinking water standards — untested sources are a health hazard.'},
+    {s:'Night-time security at highway washrooms is a hygiene concern as well as a safety one.',ans:true,exp:'True — poor lighting and security at night washrooms enables unsafe behaviour and deters cleaning — safety and hygiene are interlinked.'},
+    {s:'Woloo star ratings for highway washrooms influence which stops long-distance travellers choose.',ans:true,exp:'True — Woloo highway ratings are increasingly used by truckers, families and bus operators when planning rest stops.'}
+  ],
+  office:[
+    {s:'Office washrooms are a private concern and are not subject to public hygiene regulations.',ans:false,exp:'False — the Factories Act, Shops & Establishments Acts and Building Codes mandate washroom standards for all workplaces.'},
+    {s:'The number of washrooms required in an office is determined by the number of employees.',ans:true,exp:'True — IS and NBC standards specify toilet-to-employee ratios — one WC per 25 females and one per 30 males as a baseline.'},
+    {s:'Employees can report poor office washroom standards to the labour department.',ans:true,exp:'True — workplace hygiene is a labour right — violations can be reported to state labour inspectors or via online portals.'},
+    {s:'Office washrooms only need deep cleaning once per week.',ans:false,exp:'False — office washrooms need daily deep cleaning and interval inspections — frequency depends on footfall and occupancy.'},
+    {s:'Providing a clean, well-maintained washroom improves employee productivity and morale.',ans:true,exp:'True — research consistently links workplace washroom quality with employee satisfaction, retention and reduction of sick days.'},
+    {s:'Gender-neutral washrooms in offices are a violation of employee rights.',ans:false,exp:'False — gender-neutral washrooms offer greater inclusivity for transgender and non-binary employees — increasingly mandated in progressive workplaces.'}
+  ],
+  zoo:[
+    {s:'Zoo washrooms face unique hygiene challenges due to proximity to animal enclosures.',ans:true,exp:'True — airborne particles from animal enclosures and visitor contact with animals increase pathogen load near zoo washrooms.'},
+    {s:'Children visiting zoos face higher infection risk from washrooms than adults.',ans:true,exp:'True — children touch animal enclosures and surfaces without restraint and have developing immune systems — risk is significantly higher.'},
+    {s:'Animal faecal matter can travel through zoo visitor areas via footwear.',ans:true,exp:'True — zoological facilities in many countries provide boot wash stations at enclosure exits for this reason.'},
+    {s:'Zoo staff washrooms and public visitor washrooms can share the same facilities.',ans:false,exp:'False — zoo staff working with animals require dedicated washrooms to prevent cross-contamination with public areas.'},
+    {s:'Hand sanitiser stations after animal petting zones are a regulatory requirement at many zoos.',ans:true,exp:'True — post-petting sanitiser stations are mandated at many zoological parks to prevent zoonotic disease transmission.'},
+    {s:'Washooms at zoos need higher frequency cleaning than standard public washrooms.',ans:true,exp:'True — animal proximity, child-heavy visitor mix and outdoor conditions all increase cleaning requirements above standard public washrooms.'}
+  ],
+  temple:[
+    {s:'Temple washrooms serve a uniquely diverse group of visitors including elderly, devotees and tourists.',ans:true,exp:'True — temples attract people of all ages, abilities and backgrounds — inclusive, accessible and hygienic facilities are essential.'},
+    {s:'Ritual handwashing before prayers means temple washrooms are less important.',ans:false,exp:'False — ritual and hygienic handwashing serve different purposes — proper handwashing with soap and water is always required for germ removal.'},
+    {s:'Temple premises must provide separate washrooms for pilgrims and staff.',ans:true,exp:'True — high footfall from pilgrims creates demand spikes — segregated facilities prevent overcrowding and cross-contamination.'},
+    {s:'A wet wudhu (ablution) area near a temple washroom requires anti-slip flooring.',ans:true,exp:'True — wet ablution areas are high-risk for falls — anti-slip tiles, handrails and good drainage are essential safety requirements.'},
+    {s:'Woloo can help temple trusts maintain hygiene accountability for their facilities.',ans:true,exp:'True — Woloo listings enable devotee reviews and ratings — religious institutions increasingly use this for transparency.'},
+    {s:'Open-defecation near temple premises is acceptable due to space constraints.',ans:false,exp:'False — open defecation spreads disease and is illegal under the ODF (Open Defecation Free) provisions of the Swachh Bharat Mission.'}
+  ]
+};
+
+// SPOT THE LOO scenarios — per zone
+const SPOT_BANK={
+  metro:[
+    {c:{e:'🌟🚇',n:'Certified Metro Station',cl:['Platform-level hourly cleaning','Soap dispensers refilled each shift','Clear sightlines — no blind spots','Emergency intercom inside stall']},d:{e:'💀🚇',n:'Ghost Platform Block',cl:['Cleaning log last signed 3 weeks ago','Soap dispenser rusted and empty','Dark corner with broken light','Intercom cable hanging loose']}},
+    {c:{e:'✨🚉',n:'Model Transit Hub',cl:['Automated flush sensors','Touchless soap and dryer','CCTV outside entrance','Daily hygiene rating displayed']},d:{e:'⚠️🚉',n:'Neglected Interchange',cl:['Manual flush — handle corroded','No soap, only empty hook','No security or lighting outside','Hygiene rating board blank for months']}},
+    {c:{e:'🌿🚊',n:'Green Station Washroom',cl:['Low-flow water-saving taps','Recycled paper dispenser','Separate bins for waste types','Ventilation fan working']},d:{e:'🦠🚊',n:'Infection Express',cl:['Dripping taps wasting water','No paper — bare wiring on wall','Single overflowing mixed bin','Ventilation fan seized — no airflow']}},
+    {c:{e:'💎🚆',n:'Premium Platform Loo',cl:['Touchless entry — no handle needed','Auto-flush and sensor tap','Air ioniser for odour control','Cleaning every 30 minutes confirmed']},d:{e:'🕷️🚆',n:'Horror Halt',cl:['Door handle corroded and sticky','Manual flush — cracked lever','Rotten odour from blocked drain','Last cleaning: unknown — no log']}},
+    {c:{e:'🏥🚇',n:'Health-Certified Station',cl:['Clinical-grade hand soap','Anti-bacterial surface coating','Regular UV light cleaning cycle','Disability access fully functional']},d:{e:'💀🚇',n:'Quarantine Zone',cl:['Generic soap expired 8 months ago','Surfaces visibly dirty and sticky','UV lamp broken — disconnected','Disability ramp blocked by cleaning cart']}},
+    {c:{e:'⭐🚉',n:'Five-Star Station',cl:['Ranked 1st in city hygiene audit','All fixtures modern and functional','Fresh flowers and ventilation daily','Woloo 5-star certified']},d:{e:'😱🚉',n:'Strike Zone',cl:['Ranked last in city hygiene audit','Three broken fixtures unreported','Stale air — windows sealed shut','Zero Woloo ratings — never listed']}}
+  ],
+  restaurant:[
+    {c:{e:'🍽️✅',n:'FSSAI A-Grade Kitchen Loo',cl:['Antimicrobial soap at every sink','Separate staff and customer WCs','Colour-coded cleaning equipment','Daily third-party hygiene audit']},d:{e:'🦠🍽️',n:'Food Poisoning Waiting Room',cl:['Bar soap shared between staff and customer','One washroom for all — no separation','Single mop for all surfaces','Last hygiene audit: never']},},
+    {c:{e:'🌟🍴',n:'Chef\'s Pride Washroom',cl:['Hand-free tap operation','Hot water available for scrubbing','Hygiene poster showing 7-step wash','Weekly pest inspection confirmed']},d:{e:'⚠️🍴',n:'Recipe for Disaster',cl:['Tap requires tool to turn off','Cold water only — 12°C','No handwashing guidance anywhere','Cockroach spotted near drain']}},
+    {c:{e:'💎🍱',n:'Fine Dining Standard',cl:['Linen hand towels — hospital grade','Osmosis purified water supply','Separate prep-area hand wash station','Allergen-aware cleaning protocols']},d:{e:'😱🍱',n:'Kitchen Nightmare',cl:['Shared cloth towel — ring of grime','Mains water untested — brown tint','No prep hand wash station at all','No cleaning protocol posted anywhere']}},
+    {c:{e:'✨🥘',n:'Street Food Champion',cl:['Portable hand wash station at stall','Operator has FSSAI food handler cert','Water from BIS-certified source','Waste disposed in sealed bags hourly']},d:{e:'💀🥘',n:'Pavement Peril',cl:['No hand wash access anywhere nearby','Operator has no food safety training','Water from unknown roadside source','Waste left open attracting flies']}},
+    {c:{e:'🏅🍛',n:'Hygiene Award Winner',cl:['Zero food poisoning complaints — 3 years','Woloo 5-star on restaurant listing','Washrooms match kitchen hygiene grade','Staff trained in HACCP protocols']},d:{e:'🦠🍛',n:'Municipal Warning Notice',cl:['Multiple food poisoning complaints filed','Woloo rating: 1 star, 47 complaints','Washrooms fail every hygiene inspection','Staff have zero food safety training']}},
+    {c:{e:'🎖️🥗',n:'Zero Waste Kitchen',cl:['Biodegradable soap dispensers','Food waste composted — zero to landfill','Grey water recycled for floor cleaning','Team hygiene training monthly']},d:{e:'☠️🥗',n:'Environmental Violation',cl:['Caustic chemical poured in drains','Food waste mixed with hazardous bins','Untreated water discharged in drain','Staff hygiene training: never done']}}
+  ],
+  bus:[
+    {c:{e:'🚌✅',n:'ISBT Model Terminal',cl:['Hourly cleaning by dedicated team','Separately ventilated ladies section','Pay-per-use model funds maintenance','Monthly municipal inspection passed']},d:{e:'⚠️🚌',n:'Forgotten Terminal Block',cl:['Cleaning done once — if remembered','Ladies and gents combined — no privacy','Free but filthy — no maintenance fund','Last municipal inspection: 2 years ago']}},
+    {c:{e:'⭐🚌',n:'Swachh Bharat Award Terminal',cl:['National hygiene award plaque displayed','Live cleaning schedule on digital board','Woloo 5-star and 200+ good reviews','Accessible, child-friendly and safe']},d:{e:'💀🚌',n:'Strike Action Washroom',cl:['Hygiene complaint lodged with court','No cleaning schedule exists','Woloo 1-star with 80+ complaints','Inaccessible — no ramp, broken lock']}},
+    {c:{e:'💎🚍',n:'Premium Interstate Terminal',cl:['Hot water for hand washing','Separate prayer room and ablution area','Vending machine with hygiene products','CCTV monitored — 24 hour security']},d:{e:'😱🚍',n:'Traveller\'s Nightmare',cl:['Cold only — pipe cracked and leaking','No prayer or ablution facility','No products — empty dispensers','Unlit at night — CCTV non-functional']}},
+    {c:{e:'🌿🚌',n:'Green Terminal Loo',cl:['Solar-heated water','Rainwater harvesting for flush','Compost bin for biodegradable waste','Native plant wall for natural air filter']},d:{e:'🦠🚌',n:'Environmental Disgrace',cl:['Untreated water heated on open flame','Dripping taps — 1000L wasted daily','Mixed hazardous and biodegradable waste','Sewage leaked into outdoor planting area']}},
+    {c:{e:'🏆🚌',n:'Accessible Champion',cl:['Full wheelchair ramp and turning space','Grab rails on all three sides','Emergency intercom — tested monthly','Braille signage on all doors']},d:{e:'❌🚌',n:'Accessibility Failure',cl:['Step at entrance — no ramp','No grab rails — smooth walls only','Emergency intercom disconnected','No signage for visually impaired']}},
+    {c:{e:'🎯🚌',n:'Family Hub Terminal',cl:['Dedicated family washroom with changing','Child step stool at every sink','Lactation room available','Toy cleaning station at exit']},d:{e:'😤🚌',n:'Family Exclusion Zone',cl:['No baby changing facility','Sinks too high for children','No private nursing space','Filthy floor — hazardous for crawling babies']}}
+  ],
+  zoo:[
+    {c:{e:'🦁✅',n:'Safari-Grade Hygiene',cl:['Sanitiser after each animal encounter','Separate staff and public washrooms','Boot-wash station at enclosure exit','Child-height sinks and fixtures']},d:{e:'🦠🦁',n:'Jungle Horror Block',cl:['No sanitiser near animal areas','Staff and public share one WC','No boot wash — animal waste tracked in','Adult-only height sinks — children cannot reach']}},
+    {c:{e:'🐘⭐',n:'Conservation Park Standard',cl:['Eco-friendly biodegradable soap','Composting toilet to reduce water use','Recycled paper dispensers','Zero plastic — refillable dispensers']},d:{e:'💀🐘',n:'Extinction-Level Hygiene',cl:['Chemical soap harms nearby water habitat','Standard flush — high water waste','Plastic bin liners discarded in park','Single-use plastic dispensers — 50 daily']}},
+    {c:{e:'🌿🦒',n:'Nature Conservation Washroom',cl:['Built with reclaimed timber','Native plant ventilation wall','Rainwater harvested for flushing','Educational hygiene display inside']},d:{e:'⚠️🦒',n:'Concrete Block',cl:['High-emission concrete construction','Mechanical ventilation — energy wasteful','Mains water only — no conservation','Blank walls — zero educational value']}},
+    {c:{e:'🎖️🐯',n:'Wildlife Hero Loo',cl:['Ranked No.1 zoo washroom nationally','Woloo 5 stars — 300+ reviews','Family, accessible and inclusive rooms','Regular visits by school hygiene groups']},d:{e:'😱🐯',n:'Endangered Washroom',cl:['Ranked last in national zoo audit','Woloo 1 star — 95 complaints','No family or accessible provision','Schools avoid this zone — too dirty']}},
+    {c:{e:'💎🦓',n:'International Wildlife Standard',cl:['Meets WAZA (World Assoc. of Zoos) hygiene code','Anti-zoonotic surface coating','Veterinary-grade hand sanitiser at exit','Pest-controlled sealed environment']},d:{e:'🕷️🦓',n:'Biosecurity Breach',cl:['Does not meet any recognised standard','Standard surfaces — no anti-pathogen coating','Regular hand gel — not zoo-grade','Open walls — rodents and insects enter freely']}},
+    {c:{e:'🌟🐒',n:'Children\'s Zoo Hygiene Champion',cl:['Interactive hygiene education station','Child-friendly handwashing games','Age-appropriate posters at eye level','Gentle, child-safe soap formulation']},d:{e:'❌🐒',n:'Child Hazard Zone',cl:['No hygiene education at all','No handwashing guidance for children','Adult posters children cannot read','Harsh industrial soap — burns young skin']}}
+  ],
+  office:[
+    {c:{e:'🏢✅',n:'ISO 45001 Compliant Office',cl:['Workplace hygiene policy displayed','Monthly independent washroom audit','Gender-neutral and accessible WC','Sanitiser at entry, exit and lift']},d:{e:'⚠️🏢',n:'Policy-Free Zone',cl:['No hygiene policy posted anywhere','Last audit: year before last','Gender-neutral WC — locked always','Sanitiser station empty for 3 months']}},
+    {c:{e:'⭐🏛️',n:'Award-Winning Workplace',cl:['Great Place to Work hygiene certification','Employee washroom satisfaction 94%','Monthly feedback survey acted on','POSH-compliant safe washroom design']},d:{e:'💀🏛️',n:'HR Disaster Zone',cl:['No workplace certification of any kind','Employee satisfaction — never surveyed','Feedback ignored — unchanged for years','POSH complaint filed about washroom safety']}},
+    {c:{e:'🌿🏢',name:'Green Building Washroom',cl:['LEED certified water efficiency','Greywater recycling for flush use','Motion-sensor LED lighting only','Digital display shows water saved daily']},d:{e:'🦠🏢',n:'Energy and Water Waster',cl:['Non-certified — high water intensity','Freshwater used for all flush cycles','All lights on always — no sensors','No data collected on resource use']}},
+    {c:{e:'💎🏣',n:'Corporate Excellence',cl:['Five-tier cleaning schedule per day','Luxury hand care products provided','Monthly surprise hygiene audit','CEO washroom uses same standard'],},d:{e:'😤🏣',n:'Rank and File Washroom',cl:['One clean per day — if lucky','Bar soap cracked and shared','No audits — management never visits','Executive washrooms — totally separate luxury']}},
+    {c:{e:'🎯🏢',n:'Inclusive Workplace',cl:['Prayer room with ablution corner','Feeding and pumping room for mothers','Gender-neutral option with clear signage','Disability access champion certified']},d:{e:'❌🏢',n:'Exclusion Building',cl:['No prayer or ablution provision','Mothers must use toilet as pumping room','Binary-only signage — no third option','Disability access paperwork — never actioned']}}
+  ]
+};
+
+// SORT items per zone
+const SORT_BANK={
+  park:[
+    {t:'🌿 Using a covered dustbin',cat:'h'},{t:'🚽 Flushing after every use',cat:'h'},
+    {t:'🧼 Washing hands with soap',cat:'h'},{t:'💧 Using treated drinking water',cat:'h'},
+    {t:'🌱 Composting food waste properly',cat:'h'},{t:'🚶 Littering in the park',cat:'u'},
+    {t:'🚯 Dumping waste near play area',cat:'u'},{t:'💩 Leaving toilet unflushed',cat:'u'},
+    {t:'🧃 Leaving open food waste for pests',cat:'u'},{t:'🤧 Sneezing without covering mouth',cat:'u'}
+  ],
+  stadium:[
+    {t:'🗑️ Using provided waste bins',cat:'h'},{t:'🧼 Washing hands before eating',cat:'h'},
+    {t:'🚽 Flushing after use',cat:'h'},{t:'♿ Keeping accessible stalls clear',cat:'h'},
+    {t:'💧 Drinking from sealed bottles',cat:'h'},{t:'🚮 Throwing trash on stands',cat:'u'},
+    {t:'🍺 Spilling drinks and leaving them',cat:'u'},{t:'💩 Using portable loo then not washing',cat:'u'},
+    {t:'🚶 Blocking accessible entrances',cat:'u'},{t:'🧃 Leaving food near drain grates',cat:'u'}
+  ],
+  hotel:[
+    {t:'🛁 Reporting blocked hotel drain',cat:'h'},{t:'🧴 Using provided toiletries',cat:'h'},
+    {t:'🚽 Flushing all waste properly',cat:'h'},{t:'♻️ Using towel reuse programme',cat:'h'},
+    {t:'🧼 Washing hands before breakfast',cat:'h'},{t:'🛁 Leaving shower drain blocked',cat:'u'},
+    {t:'🧴 Pouring chemicals down sink',cat:'u'},{t:'💩 Not flushing — hotel is not home',cat:'u'},
+    {t:'🚮 Leaving waste on bathroom floor',cat:'u'},{t:'💦 Using excessive water wastefully',cat:'u'}
+  ],
+  beach:[
+    {t:'🌊 Using beach washroom facilities',cat:'h'},{t:'🧼 Handwashing before beach meals',cat:'h'},
+    {t:'🗑️ Disposing litter in bins',cat:'h'},{t:'🐚 Leaving beach clean of waste',cat:'h'},
+    {t:'💧 Using sealed water bottles',cat:'h'},{t:'🏖️ Burying rubbish in sand',cat:'u'},
+    {t:'🌊 Washing feet in sea — no soap needed',cat:'u'},{t:'🚯 Leaving sunscreen bottles on beach',cat:'u'},
+    {t:'🦀 Disturbing marine life near drains',cat:'u'},{t:'🧃 Leaving food waste near water',cat:'u'}
+  ],
+  govt:[
+    {t:'📋 Reporting washroom issues to department',cat:'h'},{t:'🧼 Washing hands after document handling',cat:'h'},
+    {t:'🚽 Using facilities properly',cat:'h'},{t:'♿ Keeping accessible areas clear',cat:'h'},
+    {t:'💧 Using hand sanitiser at entry',cat:'h'},{t:'📝 Writing graffiti on walls',cat:'u'},
+    {t:'🚮 Littering in civic building',cat:'u'},{t:'💩 Misusing washroom facilities',cat:'u'},
+    {t:'🚧 Blocking accessible paths',cat:'u'},{t:'🗑️ Dumping waste outside designated bins',cat:'u'}
+  ]
+};
+
+// REPORT issues per zone
+const REPORT_BANK={
+  park:[
+    {t:'💧 Tap left running — wasting water',r:true},{t:'🚽 Toilet left unflushed',r:true},
+    {t:'🗑️ Overflowing bin',r:true},{t:'💡 Light not working at dusk',r:true},
+    {t:'🕷️ Cobwebs and mould on ceiling',r:true},{t:'🚪 Door does not latch — no privacy',r:true},
+    {t:'💦 Standing water on floor path',r:true},{t:'🧼 Soap dispenser completely empty',r:true},
+    {t:'✅ Tree shading provides natural cooling',r:false},{t:'✅ Recycled water sign on tap',r:false},
+    {t:'✅ Bin clearly labelled — sorted correctly',r:false},{t:'✅ Fan ventilation working',r:false}
+  ],
+  stadium:[
+    {t:'💧 Leaking pipe at base of wall',r:true},{t:'🚽 All three toilets unflushed',r:true},
+    {t:'🗑️ Bins overflowing at half-time',r:true},{t:'💡 Half the lights failed — unsafe',r:true},
+    {t:'🦠 Mould visible on grout tiles',r:true},{t:'🚪 Lock broken on two cubicles',r:true},
+    {t:'♿ Accessible stall blocked by cleaning cart',r:true},{t:'🧼 No soap — dispensers empty',r:true},
+    {t:'✅ Cleaning log updated hourly',r:false},{t:'✅ Touchless hand dryer working',r:false},
+    {t:'✅ Anti-slip floor — dry and safe',r:false},{t:'✅ Sanitiser at entry point stocked',r:false}
+  ],
+  hotel:[
+    {t:'💧 Shower drain blocked — flooding',r:true},{t:'🚽 Flush not working — stuck handle',r:true},
+    {t:'💡 Extractor fan failed — humid',r:true},{t:'🦠 Black mould behind toilet',r:true},
+    {t:'🚪 Bathroom lock stiff — possible failure',r:true},{t:'🧼 Soap dispenser empty — not refilled',r:true},
+    {t:'🪞 Mirror cracked — safety hazard',r:true},{t:'💦 Cold water tap dripping constantly',r:true},
+    {t:'✅ Hot water immediately available',r:false},{t:'✅ Luxury toiletries fully stocked',r:false},
+    {t:'✅ Fresh towels placed and stacked',r:false},{t:'✅ Floor dry and clean',r:false}
+  ],
+  beach:[
+    {t:'💧 Outdoor shower tap broken — no water',r:true},{t:'🚽 Toilet blocked — overflow risk',r:true},
+    {t:'🗑️ Bin full — waste scattered around',r:true},{t:'💡 Washroom light out — unsafe at evening',r:true},
+    {t:'🦀 Drainage clogged with sand and debris',r:true},{t:'🧼 No soap — saltwater is not soap',r:true},
+    {t:'🚪 Cubicle door missing — no privacy',r:true},{t:'💦 Puddles on path to washroom — slip risk',r:true},
+    {t:'✅ Anti-slip matting at entrance',r:false},{t:'✅ Child-height sink available',r:false},
+    {t:'✅ Foot-wash station working',r:false},{t:'✅ Clean changing area for families',r:false}
+  ],
+  govt:[
+    {t:'💧 Water fountain pipe dripping',r:true},{t:'🚽 Gents toilet unflushed',r:true},
+    {t:'💡 Corridor light outside washroom failed',r:true},{t:'🦠 Mould on window seal',r:true},
+    {t:'🚪 Ladies cubicle door lock broken',r:true},{t:'🧼 Hand wash sink blocked — standing water',r:true},
+    {t:'♿ Accessible ramp has gap at entry',r:true},{t:'🗑️ Dustbin full — lid cannot close',r:true},
+    {t:'✅ Cleaning log present and current',r:false},{t:'✅ Sanitiser at building entrance',r:false},
+    {t:'✅ Braille signage on washroom door',r:false},{t:'✅ Separate gents and ladies clearly marked',r:false}
+  ]
+};
+
+// MATCH pairs per zone
+const MATCH_BANK={
+  bazaar:[
+    {prob:'Dirty drain smell',sol:'Improve ventilation'},
+    {prob:'Overflowing bin',sol:'Empty and cover it'},
+    {prob:'No soap left',sol:'Refill the dispenser'},
+    {prob:'Broken flush',sol:'Report to facility staff'},
+    {prob:'Puddles on floor',sol:'Fix the leaking tap'},
+    {prob:'No door lock',sol:'Install privacy latch'}
+  ],
+  park2:[
+    {prob:'Child falls on wet floor',sol:'Install anti-slip matting'},
+    {prob:'No baby change facility',sol:'Add a dedicated family room'},
+    {prob:'Overflowing sanitary bin',sol:'Increase service frequency'},
+    {prob:'Soap burns child skin',sol:'Switch to child-safe formula'},
+    {prob:'Washroom too dark',sol:'Fix the broken light fitting'},
+    {prob:'Broken door handle',sol:'Call maintenance immediately'}
+  ],
+  temple:[
+    {prob:'Wet ablution area is slippery',sol:'Install anti-slip flooring'},
+    {prob:'Pilgrims queue outside for hours',sol:'Add additional cubicles'},
+    {prob:'Ritual area mixed with toilets',sol:'Designate separate spaces'},
+    {prob:'No water after midday',sol:'Increase water storage capacity'},
+    {prob:'Elderly cannot use facilities',sol:'Add grab rails and seating'},
+    {prob:'Waste near sacred water source',sol:'Relocate waste disposal area'}
+  ],
+  petrol:[
+    {prob:'Trucker washroom always dirty',sol:'Schedule dedicated peak-time cleaning'},
+    {prob:'No water at highway stop',sol:'Install rainwater harvesting tank'},
+    {prob:'Unsafe lighting at night',sol:'Install solar motion-sensor lights'},
+    {prob:'Drain blocked with road debris',sol:'Install vehicle-entrance drain filter'},
+    {prob:'No accessible facility',sol:'Build wheelchair-compliant WC unit'},
+    {prob:'No hygiene products stocked',sol:'Add coin-operated vending machine'}
+  ],
+  hero:[
+    {prob:'Washroom never inspected',sol:'Schedule monthly third-party audit'},
+    {prob:'No cleaning record kept',sol:'Implement digital cleaning log'},
+    {prob:'Citizens cannot give feedback',sol:'List on Woloo for public rating'},
+    {prob:'No handwashing station',sol:'Install soap and water at exit'},
+    {prob:'Not accessible to disabled',sol:'Comply with RPWD Act 2016'},
+    {prob:'No hygiene education near washroom',sol:'Install WHO handwash poster'}
+  ]
+};
+
+/* ══════════════════════════════════
+   NAV & HUD
+══════════════════════════════════ */
 function go(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0,0);
-  if(id==='s-map') buildMap();
-  if(id==='s-profile') buildProfile();
-  if(id==='s-lb') buildLB();
+  if(id==='s-map')buildMap();
+  if(id==='s-profile')buildProfile();
+  if(id==='s-lb')buildLB();
 }
-
-/* ============================================
-   HUD
-============================================ */
-function updateHUD(){
-  ['h-csp','l1h','l2h','l3h','l4h','l5h'].forEach(id=>{
-    const el=document.getElementById(id); if(el) el.textContent=G.csp;
-  });
-  const hb=document.getElementById('h-bdg'); if(hb) hb.textContent=G.badges.length;
+function hud(){
+  const mx=document.getElementById('m-xp');if(mx)mx.textContent='⭐ '+G.xp+' XP';
+  const mb=document.getElementById('m-bdg');if(mb)mb.textContent='🏅 '+G.badges.length;
+  const mz=document.getElementById('m-zones');if(mz)mz.textContent='🗺 '+G.done.size+'/25';
+  const gx=document.getElementById('game-xp');if(gx)gx.textContent='⭐ '+G.xp;
 }
-
-/* ============================================
-   TOAST & CONFETTI
-============================================ */
+function addXP(n){G.xp+=n;hud();toast('+'+n+' XP ⭐');}
 function toast(msg){
-  const t=document.createElement('div');
-  t.className='toast'; t.textContent=msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1700);
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);setTimeout(()=>t.remove(),1900);
 }
-function spawnPoints(ref,msg){
-  toast(msg+' ⭐');
-}
-function confetti(n=30){
-  const colors=['#FFD000','#FFE55C','#FFA500','#FF8C00','#FFFDE7','#FFF9C4'];
+function confetti(n=40){
+  const cols=['#F5C400','#FFE168','#FFA500','#FFFBEA','#C99B00','#FF8C00'];
   for(let i=0;i<n;i++){
-    const c=document.createElement('div');
-    c.className='confetto';
-    const size=6+Math.random()*14;
-    const shape=Math.random()>0.5?'50%':'4px';
-    c.style.cssText=`left:${10+Math.random()*80}%;top:0;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${shape};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;`;
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+    const c=document.createElement('div');c.className='confetto';
+    const sz=5+Math.random()*12;
+    c.style.cssText=`left:${5+Math.random()*90}%;top:-10px;width:${sz}px;height:${sz}px;background:${cols[i%cols.length]};border-radius:${Math.random()>.5?'50%':'3px'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.5}s;`;
+    document.body.appendChild(c);setTimeout(()=>c.remove(),3200);
   }
 }
 
-/* ============================================
+/* ══════════════════════════════════
    REWARD
-============================================ */
-let _rewardCb = null;
-function reward(em,ttl,bdg,txt,cb){
+══════════════════════════════════ */
+let _rCb=null;
+function reward(em,ttl,bdg,txt,xp,cb){
+  _rCb=cb;
   document.getElementById('rw-em').textContent=em;
   document.getElementById('rw-ttl').textContent=ttl;
   document.getElementById('rw-bdg').textContent=bdg;
   document.getElementById('rw-txt').textContent=txt;
+  document.getElementById('rw-xp').textContent='+'+xp;
   document.getElementById('overlay').classList.add('open');
-  _rewardCb=cb;
-  confetti(50);
+  confetti(60);
 }
-function closeReward(){
-  document.getElementById('overlay').classList.remove('open');
-  if(_rewardCb) _rewardCb();
-}
-function addCSP(n){ G.csp+=n; updateHUD(); toast(`+${n} CSP`); }
-function finishLevel(lvl,bdg,pts,em,ttl,bdgTxt,txt){
-  G.done.add(lvl);
-  G.level=Math.max(G.level, G.done.size+1);
-  addCSP(pts);
-  if(bdg&&!G.badges.includes(bdg)) G.badges.push(bdg);
-  reward(em,ttl,bdgTxt,txt,()=>go('s-map'));
+function closeReward(){document.getElementById('overlay').classList.remove('open');if(_rCb)_rCb();}
+function finishZone(zone,xp,em,ttl,txt){
+  G.done.add(zone.id);
+  const bdgObj=ALL_BADGES.find(b=>b.id===zone.badge);
+  if(bdgObj&&!G.badges.includes(zone.badge))G.badges.push(zone.badge);
+  addXP(xp);
+  const bdgTxt=bdgObj?bdgObj.icon+' '+bdgObj.name+' Earned!':'🏅 Badge Earned!';
+  reward(em,ttl,bdgTxt,txt,xp,()=>go('s-map'));
 }
 
-/* ============================================
+/* ══════════════════════════════════
+   FACE POKE
+══════════════════════════════════ */
+const POKES=['Flush after use! 🚽','Wash hands 20s! 🧼','Report dirty loos! 📢','Stay hygienic! ✨','Check for soap! 🧴','Be a Loo Hero! 🦸','Woloo certified! ⭐','Good ventilation matters!','Clean floors = safe floors!','Report, do not ignore!'];
+let _pi=0;
+function pokeFace(el){
+  el.style.transform='scale(0.85)';
+  setTimeout(()=>el.style.transform='',200);
+  _pi=(_pi+1)%POKES.length;
+  document.getElementById('floatBadge').textContent=POKES[_pi];
+  addXP(2);
+}
+
+/* ══════════════════════════════════
    MAP
-============================================ */
-const REGIONS=[
-  {id:'l1',name:'Schoolville',icon:'🏫',lbl:'Level 1 · Quiz',sc:'s-l1',min:1},
-  {id:'l2',name:'Market Plaza',icon:'🛒',lbl:'Level 2 · Spot It',sc:'s-l2',min:1},
-  {id:'l3',name:'Metro Junction',icon:'🚇',lbl:'Level 3 · Report',sc:'s-l3',min:2},
-  {id:'l4',name:'Parkside',icon:'🌳',lbl:'Level 4 · Sort',sc:'s-l4',min:3},
-  {id:'l5',name:'Bazaar Lane',icon:'🏪',lbl:'Level 5 · Certify',sc:'s-l5',min:4},
-  {id:'cx',name:'City Hall',icon:'🏛️',lbl:'🔒 Coming Soon',sc:null,min:99}
-];
+══════════════════════════════════ */
 function buildMap(){
-  const g=document.getElementById('cityGrid'); g.innerHTML='';
-  updateHUD();
-  REGIONS.forEach((r,i)=>{
-    const locked=G.level<r.min;
-    const done=G.done.has(r.id);
-    const d=document.createElement('div');
-    d.className='region'+(locked?' locked':'')+(done?' done':'');
-    d.innerHTML=`<span class="region-icon">${r.icon}</span><div class="region-name">${r.name}</div><div class="region-lvl">${locked?'🔒 Locked':r.lbl}</div>`;
-    d.style.animationDelay=i*0.07+'s';
-    if(!locked&&r.sc) d.onclick=()=>launchLevel(r.sc,r.id);
-    g.appendChild(d);
+  hud();
+  const wrap=document.getElementById('mapWrap');wrap.innerHTML='';
+  let globalIdx=0;
+  WORLDS.forEach(world=>{
+    const sec=document.createElement('div');sec.className='world-section';
+    sec.innerHTML=`<div class="world-title"><div class="world-label">${world.name}</div><div class="world-divider"></div><div class="world-count">${world.zones.filter(z=>G.done.has(z.id)).length}/${world.zones.length} done</div></div>`;
+    const grid=document.createElement('div');grid.className='zones-grid';
+    world.zones.forEach(z=>{
+      const idx=globalIdx++;
+      const locked=idx>0&&!G.done.has(WORLDS.flat?.[0]?.zones?.[0]?.id)&&idx>=G.done.size+Math.min(idx,3);
+      // Simple unlock: first 2 zones open, rest unlock as you complete zones
+      const unlocked=G.done.size>=z.min||z.min===0;
+      const done=G.done.has(z.id);
+      const d=document.createElement('div');
+      d.className='region'+((!unlocked)?' locked':'')+(done?' done':'');
+      d.innerHTML=`
+        <div class="region-shine"></div>
+        ${done?'<div class="region-tick">✓</div>':''}
+        <span class="region-icon">${z.icon}</span>
+        <div class="region-name">${z.name}</div>
+        <div class="region-sub">${!unlocked?'🔒 Locked':z.sub}</div>
+        ${unlocked?`<div class="region-xp">+${z.xp} XP</div>`:''}
+      `;
+      if(unlocked)d.onclick=()=>launchZone(z);
+      grid.appendChild(d);
+    });
+    sec.appendChild(grid);
+    wrap.appendChild(sec);
   });
-}
-function launchLevel(sc,id){
-  if(sc==='s-l1') initQuiz();
-  if(sc==='s-l2') initLoo();
-  if(sc==='s-l3') initReport();
-  if(sc==='s-l4') initSort();
-  if(sc==='s-l5') initCL();
-  go(sc);
 }
 
-/* ============================================
-   LEVEL 1 — QUIZ
-============================================ */
-const QS=[
-  {q:'Why must we wash hands after using a toilet?',opts:[{t:'🦠 Remove germs & prevent disease',c:true},{t:'🎨 Remove paint stains',c:false},{t:'💧 Cool our hands down',c:false},{t:'🌸 Make them smell nice',c:false}],tip:'Germs on unwashed hands spread to food, eyes & others — causing diarrhoea, typhoid & more!'},
-  {q:'How long should you scrub with soap?',opts:[{t:'⚡ 2 seconds',c:false},{t:'✅ 20 seconds',c:true},{t:'🕐 5 minutes',c:false},{t:'💦 Just rinse with water',c:false}],tip:'20 seconds = singing "Happy Birthday" twice. That kills most harmful germs!'},
-  {q:'What makes a public washroom SAFE to use?',opts:[{t:'💡 Only bright lights',c:false},{t:'✅ Clean, lit, working, soap & water',c:true},{t:'🎵 Good music',c:false},{t:'🖼️ Nice paintings',c:false}],tip:'Woloo certifies washrooms that are clean, functional, well-lit and hygiene-stocked!'},
-  {q:'What should you do if a washroom is dirty?',opts:[{t:'😤 Just ignore it',c:false},{t:'✅ Report it on the Woloo app!',c:true},{t:'🗑️ Add more garbage',c:false},{t:'🚶 Never use public loos again',c:false}],tip:'Every Woloo report makes Sanitia cleaner. Your report matters!'},
-  {q:'Which habit spreads germs in washrooms?',opts:[{t:'🧼 Washing hands',c:false},{t:'🚿 Flushing after use',c:false},{t:'✅ NOT flushing after use',c:true},{t:'🗑️ Using the bin',c:false}],tip:'Always flush! Unflushed waste releases bacteria that can make many people sick.'},
-  {q:'What does Woloo help people find?',opts:[{t:'🍕 Pizza restaurants',c:false},{t:'✅ Safe, certified public washrooms',c:true},{t:'🎮 Gaming cafes',c:false},{t:'🛍️ Shopping malls',c:false}],tip:'Woloo is a phygital platform helping everyone find safe, clean washrooms nearby!'},
-  {q:'Who benefits most from well-maintained washrooms?',opts:[{t:'🤔 Only adults',c:false},{t:'🤔 Only men',c:false},{t:'✅ Everyone — especially women & children',c:true},{t:'🤔 Only tourists',c:false}],tip:'Clean public washrooms protect dignity, health & safety — it\'s a basic human right!'}
-];
-let qIdx=0,qDone=false;
-function initQuiz(){ qIdx=0; qDone=false; renderQ(); }
-function renderQ(){
-  const d=QS[qIdx];
-  document.getElementById('q-text').textContent=d.q;
-  document.getElementById('q-lbl').textContent=`Question ${qIdx+1} of ${QS.length}`;
-  document.getElementById('q-pbar').style.width=`${(qIdx/QS.length)*100}%`;
-  const o=document.getElementById('q-opts'); o.innerHTML='';
-  const keys=['A','B','C','D'];
-  d.opts.forEach((opt,i)=>{
-    const b=document.createElement('button');
-    b.className='opt';
-    b.innerHTML=`<span class="opt-key">${keys[i]}</span>${opt.t}`;
-    b.onclick=()=>{ if(!qDone) answerQ(b,opt.c,d); };
-    o.appendChild(b);
-  });
-  ['q-fb','q-tip'].forEach(id=>{ const el=document.getElementById(id); el.className=el.className.includes('tip')?'fb tip':'fb'; el.style.display='none'; });
-  document.getElementById('q-nxt').style.display='none';
-  document.getElementById('l1h').textContent=G.csp;
-  qDone=false;
+/* ══════════════════════════════════
+   LAUNCH ZONE
+══════════════════════════════════ */
+function launchZone(zone){
+  G.currentZone=zone;
+  document.getElementById('game-icon').textContent=zone.icon;
+  document.getElementById('game-zone-name').textContent=zone.name;
+  document.getElementById('game-zone-sub').textContent=zone.sub;
+  document.getElementById('game-xp').textContent='⭐ '+G.xp;
+  const shell=document.getElementById('game-shell');shell.innerHTML='';
+  if(zone.type==='quiz')renderQuiz(zone,shell);
+  else if(zone.type==='tf')renderTF(zone,shell);
+  else if(zone.type==='spot')renderSpot(zone,shell);
+  else if(zone.type==='report')renderReport(zone,shell);
+  else if(zone.type==='match')renderMatch(zone,shell);
+  go('s-game');
 }
-function answerQ(btn,correct,d){
-  qDone=true;
-  document.querySelectorAll('#q-opts .opt').forEach((b,i)=>{
-    if(d.opts[i].c) b.classList.add('c-right');
-    else b.classList.add('c-disabled');
-    if(b===btn&&!correct) b.classList.remove('c-disabled'), b.classList.add('c-wrong');
-  });
-  const fb=document.getElementById('q-fb');
-  if(correct){
-    fb.className='fb ok show'; fb.textContent='🎉 Correct! You\'re a hygiene expert!';
-    addCSP(15);
-  } else {
-    fb.className='fb bad show'; fb.textContent='❌ Not quite — the correct answer is highlighted!';
-    addCSP(5);
+
+/* ══════════════════════════════════
+   STREAK HELPER
+══════════════════════════════════ */
+function makeStreakBar(arr){
+  const bar=document.createElement('div');bar.className='streak-bar';
+  arr.forEach(s=>{const d=document.createElement('div');d.className='streak-dot'+(s==='correct'?' lit correct':s==='wrong'?' wrong':s==='pending'?' lit':'');bar.appendChild(d);});
+  return bar;
+}
+
+/* ══════════════════════════════════
+   QUIZ GAME
+══════════════════════════════════ */
+function renderQuiz(zone,shell){
+  const qs=QUIZ_BANK[zone.id]||QUIZ_BANK.school;
+  let idx=0,locked=false,score=0,streak=new Array(qs.length).fill('pending');
+
+  function render(){
+    const d=qs[idx];
+    shell.innerHTML='';
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">🧠 ${zone.name} · Quiz</div>
+      <div class="lc-title">Knowledge Challenge</div>
+      <div class="lc-desc">Answer all ${qs.length} questions to earn your ${zone.name} badge!</div>
+      <div class="prog-wrap">
+        <div class="prog-top"><span class="prog-label">Question ${idx+1} of ${qs.length}</span><span class="prog-frac">Score: ${score}</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${(idx/qs.length)*100}%"></div></div>
+      </div>`;
+    card.appendChild(makeStreakBar(streak));
+    card.innerHTML+=`<div class="q-pill"><div class="q-num">${idx+1}</div><div class="q-category">${d.cat}</div></div>
+      <div class="q-text">${d.q}</div>
+      <div class="opts" id="quiz-opts"></div>
+      <div class="feedback" id="quiz-fb" style="display:none;"><span class="fb-icon" id="quiz-fb-icon"></span><span id="quiz-fb-text"></span></div>
+      <div class="btn-row" id="quiz-nxt" style="display:none;"><button class="btn btn-gold btn-lg" onclick="quizNext()">Next →</button></div>`;
+    shell.appendChild(card);
+    const opts=document.getElementById('quiz-opts');
+    ['A','B','C','D'].forEach((k,i)=>{
+      const b=document.createElement('button');b.className='opt';
+      b.innerHTML=`<span class="opt-key">${k}</span>${d.opts[i]}`;
+      b.onclick=()=>{if(!locked)answer(b,i===d.ans,d,i);};
+      opts.appendChild(b);
+    });
+    locked=false;
   }
-  const tip=document.getElementById('q-tip');
-  tip.style.display='flex'; tip.className='fb tip show';
-  tip.innerHTML='💡 '+d.tip;
-  document.getElementById('q-nxt').style.display='flex';
-  document.getElementById('l1h').textContent=G.csp;
-}
-function nextQ(){
-  qIdx++;
-  if(qIdx>=QS.length){
-    finishLevel('l1','wb',30,'🏅','Level 1 Complete!','🏅 Washroom Watcher Badge Earned!','You aced the Hygiene Basics Quiz! Sanitia is proud of you!');
-  } else renderQ();
-}
 
-/* ============================================
-   LEVEL 2 — SPOT THE LOO
-============================================ */
-const LOOS=[
-  {c:{e:'✨🚽',n:'Sparkling Clean',cl:['✅ Dry spotless floor','✅ Soap dispenser full','✅ Fresh air, no smell']},d:{e:'💢🚽',n:'Filth Monster Lair',cl:['❌ Wet slippery floor','❌ No soap available','❌ Terrible odour']}},
-  {c:{e:'🌸🚿',n:'Floral Fresh',cl:['✅ Working flush','✅ Clean mirror','✅ Lidded dustbin']},d:{e:'🕷️🚿',n:'Spider\'s Den',cl:['❌ Broken flush','❌ Cracked mirror','❌ Overflowing bin']}},
-  {c:{e:'💧🚰',n:'Crystal Clear',cl:['✅ Running taps','✅ Paper towels','✅ Well lit']},d:{e:'⚠️🚰',n:'Germ Central',cl:['❌ No water','❌ No paper/dryer','❌ Broken lights']}},
-  {c:{e:'🌿🚽',n:'Green & Fresh',cl:['✅ Regular cleaning','✅ Sanitiser','✅ Good ventilation']},d:{e:'🦠🚽',n:'Virus Vault',cl:['❌ Never cleaned','❌ No sanitiser','❌ Stuffy & smelly']}},
-  {c:{e:'⭐🏪',n:'Woloo Certified ⭐⭐⭐⭐⭐',cl:['✅ 5-star rated','✅ All amenities','✅ Safety assured']},d:{e:'💀🏚️',n:'Reported & Closed',cl:['❌ Multiple complaints','❌ Missing facilities','❌ Unsafe for women']}}
-];
-let looR=0;
-function initLoo(){ looR=0; renderLoo(); }
-function renderLoo(){
-  const r=LOOS[looR];
-  document.getElementById('l2-lbl').textContent=`Round ${looR+1} of ${LOOS.length}`;
-  document.getElementById('l2-pbar').style.width=`${(looR/LOOS.length)*100}%`;
-  document.getElementById('l2h').textContent=G.csp;
-  const wrap=document.getElementById('loo-cards'); wrap.innerHTML='';
-  const pair=Math.random()>0.5?[{...r.c,bad:false},{...r.d,bad:true}]:[{...r.d,bad:true},{...r.c,bad:false}];
-  pair.forEach(l=>{
-    const c=document.createElement('div');
-    c.className='loo-card';
-    c.innerHTML=`<span class="loo-big">${l.e}</span><div class="loo-name">${l.n}</div><ul class="loo-clue">${l.cl.map(x=>`<li>${x}</li>`).join('')}</ul>`;
-    c.onclick=()=>pickLoo(c,l.bad);
-    wrap.appendChild(c);
-  });
-  document.getElementById('l2-fb').className='fb';
-}
-function pickLoo(card,bad){
-  document.querySelectorAll('.loo-card').forEach(c=>c.onclick=null);
-  const fb=document.getElementById('l2-fb');
-  if(bad){
-    card.classList.add('flash-right');
-    fb.className='fb ok show'; fb.textContent='🎉 Spot on! That\'s the unhygienic one!';
-    addCSP(20); document.getElementById('l2h').textContent=G.csp;
-    setTimeout(()=>{
-      looR++;
-      if(looR>=LOOS.length) finishLevel('l2','cs',50,'🧹','Level 2 Complete!','🧹 Clean Sweep Medal Earned!','You can now identify dirty washrooms like a true Loo Hero!');
-      else renderLoo();
-    },1400);
-  } else {
-    card.classList.add('flash-wrong');
-    fb.className='fb bad show'; fb.textContent='❌ Look again! Read the clues carefully…';
-    setTimeout(()=>{
-      card.classList.remove('flash-wrong');
-      document.querySelectorAll('.loo-card').forEach(c=>{ const isBad=c.querySelector('.loo-name').textContent.includes('Filth')||c.querySelector('.loo-name').textContent.includes('Spider')||c.querySelector('.loo-name').textContent.includes('Germ')||c.querySelector('.loo-name').textContent.includes('Virus')||c.querySelector('.loo-name').textContent.includes('Reported'); c.onclick=()=>pickLoo(c,isBad); });
-      fb.className='fb';
-    },1200);
-  }
-}
-
-/* ============================================
-   LEVEL 3 — REPORT
-============================================ */
-const ISSUES=[
-  {t:'💧 Leaking tap',real:true},{t:'🧼 No soap',real:true},{t:'🚽 Unflushed toilet',real:true},
-  {t:'💡 Broken light',real:true},{t:'🗑️ Overflowing bin',real:true},{t:'🕷️ Cobwebs on ceiling',real:true},
-  {t:'✅ Fresh air (window)',real:false},{t:'✅ Door latch works',real:false},{t:'✅ Clean floor tiles',real:false}
-];
-let reportCount=0, issuesTotal=0;
-function initReport(){
-  reportCount=0;
-  issuesTotal=ISSUES.filter(i=>i.real).length;
-  document.getElementById('l3-cnt').textContent=`Issues found: 0 / ${issuesTotal}`;
-  document.getElementById('l3-pbar').style.width='0%';
-  document.getElementById('l3-fb').className='fb';
-  document.getElementById('l3-sub').style.display='none';
-  document.getElementById('l3h').textContent=G.csp;
-  const pool=document.getElementById('issue-chips'); pool.innerHTML='';
-  [...ISSUES].sort(()=>Math.random()-0.5).forEach(item=>{
-    const c=document.createElement('div');
-    c.className='issue-chip'; c.textContent=item.t;
-    c.onclick=()=>tapIssue(c,item);
-    pool.appendChild(c);
-  });
-}
-function tapIssue(chip,item){
-  if(chip.classList.contains('tapped-issue')||chip.classList.contains('tapped-good')) return;
-  if(item.real){
-    chip.classList.add('tapped-issue');
-    reportCount++;
-    addCSP(10); document.getElementById('l3h').textContent=G.csp;
-    const pct=(reportCount/issuesTotal)*100;
-    document.getElementById('l3-pbar').style.width=pct+'%';
-    document.getElementById('l3-cnt').textContent=`Issues found: ${reportCount} / ${issuesTotal}`;
-    if(reportCount>=issuesTotal){
-      document.getElementById('l3-sub').style.display='flex';
-      const fb=document.getElementById('l3-fb');
-      fb.className='fb ok show'; fb.textContent='🎉 All issues found! Submit your report!';
+  function answer(btn,correct,d,idx2){
+    locked=true;
+    document.querySelectorAll('#quiz-opts .opt').forEach((b,i)=>{
+      if(i===d.ans)b.classList.add('correct');
+      else b.classList.add('dimmed');
+    });
+    if(!correct){btn.classList.remove('dimmed');btn.classList.add('wrong');}
+    streak[idx]=correct?'correct':'wrong';
+    const fb=document.getElementById('quiz-fb');fb.style.display='flex';
+    let mult=1;let s2=0;for(let j=idx-1;j>=0;j--){if(streak[j]==='correct')s2++;else break;}
+    if(s2>=4)mult=3;else if(s2>=2)mult=2;
+    if(correct){
+      const pts=Math.round(12*mult);score+=pts;
+      fb.className='feedback ok show';
+      document.getElementById('quiz-fb-icon').textContent='✅';
+      document.getElementById('quiz-fb-text').innerHTML=`<strong>Correct!</strong>${mult>1?' Streak x'+mult+'! ':' '}${d.tip}`;
+      addXP(pts);
+    } else {
+      fb.className='feedback bad show';
+      document.getElementById('quiz-fb-icon').textContent='❌';
+      document.getElementById('quiz-fb-text').innerHTML=`<strong>Not quite.</strong> ${d.tip}`;
+      addXP(3);
     }
-  } else {
-    chip.classList.add('tapped-good');
-    const fb=document.getElementById('l3-fb');
-    fb.className='fb tip show'; fb.textContent='⚠️ That\'s actually a good hygiene feature — not an issue!';
-    setTimeout(()=>fb.className='fb',2000);
+    document.getElementById('quiz-nxt').style.display='flex';
   }
-}
-function submitReport(){
-  finishLevel('l3','sr',60,'📢','Level 3 Complete!','📢 Sanitia Reporter Star Earned!','Your Woloo report has been submitted! Metro Junction will be cleaned!');
+
+  window.quizNext=function(){
+    idx++;
+    if(idx>=qs.length)finishZone(zone,zone.xp,'🧠',zone.name+' Complete!',`You answered all ${qs.length} questions and scored ${score} points! Knowledge is power!`);
+    else render();
+  };
+  render();
 }
 
-/* ============================================
-   LEVEL 4 — DRAG SORT
-============================================ */
-const SORT_ITEMS=[
-  {t:'🧼 Washing hands with soap',cat:'h'},{t:'🚽 Flushing after use',cat:'h'},
-  {t:'🗑️ Using the dustbin',cat:'h'},{t:'💧 Drinking clean water',cat:'h'},
-  {t:'🪥 Brushing teeth daily',cat:'h'},{t:'🚶 Littering on street',cat:'u'},
-  {t:'🤧 Sneezing without cover',cat:'u'},{t:'💩 Not flushing',cat:'u'},
-  {t:'🦠 Sharing unwashed cups',cat:'u'},{t:'🧃 Leaving food open',cat:'u'}
-];
-let sortMap={}, selItem=null;
-function initSort(){
-  sortMap={}; selItem=null; G.selected=null;
-  SORT_ITEMS.forEach(i=>sortMap[i.t]=null);
-  document.getElementById('drop-h').innerHTML='';
-  document.getElementById('drop-u').innerHTML='';
-  document.getElementById('l4-fb').className='fb';
-  document.getElementById('l4h').textContent=G.csp;
-  const pool=document.getElementById('drag-pool'); pool.innerHTML='';
-  [...SORT_ITEMS].sort(()=>Math.random()-0.5).forEach(item=>{
-    const el=makeDragItem(item,pool);
-    pool.appendChild(el);
-  });
-  // Bin drop targets
-  setupBin('bin-h','h'); setupBin('bin-u','u');
-}
-function makeDragItem(item, pool){
-  const el=document.createElement('div');
-  el.className='drag-item';
-  el.textContent=item.t;
-  el.dataset.key=item.t;
-  el.dataset.cat=item.cat;
-  // Tap to select then tap bin
-  el.onclick=()=>selectForTap(el,item);
-  // Drag
-  el.draggable=true;
-  el.addEventListener('dragstart',e=>{
-    e.dataTransfer.setData('text',item.t);
-    setTimeout(()=>el.classList.add('is-dragging'),0);
-  });
-  el.addEventListener('dragend',()=>el.classList.remove('is-dragging'));
-  return el;
-}
-function selectForTap(el,item){
-  if(el.classList.contains('placed')) return;
-  // deselect prev
-  document.querySelectorAll('.drag-item.selected-tap').forEach(e=>e.style.outline='');
-  el.style.outline='3px solid var(--y4)';
-  G.selected={el,item};
-}
-function setupBin(binId, cat){
-  const bin=document.getElementById(binId);
-  bin.ondragover=e=>{ e.preventDefault(); bin.classList.add('drag-over'); };
-  bin.ondragleave=()=>bin.classList.remove('drag-over');
-  bin.ondrop=e=>{
-    e.preventDefault(); bin.classList.remove('drag-over');
-    const key=e.dataTransfer.getData('text');
-    placeToBin(key,cat);
+/* ══════════════════════════════════
+   TRUE/FALSE GAME
+══════════════════════════════════ */
+function renderTF(zone,shell){
+  const tfs=TF_BANK[zone.id]||TF_BANK.market;
+  let idx=0,locked=false,correct=0,wrong=0,streak=new Array(tfs.length).fill('pending');
+
+  function render(){
+    const d=tfs[idx];shell.innerHTML='';
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">⚡ ${zone.name} · True or False</div>
+      <div class="lc-title">Quick Fire Challenge!</div>
+      <div class="lc-desc">${tfs.length} fast-fire hygiene statements — TRUE or FALSE?</div>
+      <div class="prog-wrap">
+        <div class="prog-top"><span class="prog-label">Statement ${idx+1} of ${tfs.length}</span><span class="prog-frac">✓ ${correct} | ✗ ${wrong}</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${(idx/tfs.length)*100}%"></div></div>
+      </div>`;
+    card.appendChild(makeStreakBar(streak));
+    card.innerHTML+=`<div class="q-text" style="text-align:center;font-size:16px;">${d.s}</div>
+      <div class="tf-grid">
+        <button class="tf-btn" id="tf-t" onclick="tfAnswer(true)"><span class="tf-icon">✅</span>TRUE</button>
+        <button class="tf-btn" id="tf-f" onclick="tfAnswer(false)"><span class="tf-icon">❌</span>FALSE</button>
+      </div>
+      <div class="feedback" id="tf-fb" style="display:none;"><span class="fb-icon" id="tf-fb-icon"></span><span id="tf-fb-text"></span></div>
+      <div class="btn-row" id="tf-nxt" style="display:none;"><button class="btn btn-gold btn-lg" onclick="tfNext()">Next →</button></div>`;
+    shell.appendChild(card);locked=false;
+  }
+
+  window.tfAnswer=function(val){
+    if(locked)return;locked=true;
+    const d=tfs[idx];const isCorrect=(val===d.ans);
+    const tBtn=document.getElementById('tf-t');const fBtn=document.getElementById('tf-f');
+    if(d.ans)tBtn.classList.add('correct');else fBtn.classList.add('correct');
+    if(!isCorrect)(val?tBtn:fBtn).classList.add('wrong');
+    (val?fBtn:tBtn).classList.add('dimmed');
+    streak[idx]=isCorrect?'correct':'wrong';
+    if(isCorrect)correct++;else wrong++;
+    const fb=document.getElementById('tf-fb');fb.style.display='flex';
+    if(isCorrect){fb.className='feedback ok show';document.getElementById('tf-fb-icon').textContent='✅';document.getElementById('tf-fb-text').innerHTML=`<strong>Correct!</strong> ${d.exp}`;addXP(10);}
+    else{fb.className='feedback bad show';document.getElementById('tf-fb-icon').textContent='❌';document.getElementById('tf-fb-text').innerHTML=`<strong>Not quite.</strong> ${d.exp}`;addXP(3);}
+    document.getElementById('tf-nxt').style.display='flex';
   };
-  bin.onclick=()=>{
-    if(G.selected){
-      placeToBin(G.selected.item.t, cat);
-      G.selected=null;
+  window.tfNext=function(){
+    idx++;
+    if(idx>=tfs.length)finishZone(zone,zone.xp,'⚡',zone.name+' Complete!',`You got ${correct}/${tfs.length} correct! Quick thinking at ${zone.name}!`);
+    else render();
+  };
+  render();
+}
+
+/* ══════════════════════════════════
+   SPOT THE LOO
+══════════════════════════════════ */
+function renderSpot(zone,shell){
+  const rounds=SPOT_BANK[zone.id]||SPOT_BANK.metro;
+  let rnd=0,correctCount=0;
+
+  function render(){
+    const r=rounds[rnd];shell.innerHTML='';
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">🔍 ${zone.name} · Visual Inspection</div>
+      <div class="lc-title">Spot the Dirty Loo!</div>
+      <div class="lc-desc">${rounds.length} rounds — find the unhygienic washroom from the clues!</div>
+      <div class="prog-wrap">
+        <div class="prog-top"><span class="prog-label">Round ${rnd+1} of ${rounds.length}</span><span class="prog-frac">${correctCount} correct</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${(rnd/rounds.length)*100}%"></div></div>
+      </div>
+      <p style="font-size:14px;font-weight:700;text-align:center;margin-bottom:13px;color:var(--ink);">👇 Which washroom is <strong>unhygienic</strong>?</p>
+      <div class="loo-pair" id="loo-pair"></div>
+      <div class="feedback" id="loo-fb" style="display:none;"><span class="fb-icon" id="loo-fb-icon"></span><span id="loo-fb-text"></span></div>`;
+    shell.appendChild(card);
+    const pair=document.getElementById('loo-pair');
+    const items=Math.random()>.5?[{...r.c,bad:false},{...r.d,bad:true}]:[{...r.d,bad:true},{...r.c,bad:false}];
+    items.forEach(l=>{
+      const c=document.createElement('div');c.className='loo-card';
+      c.innerHTML=`<span class="loo-icon">${l.e}</span><div class="loo-name">${l.n}</div><ul class="loo-clues">${l.cl.map(x=>`<li>→ ${x}</li>`).join('')}</ul>`;
+      c.onclick=()=>pickLoo(c,l.bad,r.d.n);pair.appendChild(c);
+    });
+  }
+
+  function pickLoo(card,bad,badName){
+    document.querySelectorAll('#loo-pair .loo-card').forEach(c=>c.onclick=null);
+    const fb=document.getElementById('loo-fb');fb.style.display='flex';
+    if(bad){
+      card.classList.add('hit');correctCount++;
+      fb.className='feedback ok show';document.getElementById('loo-fb-icon').textContent='✅';
+      document.getElementById('loo-fb-text').textContent='Correct! You spotted the unhygienic washroom — great inspector instinct!';
+      addXP(20);
+      setTimeout(()=>{rnd++;if(rnd>=rounds.length)finishZone(zone,zone.xp,'🔍',zone.name+' Complete!',`You spotted ${correctCount}/${rounds.length} unhygienic washrooms correctly. Elite inspection skills!`);else render();},1600);
+    } else {
+      card.classList.add('miss');
+      fb.className='feedback bad show';document.getElementById('loo-fb-icon').textContent='❌';
+      document.getElementById('loo-fb-text').textContent='Look again — check the clues more carefully! One washroom has serious hygiene failures.';
+      setTimeout(()=>{
+        card.classList.remove('miss');fb.className='feedback';fb.style.display='none';
+        document.querySelectorAll('#loo-pair .loo-card').forEach(c=>{const isBad=c.querySelector('.loo-name').textContent===badName;c.onclick=()=>pickLoo(c,isBad,badName);});
+      },1300);
+    }
+  }
+  render();
+}
+
+/* ══════════════════════════════════
+   REPORT + SORT
+══════════════════════════════════ */
+function renderReport(zone,shell){
+  const issues=REPORT_BANK[zone.id]||REPORT_BANK.park;
+  const sortItems=SORT_BANK[zone.id]||SORT_BANK.park;
+  const issueTotal=issues.filter(i=>i.r).length;
+  let found=0,errors=0,sortSel=null,sortMap={};
+
+  function renderPhaseA(){
+    shell.innerHTML='';
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">📢 ${zone.name} · Report & Sort</div>
+      <div class="lc-title">Report a Toilet!</div>
+      <div class="lc-desc">Tap every problem you find to file a complete Woloo report!</div>
+      <div class="report-scene">
+        <span class="scene-emoji">${zone.icon}</span>
+        <div class="scene-name">${zone.name} — Public Washroom</div>
+        <div class="scene-cap">⚠️ Multiple citizen complaints received. Inspect carefully!</div>
+      </div>
+      <div class="issue-grid" id="rep-chips"></div>
+      <div class="prog-wrap">
+        <div class="prog-top"><span class="prog-label" id="rep-cnt">Issues found: 0 / ${issueTotal}</span><span class="prog-frac" id="rep-acc">Accuracy: —</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="rep-bar" style="width:0%"></div></div>
+      </div>
+      <div class="feedback" id="rep-fb" style="display:none;"><span class="fb-icon"></span><span id="rep-fb-text"></span></div>
+      <div class="btn-row" id="rep-sub" style="display:none;"><button class="btn btn-gold btn-lg" onclick="submitRep()">📤 Submit Woloo Report</button></div>`;
+    shell.appendChild(card);
+    const pool=document.getElementById('rep-chips');
+    [...issues].sort(()=>Math.random()-.5).forEach(item=>{
+      const c=document.createElement('div');c.className='issue-chip';c.textContent=item.t;
+      c.onclick=()=>{
+        if(c.classList.contains('found')||c.classList.contains('not-issue'))return;
+        if(item.r){
+          c.classList.add('found');found++;addXP(7);
+          const pct=(found/issueTotal)*100;
+          document.getElementById('rep-bar').style.width=pct+'%';
+          const acc=Math.round((found/(found+errors))*100);
+          document.getElementById('rep-cnt').textContent=`Issues found: ${found} / ${issueTotal}`;
+          document.getElementById('rep-acc').textContent=`Accuracy: ${acc}%`;
+          if(found>=issueTotal){
+            document.getElementById('rep-sub').style.display='flex';
+            const fb=document.getElementById('rep-fb');fb.className='feedback ok show';fb.style.display='flex';
+            document.getElementById('rep-fb-text').textContent='All issues found! Submit your Woloo report!';
+          }
+        } else {
+          c.classList.add('not-issue');errors++;
+          const fb=document.getElementById('rep-fb');fb.className='feedback info show';fb.style.display='flex';
+          document.getElementById('rep-fb-text').textContent='⚠️ That is actually a good hygiene feature — not an issue!';
+          setTimeout(()=>{fb.className='feedback';fb.style.display='none';},2000);
+        }
+      };
+      pool.appendChild(c);
+    });
+  }
+
+  function renderPhaseB(){
+    shell.innerHTML='';sortMap={};sortSel=null;
+    sortItems.forEach(i=>sortMap[i.t]=null);
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">♻️ ${zone.name} · Habit Sort</div>
+      <div class="lc-title">Hygiene Sort!</div>
+      <div class="lc-desc">Tap an item, then tap a bin to sort it. Get 9/10 to pass!</div>
+      <div class="sort-hint">💡 Tap any item, then tap the correct bin below</div>
+      <div class="item-pool" id="sort-pool"></div>
+      <div class="bins">
+        <div class="bin h-bin" id="bin-h" onclick="sortBin('h')"><div class="bin-label h">✅ Hygienic</div><div class="bin-items" id="drop-h"></div></div>
+        <div class="bin u-bin" id="bin-u" onclick="sortBin('u')"><div class="bin-label u">❌ Unhygienic</div><div class="bin-items" id="drop-u"></div></div>
+      </div>
+      <div class="feedback" id="sort-fb" style="display:none;margin-top:10px;"><span class="fb-icon"></span><span id="sort-fb-text"></span></div>
+      <div class="btn-row"><button class="btn btn-gold btn-lg" onclick="checkSortGame()">✅ Check My Sort</button></div>`;
+    shell.appendChild(card);
+    const pool=document.getElementById('sort-pool');
+    [...sortItems].sort(()=>Math.random()-.5).forEach(item=>{
+      const el=document.createElement('div');el.className='sort-item';el.textContent=item.t;el.dataset.k=item.t;el.dataset.cat=item.cat;
+      el.onclick=()=>{
+        if(el.classList.contains('placed'))return;
+        document.querySelectorAll('.sort-item:not(.placed)').forEach(e=>e.classList.remove('sel'));
+        el.classList.add('sel');sortSel=item;toast('Now tap a bin!');
+      };
+      pool.appendChild(el);
+    });
+  }
+
+  window.submitRep=function(){addXP(15);renderPhaseB();};
+  window.sortBin=function(cat){
+    if(!sortSel)return;
+    const key=sortSel.t;if(sortMap[key]!==null)return;
+    sortMap[key]=cat;
+    const poolEl=Array.from(document.querySelectorAll('.sort-item:not(.placed)')).find(e=>e.dataset.k===key);
+    if(poolEl){poolEl.classList.remove('sel');poolEl.classList.add('placed');}
+    const mini=document.createElement('div');mini.className='sort-item';mini.textContent=key;
+    document.getElementById('drop-'+cat).appendChild(mini);
+    sortSel=null;addXP(4);
+  };
+  window.checkSortGame=function(){
+    const placed=Object.values(sortMap).filter(v=>v!==null).length;
+    if(placed<sortItems.length){
+      const fb=document.getElementById('sort-fb');fb.className='feedback bad show';fb.style.display='flex';
+      document.getElementById('sort-fb-text').textContent=`Sort all ${sortItems.length} items first! (${placed}/${sortItems.length} done)`;
+      return;
+    }
+    let c=0;sortItems.forEach(i=>{if(sortMap[i.t]===i.cat)c++;});
+    if(c>=9){addXP(25);finishZone(zone,zone.xp,'📢',zone.name+' Complete!',`Report filed and ${c}/10 habits sorted correctly — outstanding community work!`);}
+    else{
+      const fb=document.getElementById('sort-fb');fb.className='feedback bad show';fb.style.display='flex';
+      document.getElementById('sort-fb-text').textContent=`${c}/${sortItems.length} correct. Need 9+ to pass — try again!`;
+      addXP(8);setTimeout(renderPhaseB,2000);
     }
   };
-}
-function placeToBin(key,cat){
-  if(sortMap[key]!==null) return;
-  sortMap[key]=cat;
-  const src=document.getElementById('drag-pool');
-  const el=[...src.querySelectorAll('.drag-item')].find(e=>e.dataset.key===key);
-  if(el){ el.style.outline=''; el.remove(); }
-  const mini=document.createElement('div');
-  mini.className='drag-item placed';
-  mini.textContent=key;
-  document.getElementById('drop-'+cat).appendChild(mini);
-}
-function checkSort(){
-  const placed=Object.values(sortMap).filter(v=>v!==null).length;
-  if(placed<SORT_ITEMS.length){
-    const fb=document.getElementById('l4-fb');
-    fb.className='fb bad show';
-    fb.textContent=`Sort all ${SORT_ITEMS.length} items first! (${placed}/${SORT_ITEMS.length} done)`;
-    return;
-  }
-  let correct=0;
-  SORT_ITEMS.forEach(i=>{ if(sortMap[i.t]===i.cat) correct++; });
-  if(correct>=8){
-    addCSP(40+(correct-8)*15);
-    document.getElementById('l4h').textContent=G.csp;
-    finishLevel('l4','tw',80,'🤝','Level 4 Complete!','🤝 Teamwork Ribbon Earned!',`${correct}/10 correct! You're a hygiene champion!`);
-  } else {
-    const fb=document.getElementById('l4-fb');
-    fb.className='fb bad show';
-    fb.textContent=`${correct}/10 correct. Need 8+ to pass. Try again!`;
-    addCSP(10); setTimeout(initSort,2000);
-  }
+  renderPhaseA();
 }
 
-/* ============================================
-   LEVEL 5 — CHECKLIST
-============================================ */
-const CL_ITEMS=[
-  '🧼 Check soap dispenser — full & working',
-  '💧 Verify taps & water supply',
-  '🚽 Confirm flush is working',
-  '💡 All lights on — no dark corners',
-  '🗑️ Empty bin & replace lid',
-  '🪤 Floor — dry, clean, no slip hazard',
-  '🔒 Door lock & latch for privacy',
-  '🌬️ Good ventilation — no foul odour',
-  '📋 Update cleaning log with date & time',
-  '⭐ Submit Woloo Certification Report'
-];
-let clState=[];
-function initCL(){
-  clState=new Array(CL_ITEMS.length).fill(false);
-  renderCL();
-  document.getElementById('cl-certify').style.display='none';
-  document.getElementById('l5h').textContent=G.csp;
-}
-function renderCL(){
-  const ul=document.getElementById('hero-cl'); ul.innerHTML='';
-  CL_ITEMS.forEach((txt,i)=>{
-    const li=document.createElement('li');
-    li.className='cl-item'+(clState[i]?' done':'');
-    li.innerHTML=`<div class="cl-box">${clState[i]?'✓':''}</div>${txt}`;
-    li.onclick=()=>tickCL(i);
-    ul.appendChild(li);
-  });
-  const done=clState.filter(Boolean).length;
-  document.getElementById('cl-pbar').style.width=`${(done/CL_ITEMS.length)*100}%`;
-  document.getElementById('cl-cnt').textContent=`Checked: ${done} / ${CL_ITEMS.length}`;
-  if(done===CL_ITEMS.length) document.getElementById('cl-certify').style.display='flex';
-}
-function tickCL(i){
-  if(clState[i]) return;
-  clState[i]=true;
-  addCSP(8); document.getElementById('l5h').textContent=G.csp;
-  renderCL();
-}
-function certify(){
-  finishLevel('l5','lh',100,'🎓','🦸 LOO HERO CERTIFIED!','🎓 Loo Hero Certificate Earned!','You\'ve completed all missions! You are now an official Woloo Loo Hero!');
+/* ══════════════════════════════════
+   MATCH + CHECKLIST
+══════════════════════════════════ */
+function renderMatch(zone,shell){
+  const pairs=MATCH_BANK[zone.id]||MATCH_BANK.bazaar;
+  const clItems=[
+    '🧼 Soap dispenser: full and pump working',
+    '💧 Taps: hot and cold both functional',
+    '🚽 Flush mechanism: operational and clear',
+    '💡 All lights working — no dark corners',
+    '🗑️ Waste bin: emptied, clean, lid fitted',
+    '🪤 Floor: dry, clean, no slip hazard',
+    '🔒 All stall doors: lock and latch work',
+    '🌬️ Ventilation: fresh air, no foul odour',
+    '🪞 Mirror and basin: clean and intact',
+    '♿ Accessible stall available and clear',
+    '📋 Cleaning log: updated with date and time',
+    '⭐ Woloo Certification: report submitted'
+  ];
+  let matchSel=null,matchDone=0,clState=new Array(clItems.length).fill(false);
+
+  function renderPhaseA(){
+    shell.innerHTML='';
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">🔗 ${zone.name} · Knowledge Match</div>
+      <div class="lc-title">Match the Pairs!</div>
+      <div class="lc-desc">Connect each hygiene problem with the correct solution. Match all ${pairs.length}!</div>
+      <div class="match-grid">
+        <div><div class="match-col-title">⚠️ Problem</div><div class="match-col" id="match-left"></div></div>
+        <div><div class="match-col-title">✅ Solution</div><div class="match-col" id="match-right"></div></div>
+      </div>
+      <div class="feedback" id="match-fb" style="display:none;"><span class="fb-icon"></span><span id="match-fb-text"></span></div>
+      <div class="prog-wrap" style="margin-top:12px;">
+        <div class="prog-top"><span class="prog-label" id="match-lbl">Matched: 0 / ${pairs.length}</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="match-bar" style="width:0%"></div></div>
+      </div>`;
+    shell.appendChild(card);
+    const lefts=document.getElementById('match-left');
+    const rights=document.getElementById('match-right');
+    const shuffledR=[...pairs].sort(()=>Math.random()-.5);
+    pairs.forEach((p,i)=>{
+      const l=document.createElement('div');l.className='match-item';l.textContent=p.prob;l.dataset.idx=i;
+      l.onclick=()=>{
+        if(l.classList.contains('matched'))return;
+        document.querySelectorAll('#match-left .match-item:not(.matched)').forEach(e=>e.classList.remove('sel-left'));
+        l.classList.add('sel-left');matchSel=i;
+      };
+      lefts.appendChild(l);
+    });
+    shuffledR.forEach(p=>{
+      const origIdx=pairs.indexOf(p);
+      const r=document.createElement('div');r.className='match-item';r.textContent=p.sol;r.dataset.idx=origIdx;
+      r.onclick=()=>{
+        if(r.classList.contains('matched'))return;
+        if(matchSel===null){showMFb('info','Select a problem on the left first!');return;}
+        if(matchSel===origIdx){
+          r.classList.add('matched');
+          document.querySelector(`#match-left .match-item[data-idx="${matchSel}"]`).classList.remove('sel-left');
+          document.querySelector(`#match-left .match-item[data-idx="${matchSel}"]`).classList.add('matched');
+          matchDone++;matchSel=null;addXP(12);
+          document.getElementById('match-lbl').textContent=`Matched: ${matchDone} / ${pairs.length}`;
+          document.getElementById('match-bar').style.width=`${(matchDone/pairs.length)*100}%`;
+          showMFb('ok','✅ Correct match!');
+          if(matchDone>=pairs.length){addXP(15);setTimeout(renderPhaseB,1200);}
+        } else {
+          r.classList.add('wrong-flash');
+          document.querySelectorAll('#match-left .match-item').forEach(e=>e.classList.remove('sel-left'));
+          matchSel=null;showMFb('bad','Not quite — that pair does not match. Try again!');
+          setTimeout(()=>r.classList.remove('wrong-flash'),400);
+        }
+      };
+      rights.appendChild(r);
+    });
+  }
+
+  function showMFb(type,msg){
+    const fb=document.getElementById('match-fb');fb.className=`feedback ${type} show`;fb.style.display='flex';
+    document.getElementById('match-fb-text').textContent=msg;
+    setTimeout(()=>{fb.className='feedback';fb.style.display='none';},2000);
+  }
+
+  function renderPhaseB(){
+    shell.innerHTML='';
+    const card=document.createElement('div');card.className='level-card';
+    card.innerHTML=`<div class="level-card-accent"></div>
+      <div class="lc-label">📋 ${zone.name} · Certification</div>
+      <div class="lc-title">Woloo Hero Checklist!</div>
+      <div class="lc-desc">Tick every inspection step to certify this washroom as Woloo-approved!</div>
+      <div class="cl-list" id="cl-list"></div>
+      <div class="prog-wrap" style="margin-top:14px;">
+        <div class="prog-top"><span class="prog-label" id="cl-lbl">Checked: 0 / ${clItems.length}</span></div>
+        <div class="prog-bar"><div class="prog-fill" id="cl-bar" style="width:0%"></div></div>
+      </div>
+      <div class="btn-row" id="cl-certify" style="display:none;"><button class="btn btn-gold btn-xl" onclick="doCertify()">🎓 Certify as Loo Hero!</button></div>`;
+    shell.appendChild(card);
+    renderCL();
+  }
+
+  function renderCL(){
+    const ul=document.getElementById('cl-list');ul.innerHTML='';
+    clItems.forEach((txt,i)=>{
+      const li=document.createElement('div');li.className='cl-item'+(clState[i]?' done':'');
+      li.innerHTML=`<div class="cl-check">${clState[i]?'✓':''}</div>${txt}`;
+      li.onclick=()=>{if(clState[i])return;clState[i]=true;addXP(6);renderCL();};
+      ul.appendChild(li);
+    });
+    const done=clState.filter(Boolean).length;
+    document.getElementById('cl-bar').style.width=`${(done/clItems.length)*100}%`;
+    document.getElementById('cl-lbl').textContent=`Checked: ${done} / ${clItems.length}`;
+    if(done===clItems.length)document.getElementById('cl-certify').style.display='flex';
+  }
+
+  window.doCertify=function(){finishZone(zone,zone.xp,'🎓',zone.name+' Complete!','Pairs matched, checklist certified — you are a genuine Woloo Loo Hero at '+zone.name+'!');};
+  renderPhaseA();
 }
 
-/* ============================================
+/* ══════════════════════════════════
    PROFILE
-============================================ */
-const HN=['Sanitation Rookie','Washroom Watcher','Clean Scout','Sanitia Reporter','Community Champion','Certified Loo Hero'];
+══════════════════════════════════ */
+const HN=['Sanitation Rookie','Hygiene Scout','Clean Inspector','Community Reporter','Hygiene Champion','Loo Hero','Woloo Legend'];
 function buildProfile(){
-  const avs=['🦸','🦸‍♀️','🧑‍🔬','👩‍⚕️','🦸‍♂️'];
-  document.getElementById('p-av').textContent=avs[G.done.size%avs.length];
-  document.getElementById('p-name').textContent=HN[Math.min(G.badges.length,HN.length-1)];
-  let rank=RANKS[0][1];
-  for(const [p,r] of RANKS){ if(G.csp>=p) rank=r; }
+  let rank=RANKS[0][1];for(const[p,r]of RANKS)if(G.xp>=p)rank=r;
+  const avts=['🦸','🦸‍♀️','🧑‍🔬','👩‍⚕️','🦸‍♂️','🌟'];
+  document.getElementById('p-av').textContent=avts[Math.min(G.done.size,avts.length-1)];
+  document.getElementById('p-name').textContent=HN[Math.min(Math.floor(G.badges.length/4),HN.length-1)];
   document.getElementById('p-rank').textContent=rank;
-  document.getElementById('p-csp').textContent=G.csp;
+  document.getElementById('p-xp').textContent=G.xp;
   document.getElementById('p-bc').textContent=G.badges.length;
-  document.getElementById('p-lc').textContent=G.done.size;
-  const bg=document.getElementById('p-badges'); bg.innerHTML='';
+  document.getElementById('p-zc').textContent=G.done.size;
+  const bg=document.getElementById('p-badges');bg.innerHTML='';
   ALL_BADGES.forEach(b=>{
     const el=document.createElement('div');
-    el.className='badge-tag '+(G.badges.includes(b.id)?'earned':'locked');
-    el.textContent=b.icon+' '+b.name;
-    bg.appendChild(el);
+    el.className='badge-pill '+(G.badges.includes(b.id)?'earned':'locked');
+    el.textContent=b.icon+' '+b.name;bg.appendChild(el);
   });
 }
 
-/* ============================================
+/* ══════════════════════════════════
    LEADERBOARD
-============================================ */
-const LB_DATA=[
-  {name:'Priya Sharma',school:'Delhi Public School',av:'👧',score:920},
-  {name:'Arjun Mehta',school:'St. Xavier\'s Mumbai',av:'👦',score:845},
-  {name:'Sneha Pillai',school:'KV Pune',av:'👩',score:810},
-  {name:'Rohan Gupta',school:'DPS Noida',av:'🧑',score:760},
-  {name:'Kavya Nair',school:'Amrita Vidyalayam',av:'👧',score:720}
+══════════════════════════════════ */
+const LB=[
+  {n:'Priya Sharma',sch:'Delhi Public School',av:'👧',sc:3240},
+  {n:'Arjun Mehta',sch:'St. Xavier\'s Mumbai',av:'👦',sc:2985},
+  {n:'Sneha Pillai',sch:'KV Pune',av:'👩',sc:2710},
+  {n:'Rohan Gupta',sch:'DPS Noida',av:'🧑',sc:2450},
+  {n:'Kavya Nair',sch:'Amrita Vidyalayam',av:'👧',sc:2190},
+  {n:'Mihir Desai',sch:'Ryan International',av:'👦',sc:1980},
+  {n:'Aanya Joshi',sch:'Podar School',av:'👩',sc:1750},
+  {n:'Dev Sharma',sch:'Kendriya Vidyalaya',av:'👦',sc:1520}
 ];
 function buildLB(){
-  const me={name:'You 🌟',school:'Your School',av:'🦸',score:G.csp,me:true};
-  const combined=[...LB_DATA,me].sort((a,b)=>b.score-a.score);
-  const list=document.getElementById('lb-list'); list.innerHTML='';
+  const me={n:'You 🌟',sch:'Your School',av:'🦸',sc:G.xp,me:true};
+  const all=[...LB,me].sort((a,b)=>b.sc-a.sc);
+  const list=document.getElementById('lb-list');list.innerHTML='';
   const medals=['🥇','🥈','🥉'];
-  combined.slice(0,8).forEach((p,i)=>{
+  all.slice(0,10).forEach((p,i)=>{
     const row=document.createElement('div');
-    const rc=i===0?'r1':i===1?'r2':i===2?'r3':'';
+    const rc=i===0?'g1':i===1?'g2':i===2?'g3':'';
     row.className='lb-row '+rc+(p.me?' me':'');
-    row.innerHTML=`<div class="lb-rank">${i<3?medals[i]:'#'+(i+1)}</div><div class="lb-av">${p.av}</div><div class="lb-info"><div class="lb-name">${p.name}</div><div class="lb-sch">${p.school}</div></div><div class="lb-sc">${p.score}</div>`;
+    row.innerHTML=`<div class="lb-rank">${i<3?medals[i]:'#'+(i+1)}</div><div class="lb-av">${p.av}</div><div class="lb-info"><div class="lb-name">${p.n}</div><div class="lb-sch">${p.sch}</div></div><div class="lb-pts">${p.sc} XP</div>`;
     list.appendChild(row);
   });
 }
 
-/* ============================================
+/* ══════════════════════════════════
    INIT
-============================================ */
-buildMap();
-updateHUD();
+══════════════════════════════════ */
+hud();buildMap();
 </script>
 </body>
 </html>
